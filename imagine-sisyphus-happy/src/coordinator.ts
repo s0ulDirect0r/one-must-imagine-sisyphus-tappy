@@ -1,26 +1,30 @@
-type GameState = {
-    x: number;
-    y: number;
-    bpm: number;
-    elevation: number;
-    score: number;
-    streak: number;
-  }
+import * as stateMachine from "./stateMachine";
+import * as renderer from "./renderer";
 
-export const initialGameState: GameState = {
-  x: 2,
-  y: 5,
-  bpm: 0,
-  elevation: 0,
-  score: 0,
-  streak: 0
+let gameState: GameState;
+
+export function initializeGameState(): GameState {
+  gameState = stateMachine.initialGameState;
+
+  // passing it off to the renderer
+  renderer.initialize(gameState);
 }
 
-export function Coordinator() {
-  // Communicate with State Machine
-  
+export function startGameLoop() {
+  // start the game loop forever.
+  setInterval(() => {
+    gameLoop();
+  }, 16);
+}
 
-  // Communicate with Audio
+// This will run 60x per second.
+export function gameLoop() {
+  console.log("looping");
+  // logic
+  const newState = stateMachine.updateGame(gameState); // call all the things that change it
 
-  // Communicate with Renderer
+  gameState = newState;
+
+  // pass it off to the renderer
+  renderer.render(gameState);
 }
