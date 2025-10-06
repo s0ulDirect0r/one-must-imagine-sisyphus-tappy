@@ -1,5 +1,30 @@
-node_modules
+# Godot 4+ specific ignores
+.godot/
 
-/.cache
-/build
-.env
+# Godot-specific ignores
+.import/
+export.cfg
+export_presets.cfg
+
+# GodotJS-specific ignores
+**/generated
+!**/.gdignore
+
+# Imported translations (automatically generated from CSV files)
+*.translation
+
+# Mono-specific ignores
+.mono/
+data_*/
+mono_crash.*.json
+
+# Dependency directory
+node_modules
+bower_components
+
+# Editors
+.idea
+*.iml
+
+# ignore yarn.lock
+yarn.lock
