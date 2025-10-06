@@ -1,10 +1,14 @@
 import { Application, Assets, Sprite } from "pixi.js";
+import type { GameState } from "./coordinator";
 
-export default async function render() {
+let app;
+let bunny;
+
+// Initialize the application
+export async function initialize(gameState) {
   // Create a new application
-  const app = new Application();
+  app = new Application();
 
-  // Initialize the application
   await app.init({ background: "#1099bb", resizeTo: window });
 
   // Append the application canvas to the document body
@@ -14,7 +18,7 @@ export default async function render() {
   const texture = await Assets.load("/assets/bunny.png");
 
   // Create a bunny Sprite
-  const bunny = new Sprite(texture);
+  bunny = new Sprite(texture);
 
   // Center the sprite's anchor point
   bunny.anchor.set(0.5);
@@ -24,6 +28,10 @@ export default async function render() {
 
   // Add the bunny to the stage
   app.stage.addChild(bunny);
+}
+
+export async function render(gameState) {
+  bunny.position.set(gameState.x, gameState.y);
 
   // Listen for animate update
   app.ticker.add((time) => {

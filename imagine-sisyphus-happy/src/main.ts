@@ -1,9 +1,7 @@
-import { initialGameState } from "./coordinator";
-import render from "./renderer";
+import * as coordinator from "./coordinator";
 
-// initialize Game
-function initializeGame() {
-  const gameState = initialGameState
+function startGame() {
+  coordinator.initializeGameState();
+  coordinator.startGameLoop();
 }
-// game loop
-render();
+startGame();
