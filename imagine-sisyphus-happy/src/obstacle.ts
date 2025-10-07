@@ -3,7 +3,7 @@
 // then move every obstacle down in the beat
 
 import { KeyState } from "./input"
-import { GameState, GRID_HEIGHT, GRID_WIDTH, MAX_OBSTACLES } from "./stateMachine"
+import { GameState, GRID_HEIGHT, GRID_WIDTH, MAX_OBSTACLES, Obstacle } from "./stateMachine"
 
 // mvp: generate an obstacle for every space press, and move each obstacle down by one
 // TODO: pass obstacle updates to renderer, make it it's own function?
@@ -19,30 +19,25 @@ export function updateObstacles(inputs: Map<string, KeyState>, gameState: GameSt
     const bounded = movedObstacles.filter(obs => obs.y >= 0)
 
     // TODO: possible to generate multiple obstacles per line? 
-    if (bounded.length < MAX_OBSTACLES) {
-      const newX = Math.floor(Math.random() * (GRID_WIDTH - 1))
-      const newY = GRID_HEIGHT - 1
-      const newObstacle = {
-        id: crypto.randomUUID(),
-        x: newX,
-        y: newY
-      }
+    const spawned = bounded.length < MAX_OBSTACLES
+      ? [
+        ...bounded,
+        {
+          id: crypto.randomUUID(),
+          x: Math.floor(Math.random() * (GRID_WIDTH - 1)),
+          y: GRID_HEIGHT - 1,
+        } as Obstacle
+      ]
+      : bounded
 
-      const newTreeArray = [...bounded, newObstacle]
-      const newGameState = {
-        ...gameState,
-        obstacles: newTreeArray,
-      }
-      console.log(newGameState.obstacles)
-      return newGameState
-    } else {
-      const newGameState = {
-        ...gameState,
-        trees: bounded
-      }
-      console.log(newGameState.obstacles)
-      return newGameState
+    const newGameState = {
+      ...gameState,
+      obstacles: spawned,
     }
+
+    console.log(newGameState.obstacles)
+    return newGameState
   }
+
   return gameState
 }
