@@ -31,17 +31,3 @@ export async function render(gameState: GameState) {
   renderTrees(gameState.trees);
   renderUI(gameState.score, gameState.streak);
 }
-
-function renderTrees(trees: Tree[]) {
-  trees.forEach(tree => {
-    const treeSprite = myTrees.get(tree.id)
-    if (treeSprite) {
-      treeSprite.position.set(tree.x, tree.y)
-    } else {
-      const newSprite = new Sprite(treeTexture);
-      newSprite.position.set(tree.x, tree.y)
-      app.stage.addChild(newSprite)
-      myTrees.set(tree.id, newSprite)
-    }
-  })
-}
