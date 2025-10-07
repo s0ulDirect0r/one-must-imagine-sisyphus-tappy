@@ -2,6 +2,7 @@ import { Application, Assets, Sprite } from "pixi.js";
 import type { GameState } from "./coordinator";
 import { Tree } from "./stateMachine";
 import { renderUI } from "./ui";
+import { initDevtools } from "@pixi/devtools";
 
 let app: Application;
 let bunny: Sprite;
