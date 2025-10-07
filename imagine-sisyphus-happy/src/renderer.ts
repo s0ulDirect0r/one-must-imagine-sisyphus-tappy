@@ -29,23 +29,12 @@ export async function initialize(gameState: GameState) {
   // Append the application canvas to the document body
   document.getElementById("pixi-container")!.appendChild(app.canvas);
 
-  //Load song, setup metronome with song 
+  //Load song, setup metronome with song
 
   if (gameState.debug) {
     const container = initializeGrid();
     app.stage.addChild(container);
   }
-
-  const { currentTime, bpm, songDuration } = await loadAudio()
-
-  gameState.songBpm = bpm;
-  gameState.songDuration = songDuration;
-  gameState.timePassedSinceSongStarted = currentTime;
-  gameState.needsAudio = false;
-  setUpMetronome(bpm)
-
-
-  treeTexture = await Assets.load("/assets/tree.png");
 
   initializeUIElements(app);
 }
@@ -75,21 +64,6 @@ function initializeGrid() {
   container.scale = 4;
   return container;
 }
-
-function renderTrees(trees: Tree[]) {
-  trees.forEach((tree) => {
-    const treeSprite = myTrees.get(tree.id);
-    if (treeSprite) {
-      treeSprite.position.set(tree.x, tree.y);
-    } else {
-      const newSprite = new Sprite(treeTexture);
-      newSprite.position.set(tree.x, tree.y);
-      app.stage.addChild(newSprite);
-      myTrees.set(tree.id, newSprite);
-    }
-  });
-}
-
 /**
  * Creates a grid pattern using Graphics lines
  * @param graphics - The Graphics object to draw on

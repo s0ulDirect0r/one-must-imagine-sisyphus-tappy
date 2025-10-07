@@ -6,16 +6,13 @@ import { loadAudio, playAudio } from "./audio";
 import { setUpMetronome } from "./metronome";
 
 let gameState: GameState;
+let { currentTime, bpm, songDuration } = await loadAudio();
 
 export function initializeGameState(): void {
   gameState = stateMachine.initialGameState;
   inputs.initialize();
   // passing it off to the renderer
   renderer.initialize(gameState);
-
-
-
-
 }
 
 export function startGameLoop() {
@@ -31,10 +28,13 @@ export function gameLoop() {
   // logic
   const newState = stateMachine.updateGame(newInputs, gameState); // call all the things that change it
   if (gameState.needsAudio) {
-
     playAudio();
-
-
+  } else {
+    gameState.songBpm = bpm;
+    gameState.songDuration = songDuration;
+    gameState.timePassedSinceSongStarted = currentTime;
+    gameState.needsAudio = false;
+    setUpMetronome(bpm);
   }
 
   gameState = newState;
