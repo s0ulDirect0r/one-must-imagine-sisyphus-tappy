@@ -35,6 +35,7 @@ export function gameLoop() {
 
     playAudio();
 
+
   }
 
   gameState = newState;

@@ -20,10 +20,8 @@ export function expectUserInput(musicPosition: number) {
     let activeBeatStartPosition = nextBeatPosition - window
     let activeBeatEndPosition = nextBeatPosition + window
 
-    console.log("MYSIC POS: ", (musicPosition * 1000), "start: ", activeBeatStartPosition, "end: ", activeBeatEndPosition)
 
     if ((musicPosition * 1000) >= activeBeatStartPosition && (musicPosition * 1000) <= activeBeatEndPosition) {
-        console.log("HELLO")
         lastBeat += 1
         nextBeatPosition += beatDurationMs
         return true

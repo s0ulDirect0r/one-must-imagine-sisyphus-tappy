@@ -19,6 +19,7 @@ export async function loadAudio() {
 
 // gets the current time elapsed of the song
 export function getCurrentAudioTime() {
+    console.log("HELPMEMEEE", audio.currentTime)
     return audio.currentTime
 
 

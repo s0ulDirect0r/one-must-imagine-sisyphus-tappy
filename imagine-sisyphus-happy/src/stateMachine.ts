@@ -35,7 +35,7 @@ export const initialGameState: GameState = {
   elevation: 0,
   score: 0,
   streak: 0,
-  trees: []
+  trees: [],
   songBpm: 0,
   timePassedSinceSongStarted: 0,
   songDuration: 0,
@@ -46,7 +46,10 @@ export const initialGameState: GameState = {
 
 
 export function updateGame(inputs: Map<string, KeyState>, gameState: GameState) {
-  let newGameState = movePlayer(gameState);
+
+  let newGameState: GameState
+
+
   // check if Audio has been loaded in renderer
   if (gameState.needsAudio) {
 
@@ -56,21 +59,22 @@ export function updateGame(inputs: Map<string, KeyState>, gameState: GameState) 
   }
 
   if (isAudioPlaying()) {
-    const expected = expectUserInput(newGameState.timePassedSinceSongStarted);
+    const expected = expectUserInput(gameState.timePassedSinceSongStarted);
     newGameState = {
-      ...newGameState,
+      ...gameState,
       timePassedSinceSongStarted: getCurrentAudioTime(),
       expectMove: expected,
       needsAudio: false
     };
   } else {
     // Just mark that we need to load audio next tick
-    newGameState.needsAudio = true;
+    newGameState = gameState
+    gameState.needsAudio = true
   }
-  newGameState = updateObstacles(inputs, gameState)
+  return updateObstacles(inputs, newGameState)
 
 
-  return newGameState;
+
 
 
 
@@ -90,11 +94,6 @@ export function updateGame(inputs: Map<string, KeyState>, gameState: GameState) 
 
 }
 // An example of some logic that we will move to a component later.
-function movePlayer(gameState: GameState) {
-  const newGameState = {
-    ...gameState,
-    x: gameState.x + 1,
-  };
-  return newGameState;
-}
+
+
 
