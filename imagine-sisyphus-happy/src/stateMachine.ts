@@ -8,8 +8,7 @@ export const MAX_OBSTACLES = 12;
 import { playAudio, isAudioPlaying, getCurrentAudioTime, loadAudio } from "./audio";
 import { setUpMetronome, expectUserInput } from "./metronome";
 export type GameState = {
-  x: number;
-  y: number;
+  player: Player;
   bpm: number;
   elevation: number;
   score: number;
@@ -29,10 +28,16 @@ export type Obstacle = {
   y: number
 }
 
+export type Player = {
+  x: number;
+  y: number;
+};
 
 export const initialGameState: GameState = {
-  x: 100,
-  y: 100,
+  player: {
+    x: Math.floor(GRID_WIDTH / 2),
+    y: Math.floor(GRID_HEIGHT / 3),
+  },
   bpm: 0,
   elevation: 0,
   score: 0,
@@ -68,8 +73,8 @@ export function updateGame(inputs: Map<string, KeyState>, gameState: GameState) 
     // Just mark that we need to load audio next tick
     newGameState = gameState
     gameState.needsAudio = true
-  }  
-  
+  }
+
   if (inputs.get("Space")?.pressed) {
     newGameState = movePlayer(gameState);
   }
