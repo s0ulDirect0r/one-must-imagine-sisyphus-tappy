@@ -1,13 +1,8 @@
-import { GameState } from "./stateMachine";
-import { Application, Text } from "pixi.js";
+import "./main.css";
+// import dominican from "../src/assets/fonts/dominican/DOMINICA.TTF";
+import { Application, Color, FillGradient, Text, TextStyle } from "pixi.js";
 
-export function renderUI(app: Application, score: number, streak: number) {
-  // TODO: show score at top-right of screen
-  const scoreText = new Text({ text: "10000000" });
-  const streakText = new Text({ text: "1000x" });
-  scoreText.x = 100;
-  scoreText.y = 200;
-
-  app.stage.addChild(scoreText);
-  app.stage.addChild(streakText);
+export function renderUI(scoreText: Text, streakText: Text, score: number, streak: number) {
+  scoreText.text = score;
+  streakText.text = streak;
 }
