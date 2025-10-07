@@ -1,3 +1,10 @@
+import { KeyState } from "./input";
+import { updateObstacles } from "./obstacle";
+
+export const GRID_WIDTH = 10
+export const GRID_HEIGHT = 15
+export const MAX_OBSTACLES = 12
+
 import { playAudio, isAudioPlaying, getCurrentAudioTime, loadAudio } from "./audio";
 import { setUpMetronome, expectUserInput } from "./metronome";
 export type GameState = {
@@ -12,7 +19,14 @@ export type GameState = {
   songDuration: number;
   expectMove: boolean;
   needsAudio: boolean;
+  trees: Tree[]
 };
+
+export type Tree = {
+  id: string,
+  x: number,
+  y: number
+}
 
 export const initialGameState: GameState = {
   x: 100,
@@ -21,6 +35,7 @@ export const initialGameState: GameState = {
   elevation: 0,
   score: 0,
   streak: 0,
+  trees: []
   songBpm: 0,
   timePassedSinceSongStarted: 0,
   songDuration: 0,
@@ -30,7 +45,7 @@ export const initialGameState: GameState = {
 };
 
 
-export function updateGame(gameState: GameState) {
+export function updateGame(inputs: Map<string, KeyState>, gameState: GameState) {
   let newGameState = movePlayer(gameState);
   // check if Audio has been loaded in renderer
   if (gameState.needsAudio) {
@@ -52,6 +67,8 @@ export function updateGame(gameState: GameState) {
     // Just mark that we need to load audio next tick
     newGameState.needsAudio = true;
   }
+  newGameState = updateObstacles(inputs, gameState)
+
 
   return newGameState;
 
@@ -72,7 +89,6 @@ export function updateGame(gameState: GameState) {
   // Communicate with Renderer
 
 }
-
 // An example of some logic that we will move to a component later.
 function movePlayer(gameState: GameState) {
   const newGameState = {
@@ -81,3 +97,4 @@ function movePlayer(gameState: GameState) {
   };
   return newGameState;
 }
+

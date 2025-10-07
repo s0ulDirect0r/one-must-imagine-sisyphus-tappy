@@ -1,16 +1,21 @@
 import { Application, Assets, Sprite } from "pixi.js";
 import { startGameLoop, type GameState } from "./coordinator";
+import { Tree } from "./stateMachine";
+import { initializeUIElements, renderUI } from "./ui";
+import { initDevtools } from "@pixi/devtools";
 import { loadAudio } from "./audio";
 import { setUpMetronome } from "./metronome";
 
-let app;
-let bunny;
-let metroSprite: Sprite;
+let app: Application;
+let treeTexture: any
+
+const myTrees: Map<string, Sprite> = new Map();
 
 // Initialize the application
 export async function initialize(gameState) {
   // Create a new application
   app = new Application();
+  initDevtools({ app });
 
   await app.init({ background: "#1099bb", resizeTo: window });
 
@@ -28,63 +33,28 @@ export async function initialize(gameState) {
   setUpMetronome(bpm)
 
 
-  // Load the bunny texture
-  const texture = await Assets.load("/assets/bunny.png");
+  treeTexture = await Assets.load("/assets/tree.png");
 
-  // Create a bunny Sprite
-  bunny = new Sprite(texture);
-
-  const button = await Assets.load("/assets/bunny.png");
-  const startButton = new Sprite(button);
-  startButton.x = 300;
-  startButton.y = 200;
-  startButton.interactive = true; // 👈 make it clickable
-  startButton.cursor = "pointer"; // optional: show hand cursor
-
-  // Add a click listener
-  startButton.on("pointerdown", (event) => {
-    startGameLoop()
-
-  });
-
-  // Add to stage
-  app.stage.addChild(startButton);
-
-  const metronome = await Assets.load("/assets/bunny.png");
-  metroSprite = new Sprite(button);
-  metroSprite.x = 100;
-  metroSprite.y = 100;
-  app.stage.addChild(metroSprite)
-
-
-  // Center the sprite's anchor point
-  bunny.anchor.set(0.5);
-
-  // Move the sprite to the center of the screen
-  bunny.position.set(app.screen.width / 2, app.screen.height / 2);
-
-  // Add the bunny to the stage
-  app.stage.addChild(bunny);
+  initializeUIElements(app);
 }
 
-export async function render(gameState) {
-  if (gameState.expectMove === true) {
+// TODO: split rendering into the scene itself and the UI
+// TODO: write the UI
+export async function render(gameState: GameState) {
+  renderTrees(gameState.trees);
+  renderUI(gameState.score, gameState.streak);
+}
 
-    metroSprite.x = 120
-
-  } else {
-    metroSprite.x = 0
-  }
-
-
-
-  bunny.position.set(gameState.x, gameState.y);
-
-  // Listen for animate update
-  app.ticker.add((time) => {
-    // Just for fun, let's rotate mr rabbit a little.
-    // * Delta is 1 if running at 100% performance *
-    // * Creates frame-independent transformation *
-    bunny.rotation += 0.1 * time.deltaTime;
-  });
+function renderTrees(trees: Tree[]) {
+  trees.forEach(tree => {
+    const treeSprite = myTrees.get(tree.id)
+    if (treeSprite) {
+      treeSprite.position.set(tree.x, tree.y)
+    } else {
+      const newSprite = new Sprite(treeTexture);
+      newSprite.position.set(tree.x, tree.y)
+      app.stage.addChild(newSprite)
+      myTrees.set(tree.id, newSprite)
+    }
+  })
 }

@@ -1,0 +1,38 @@
+import "./main.css";
+import { Application, Text, TextStyle } from "pixi.js";
+let scoreText: Text;
+let streakText: Text;
+
+export function initializeUIElements(app: Application) {
+  // create UI elements
+  // should these be initialized elsewhere?
+  const textStyle = new TextStyle({ align: "center" });
+  scoreText = new Text({ style: textStyle });
+  streakText = new Text({ style: textStyle });
+
+  streakText.pivot.set(streakText.width / 3, streakText.height);
+  streakText.x = app.renderer.screen.width / 2.5;
+  streakText.y = app.renderer.screen.height;
+
+  scoreText.pivot.set(scoreText.width / 2, 0);
+  scoreText.x = app.renderer.screen.width / 2.5;
+  scoreText.y = 0;
+
+  app.stage.addChild(scoreText);
+  app.stage.addChild(streakText);
+
+  return { scoreText, streakText };
+}
+
+export function renderUI(score: number, streak: number) {
+  if (score) {
+    scoreText.text = `${score} ft`;
+  } else {
+    scoreText.text = `${500000} ft`;
+  }
+  if (streak) { 
+    streakText.text = `${streak}x`;
+  } else {
+    streakText.text = `${500}x`;
+  }
+}
