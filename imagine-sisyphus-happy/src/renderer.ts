@@ -1,6 +1,6 @@
 import { Application, Assets, Sprite } from "pixi.js";
 import type { GameState } from "./coordinator";
-import { Tree } from "./stateMachine";
+import { GameState, Tree } from "./stateMachine";
 import { initializeUIElements, renderUI } from "./ui";
 import { initDevtools } from "@pixi/devtools";
 
@@ -10,7 +10,7 @@ let treeTexture: any
 const myTrees: Map<string, Sprite> = new Map();
 
 // Initialize the application
-export async function initialize(gameState) {
+export async function initialize(gameState: GameState) {
   // Create a new application
   app = new Application();
   initDevtools({ app });
@@ -29,7 +29,7 @@ export async function initialize(gameState) {
 // TODO: write the UI
 export async function render(gameState: GameState) {
   renderTrees(gameState.trees);
-  renderUI(gameState.score, gameState.streak);
+  renderUI(gameState.elevation, gameState.streak);
 }
 
 function renderTrees(trees: Tree[]) {
