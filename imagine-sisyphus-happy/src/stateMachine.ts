@@ -1,5 +1,5 @@
 import { playAudio, isAudioPlaying, getCurrentAudioTime, loadAudio } from "./audio";
-import { setUpMetronome, getPosition } from "./metronome";
+import { setUpMetronome, expectUserInput } from "./metronome";
 export type GameState = {
   x: number;
   y: number;
@@ -9,7 +9,8 @@ export type GameState = {
   streak: number;
   songBpm: number;
   timePassedSinceSongStarted: number;
-  songDuration: number
+  songDuration: number;
+  expectMove: boolean
 
 };
 
@@ -22,7 +23,8 @@ export const initialGameState: GameState = {
   streak: 0,
   songBpm: 0,
   timePassedSinceSongStarted: 0,
-  songDuration: 0
+  songDuration: 0,
+  expectMove: false
 };
 
 
@@ -30,11 +32,13 @@ export async function updateGame(gameState: GameState) {
   let newGameState = movePlayer(gameState);
 
   if (isAudioPlaying()) {
+    const expected = expectUserInput(newGameState.timePassedSinceSongStarted)
     newGameState = {
       ...newGameState,
-      timePassedSinceSongStarted: getCurrentAudioTime()
+      timePassedSinceSongStarted: getCurrentAudioTime(),
+      expectMove: expected
+
     };
-    console.log(getPosition(newGameState.timePassedSinceSongStarted))
 
 
 

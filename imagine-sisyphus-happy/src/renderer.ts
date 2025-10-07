@@ -5,6 +5,7 @@ import { startGame } from "./stateMachine";
 
 let app;
 let bunny;
+let metroSprite: Sprite;
 
 // Initialize the application
 export async function initialize(gameState) {
@@ -38,6 +39,13 @@ export async function initialize(gameState) {
   // Add to stage
   app.stage.addChild(startButton);
 
+  const metronome = await Assets.load("/assets/bunny.png");
+  metroSprite = new Sprite(button);
+  metroSprite.x = 100;
+  metroSprite.y = 100;
+  app.stage.addChild(metroSprite)
+
+
   // Center the sprite's anchor point
   bunny.anchor.set(0.5);
 
@@ -49,6 +57,14 @@ export async function initialize(gameState) {
 }
 
 export async function render(gameState) {
+  console.log("STATSATATAT", gameState.expectMove)
+  if (gameState.expectMove === true) {
+
+    metroSprite.x = 120
+
+  } else {
+    metroSprite.x = 0
+  }
 
 
 
