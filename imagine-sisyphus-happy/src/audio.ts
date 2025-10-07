@@ -1,16 +1,55 @@
-// Button will be pressed to run this function
 
-//takes file path of song
-export async function playAudio(song: string) {
+// current audio
+let audio = new Audio("/assets/garbage.mp3")
+
+
+// loads audio and audio metadata, returns metadata
+export async function loadAudio() {
     const bpm = 136 //theoretically get BPM from an API, i just hard coded it this time
-    const audio = new Audio(song)
-    let duration = 0
 
-    await audio.addEventListener("loadedmetadata", () => {
-        duration = audio.duration
-        audio.play();
+    await new Promise<void>((resolve, reject) => {
+        audio.addEventListener("loadedmetadata", () => resolve(), { once: true });
+        audio.addEventListener("error", reject, { once: true });
+        audio.load();
     });
-    return { songTime: 0, bpm: bpm, songDuration: duration }
+    return { currentTime: audio.currentTime, bpm: bpm, songDuration: audio.duration, }
+
+
+}
+
+// gets the current time elapsed of the song
+export function getCurrentAudioTime() {
+    return audio.currentTime
+
+
+}
+
+
+// loads new song, plays it, returns new audio metadata
+
+
+export async function playAudio() {
+
+
+
+
+    audio.play()
+
+
+
+}
+
+
+// chckecs to see if Audio is still playing
+export function isAudioPlaying() {
+    if (audio.currentTime > 0 && !audio.paused && !audio.ended) {
+        return true
+    } else {
+        return false
+    }
+
+
+
 
 
 }

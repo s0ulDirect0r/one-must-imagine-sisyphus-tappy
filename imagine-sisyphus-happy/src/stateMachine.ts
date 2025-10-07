@@ -1,4 +1,4 @@
-import { playAudio } from "./audio";
+import { playAudio, isAudioPlaying, getCurrentAudioTime, loadAudio } from "./audio";
 
 export type GameState = {
   x: number;
@@ -7,6 +7,10 @@ export type GameState = {
   elevation: number;
   score: number;
   streak: number;
+  songBpm: number;
+  timePassedSinceSongStarted: number;
+  songDuration: number
+
 };
 
 export const initialGameState: GameState = {
@@ -16,22 +20,39 @@ export const initialGameState: GameState = {
   elevation: 0,
   score: 0,
   streak: 0,
+  songBpm: 0,
+  timePassedSinceSongStarted: 0,
+  songDuration: 0
 };
 
-// function will run when we 
-export function startGame() {
-  // start Audio when game starts
-  const { songTime, bpm, songDuration } = playAudio("/assets/garbage.mp3")
-  console.log(songTime)
-  console.log(bpm)
-  console.log(songDuration)
 
-}
+export async function updateGame(gameState: GameState) {
+  let newGameState = movePlayer(gameState);
 
-export function updateGame(gameState: GameState) {
+  if (isAudioPlaying()) {
+    newGameState = {
+      ...newGameState,
+      timePassedSinceSongStarted: getCurrentAudioTime()
+    };
+
+  } else {
+    try {
+      const { currentTime, bpm, songDuration } = await loadAudio();
+      newGameState.songBpm = bpm;
+      newGameState.songDuration = songDuration;
+      newGameState.timePassedSinceSongStarted = currentTime;
+      playAudio()
+    } catch (err) {
+      console.error("Audio failed to load:", err);
+    }
+  }
 
 
-  const newGameState = movePlayer(gameState);
+
+
+
+
+
   // We will mutate newGameState however necessary to match
   // the current inputs and outputs and obstacles and etc.
   // These will be from various different components

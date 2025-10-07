@@ -1,5 +1,5 @@
 import { Application, Assets, Sprite } from "pixi.js";
-import type { GameState } from "./coordinator";
+import { startGameLoop, type GameState } from "./coordinator";
 import { playAudio } from "./audio";
 import { startGame } from "./stateMachine";
 
@@ -22,21 +22,21 @@ export async function initialize(gameState) {
   // Create a bunny Sprite
   bunny = new Sprite(texture);
 
-  //Create button to start game 
   const button = await Assets.load("/assets/bunny.png");
-  const sprite = new Sprite(button);
-  sprite.x = 300;
-  sprite.y = 200;
-  sprite.interactive = true; // 👈 make it clickable
-  sprite.cursor = "pointer"; // optional: show hand cursor
+  const startButton = new Sprite(button);
+  startButton.x = 300;
+  startButton.y = 200;
+  startButton.interactive = true; // 👈 make it clickable
+  startButton.cursor = "pointer"; // optional: show hand cursor
 
   // Add a click listener
-  sprite.on("pointerdown", (event) => {
-    startGame()
+  startButton.on("pointerdown", (event) => {
+    startGameLoop()
+
   });
 
   // Add to stage
-  app.stage.addChild(sprite);
+  app.stage.addChild(startButton);
 
   // Center the sprite's anchor point
   bunny.anchor.set(0.5);
