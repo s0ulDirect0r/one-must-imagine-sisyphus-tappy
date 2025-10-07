@@ -26,13 +26,13 @@ export function initializeUIElements(app: Application) {
 
 export function renderUI(score: number, streak: number) {
   if (score) {
-    scoreText.text = score;
+    scoreText.text = `${score} ft`;
   } else {
-    scoreText.text = 500000;
+    scoreText.text = `${500000} ft`;
   }
   if (streak) { 
-    streakText.text = streak;
+    streakText.text = `${streak}x`;
   } else {
-    streakText.text = 500;
+    streakText.text = `${500}x`;
   }
 }
