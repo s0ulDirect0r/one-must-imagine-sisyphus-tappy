@@ -1,5 +1,5 @@
 import { playAudio, isAudioPlaying, getCurrentAudioTime, loadAudio } from "./audio";
-
+import { setUpMetronome, getPosition } from "./metronome";
 export type GameState = {
   x: number;
   y: number;
@@ -34,6 +34,10 @@ export async function updateGame(gameState: GameState) {
       ...newGameState,
       timePassedSinceSongStarted: getCurrentAudioTime()
     };
+    console.log(getPosition(newGameState.timePassedSinceSongStarted))
+
+
+
 
   } else {
     try {
@@ -41,6 +45,7 @@ export async function updateGame(gameState: GameState) {
       newGameState.songBpm = bpm;
       newGameState.songDuration = songDuration;
       newGameState.timePassedSinceSongStarted = currentTime;
+      setUpMetronome(bpm)
       playAudio()
     } catch (err) {
       console.error("Audio failed to load:", err);
