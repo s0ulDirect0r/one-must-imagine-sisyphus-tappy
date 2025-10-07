@@ -10,8 +10,8 @@ export type GameState = {
   songBpm: number;
   timePassedSinceSongStarted: number;
   songDuration: number;
-  expectMove: boolean
-
+  expectMove: boolean;
+  needsAudio: boolean;
 };
 
 export const initialGameState: GameState = {
@@ -24,37 +24,30 @@ export const initialGameState: GameState = {
   songBpm: 0,
   timePassedSinceSongStarted: 0,
   songDuration: 0,
-  expectMove: false
+  expectMove: false,
+  needsAudio: true
+
 };
 
 
-export async function updateGame(gameState: GameState) {
+export function updateGame(gameState: GameState) {
   let newGameState = movePlayer(gameState);
 
   if (isAudioPlaying()) {
-    const expected = expectUserInput(newGameState.timePassedSinceSongStarted)
+    const expected = expectUserInput(newGameState.timePassedSinceSongStarted);
     newGameState = {
       ...newGameState,
       timePassedSinceSongStarted: getCurrentAudioTime(),
-      expectMove: expected
-
+      expectMove: expected,
+      needsAudio: false
     };
-
-
-
-
   } else {
-    try {
-      const { currentTime, bpm, songDuration } = await loadAudio();
-      newGameState.songBpm = bpm;
-      newGameState.songDuration = songDuration;
-      newGameState.timePassedSinceSongStarted = currentTime;
-      setUpMetronome(bpm)
-      playAudio()
-    } catch (err) {
-      console.error("Audio failed to load:", err);
-    }
+    // Just mark that we need to load audio next tick
+    newGameState.needsAudio = true;
   }
+
+  return newGameState;
+
 
 
 
@@ -71,7 +64,6 @@ export async function updateGame(gameState: GameState) {
   // Communicate with Audio
   // Communicate with Renderer
 
-  return newGameState;
 }
 
 // An example of some logic that we will move to a component later.

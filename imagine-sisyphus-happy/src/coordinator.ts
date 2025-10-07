@@ -1,6 +1,7 @@
 import * as stateMachine from "./stateMachine";
 import * as renderer from "./renderer";
-import { isAudioPlaying } from "./audio";
+import { loadAudio, playAudio } from "./audio";
+import { setUpMetronome } from "./metronome";
 
 let gameState: GameState;
 
@@ -24,16 +25,33 @@ export function startGameLoop() {
 }
 
 // This will run 60x per second.
-export async function gameLoop() {
-  // logic
+export function gameLoop() {
+  // If we need to load audio and it's not already loading
+  if (gameState.needsAudio) {
 
+    loadAudio()
+      .then(({ currentTime, bpm, songDuration }) => {
+        gameState.songBpm = bpm;
+        gameState.songDuration = songDuration;
+        gameState.timePassedSinceSongStarted = currentTime;
+        setUpMetronome(bpm)
 
+        playAudio();
 
+        // Mark audio as ready
+        gameState.needsAudio = false;
+        gameState.isLoadingAudio = false;
+      })
+      .catch((err) => {
+        console.error("Audio failed to load:", err);
+        gameState.isLoadingAudio = false;
+      });
+  }
 
-  const newState = await stateMachine.updateGame(gameState); // call all the things that change it
-  console.log("NEW", newState)
+  // Update logic
+  const newState = stateMachine.updateGame(gameState);
   gameState = newState;
 
-  // pass it off to the renderer
+  // Render
   renderer.render(gameState);
 }
