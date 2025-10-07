@@ -29,23 +29,12 @@ export async function initialize(gameState: GameState) {
   // Append the application canvas to the document body
   document.getElementById("pixi-container")!.appendChild(app.canvas);
 
-  //Load song, setup metronome with song 
+  //Load song, setup metronome with song
 
   if (gameState.debug) {
     const container = initializeGrid();
     app.stage.addChild(container);
   }
-
-  const { currentTime, bpm, songDuration } = await loadAudio()
-
-  gameState.songBpm = bpm;
-  gameState.songDuration = songDuration;
-  gameState.timePassedSinceSongStarted = currentTime;
-  gameState.needsAudio = false;
-  setUpMetronome(bpm)
-
-
-  treeTexture = await Assets.load("/assets/tree.png");
 
   initializeUIElements(app);
 }
