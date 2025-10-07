@@ -14,19 +14,20 @@ export type GameState = {
   elevation: number;
   score: number;
   streak: number;
+  obstacles: Obstacle[]
   songBpm: number;
   timePassedSinceSongStarted: number;
   songDuration: number;
   expectMove: boolean;
   needsAudio: boolean;
-  trees: Tree[]
 };
 
-export type Tree = {
-  id: string;
-  x: number;
-  y: number;
-};
+export type Obstacle = {
+  id: string,
+  x: number,
+  y: number
+}
+
 
 export const initialGameState: GameState = {
   x: 100,
@@ -35,13 +36,12 @@ export const initialGameState: GameState = {
   elevation: 0,
   score: 0,
   streak: 0,
-  trees: [],
+  obstacles: []
   songBpm: 0,
   timePassedSinceSongStarted: 0,
   songDuration: 0,
   expectMove: false,
   needsAudio: true
-
 };
 
 
