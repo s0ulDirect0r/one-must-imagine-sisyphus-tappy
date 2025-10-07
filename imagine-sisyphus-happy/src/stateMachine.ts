@@ -5,6 +5,8 @@ export const GRID_WIDTH = 10;
 export const GRID_HEIGHT = 15;
 export const MAX_OBSTACLES = 12;
 
+import { playAudio, isAudioPlaying, getCurrentAudioTime, loadAudio } from "./audio";
+import { setUpMetronome, expectUserInput } from "./metronome";
 export type GameState = {
   x: number;
   y: number;
@@ -12,7 +14,12 @@ export type GameState = {
   elevation: number;
   score: number;
   streak: number;
-  trees: Tree[];
+  songBpm: number;
+  timePassedSinceSongStarted: number;
+  songDuration: number;
+  expectMove: boolean;
+  needsAudio: boolean;
+  trees: Tree[]
 };
 
 export type Tree = {
@@ -29,23 +36,45 @@ export const initialGameState: GameState = {
   score: 0,
   streak: 0,
   trees: [],
+  songBpm: 0,
+  timePassedSinceSongStarted: 0,
+  songDuration: 0,
+  expectMove: false,
+  needsAudio: true
+
 };
 
-export function updateGame(
-  inputs: Map<string, KeyState>,
-  gameState: GameState,
-) {
-  // TODO: split this up into different files
-  // player file?
-  // obstacle generation system?
-  // score system?
-  let newGameState = gameState;
+
+export function updateGame(inputs: Map<string, KeyState>, gameState: GameState) {
+  let newGameState: GameState
+
+  // check if Audio has been loaded in renderer
+  if (gameState.needsAudio) {
+    //play song
+    playAudio();
+  }
+
+  if (isAudioPlaying()) {
+    const expected = expectUserInput(gameState.timePassedSinceSongStarted);
+    newGameState = {
+      ...gameState,
+      timePassedSinceSongStarted: getCurrentAudioTime(),
+      expectMove: expected,
+      needsAudio: false
+    };
+  } else {
+    // Just mark that we need to load audio next tick
+    newGameState = gameState
+    gameState.needsAudio = true
+  }  
+  
   if (inputs.get("Space")?.pressed) {
     newGameState = movePlayer(gameState);
   }
   newGameState = updateObstacles(inputs, newGameState);
   return newGameState;
 }
+
 // An example of some logic that we will move to a component later.
 function movePlayer(gameState: GameState) {
   // A player has pressed the up key and the player is moving!
