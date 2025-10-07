@@ -1,6 +1,13 @@
-import { Application, Assets, Sprite, Container, Graphics } from "pixi.js";
-import { Application, Assets, Sprite, Text, TextStyle } from "pixi.js";
-import type { GameState } from "./coordinator";
+import {
+  Application,
+  Assets,
+  Sprite,
+  Container,
+  Graphics,
+  Text,
+  TextStyle,
+} from "pixi.js";
+import type { GameState } from "./stateMachine";
 import { Tree } from "./stateMachine";
 import { initializeUIElements, renderUI } from "./ui";
 import { initDevtools } from "@pixi/devtools";
