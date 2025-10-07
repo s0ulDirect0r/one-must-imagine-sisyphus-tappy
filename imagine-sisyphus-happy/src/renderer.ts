@@ -8,18 +8,15 @@ import {
   TextStyle,
 } from "pixi.js";
 import type { GameState } from "./stateMachine";
-import { Tree } from "./stateMachine";
 import { initializeUIElements, renderUI } from "./ui";
 import { initDevtools } from "@pixi/devtools";
+import { loadAudio } from "./audio";
+import { setUpMetronome } from "./metronome";
 
 let app: Application;
-let bunny: Sprite;
-let treeTexture: any
-
-const myTrees: Map<string, Sprite> = new Map();
 
 // Initialize the application
-export async function initialize(gameState) {
+export async function initialize(gameState: GameState) {
   // Create a new application
   app = new Application();
   initDevtools({ app });
@@ -32,26 +29,23 @@ export async function initialize(gameState) {
   // Append the application canvas to the document body
   document.getElementById("pixi-container")!.appendChild(app.canvas);
 
-  // Load the bunny texture
-  const texture = await Assets.load("/assets/bunny.png");
-  treeTexture = await Assets.load("/assets/tree.png");
+  //Load song, setup metronome with song 
 
   if (gameState.debug) {
     const container = initializeGrid();
     app.stage.addChild(container);
   }
 
-  // Create a bunny Sprite
-  bunny = new Sprite(texture);
+  const { currentTime, bpm, songDuration } = await loadAudio()
 
-  // Center the sprite's anchor point
-  bunny.anchor.set(0.5);
+  gameState.songBpm = bpm;
+  gameState.songDuration = songDuration;
+  gameState.timePassedSinceSongStarted = currentTime;
+  gameState.needsAudio = false;
+  setUpMetronome(bpm)
 
-  // Move the sprite to the center of the screen
-  bunny.position.set(app.screen.width / 2, app.screen.height / 2);
 
-  // Add the bunny to the stage
-  app.stage.addChild(bunny);
+  treeTexture = await Assets.load("/assets/tree.png");
 
   initializeUIElements(app);
 }
@@ -59,9 +53,7 @@ export async function initialize(gameState) {
 // TODO: split rendering into the scene itself and the UI
 // TODO: write the UI
 export async function render(gameState: GameState) {
-  bunny.position.set(gameState.x, gameState.y);
-  renderTrees(gameState.trees);
-  renderUI(gameState.score);
+  renderUI(gameState.elevation, gameState.streak);
 }
 
 function initializeGrid() {
