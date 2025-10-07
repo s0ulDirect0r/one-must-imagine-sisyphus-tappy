@@ -27,8 +27,10 @@ export async function initialize(gameState) {
   const texture = await Assets.load("/assets/bunny.png");
   treeTexture = await Assets.load("/assets/tree.png");
 
-  const container = initializeGrid();
-  app.stage.addChild(container);
+  if (gameState.debug) {
+    const container = initializeGrid();
+    app.stage.addChild(container);
+  }
 
   // Create a bunny Sprite
   bunny = new Sprite(texture);

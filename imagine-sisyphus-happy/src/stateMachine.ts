@@ -7,7 +7,8 @@ export type GameState = {
   elevation: number;
   score: number;
   streak: number;
-  trees: Tree[]
+  debug: boolean;
+  trees: Tree[];
 };
 
 export type Tree = {
@@ -23,7 +24,8 @@ export const initialGameState: GameState = {
   elevation: 0,
   score: 0,
   streak: 0,
-  trees: []
+  debug: true,
+  trees: [],
 };
 
 export function updateGame(inputs: Map<string, KeyState>, gameState: GameState) {
