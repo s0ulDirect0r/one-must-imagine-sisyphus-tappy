@@ -49,17 +49,3 @@ function movePlayer(gameState: GameState) {
   return newGameState;
 }
 
-// function handleTreePlacement(inputs: Map<string, KeyState>, gameState: GameState): GameState {
-//   if (inputs.get("Space")?.pressed ?? false) {
-//     const newX = Math.floor(Math.random() * 500)
-//     const newY = Math.floor(Math.random() * 500)
-//     const newTreeArray = [...gameState.trees,
-//     { id: crypto.randomUUID(), x: newX, y: newY }]
-//     return {
-//       ...gameState,
-//       trees: newTreeArray,
-//     }
-//   }
-
-//   return gameState
-// }
