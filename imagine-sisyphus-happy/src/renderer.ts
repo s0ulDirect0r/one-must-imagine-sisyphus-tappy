@@ -1,12 +1,13 @@
-import { Application, Assets, Sprite } from "pixi.js";
+import { Application, Assets, Sprite, Text, TextStyle } from "pixi.js";
 import type { GameState } from "./coordinator";
 import { Tree } from "./stateMachine";
-import { renderUI } from "./ui";
+import { initializeUIElements, renderUI } from "./ui";
 import { initDevtools } from "@pixi/devtools";
 
 let app: Application;
 let bunny: Sprite;
 let treeTexture: any
+
 const myTrees: Map<string, Sprite> = new Map();
 
 // Initialize the application
@@ -35,14 +36,16 @@ export async function initialize(gameState) {
 
   // Add the bunny to the stage
   app.stage.addChild(bunny);
+
+  initializeUIElements(app);
 }
 
 // TODO: split rendering into the scene itself and the UI
 // TODO: write the UI
 export async function render(gameState: GameState) {
   bunny.position.set(gameState.x, gameState.y);
-  renderTrees(gameState.trees)
-  renderUI(gameState.score)
+  renderTrees(gameState.trees);
+  renderUI(gameState.score, gameState.streak);
 }
 
 function renderTrees(trees: Tree[]) {
