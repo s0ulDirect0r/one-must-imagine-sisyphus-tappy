@@ -12,6 +12,7 @@ const myTrees: Map<string, Sprite> = new Map();
 export async function initialize(gameState) {
   // Create a new application
   app = new Application();
+  initDevtools({ app });
 
   await app.init({ background: "#1099bb", resizeTo: window });
 
