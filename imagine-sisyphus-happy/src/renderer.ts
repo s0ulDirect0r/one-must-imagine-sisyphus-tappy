@@ -75,21 +75,6 @@ function initializeGrid() {
   container.scale = 4;
   return container;
 }
-
-function renderTrees(trees: Tree[]) {
-  trees.forEach((tree) => {
-    const treeSprite = myTrees.get(tree.id);
-    if (treeSprite) {
-      treeSprite.position.set(tree.x, tree.y);
-    } else {
-      const newSprite = new Sprite(treeTexture);
-      newSprite.position.set(tree.x, tree.y);
-      app.stage.addChild(newSprite);
-      myTrees.set(tree.id, newSprite);
-    }
-  });
-}
-
 /**
  * Creates a grid pattern using Graphics lines
  * @param graphics - The Graphics object to draw on
