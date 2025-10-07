@@ -2,6 +2,7 @@ import { Application, Assets, Sprite, Text, TextStyle } from "pixi.js";
 import type { GameState } from "./coordinator";
 import { Tree } from "./stateMachine";
 import { initializeUIElements, renderUI } from "./ui";
+import { initDevtools } from "@pixi/devtools";
 
 let app: Application;
 let bunny: Sprite;
@@ -13,6 +14,7 @@ const myTrees: Map<string, Sprite> = new Map();
 export async function initialize(gameState) {
   // Create a new application
   app = new Application();
+  initDevtools({ app });
 
   await app.init({ background: "#1099bb", resizeTo: window });
 
