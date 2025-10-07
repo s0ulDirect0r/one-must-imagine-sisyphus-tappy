@@ -1,8 +1,12 @@
 import { Application, Assets, Sprite } from "pixi.js";
 import type { GameState } from "./coordinator";
+import { Tree } from "./stateMachine";
+import { renderUI } from "./ui";
 
-let app;
-let bunny;
+let app: Application;
+let bunny: Sprite;
+let treeTexture: any
+const myTrees: Map<string, Sprite> = new Map();
 
 // Initialize the application
 export async function initialize(gameState) {
@@ -16,6 +20,7 @@ export async function initialize(gameState) {
 
   // Load the bunny texture
   const texture = await Assets.load("/assets/bunny.png");
+  treeTexture = await Assets.load("/assets/tree.png");
 
   // Create a bunny Sprite
   bunny = new Sprite(texture);
@@ -30,14 +35,24 @@ export async function initialize(gameState) {
   app.stage.addChild(bunny);
 }
 
-export async function render(gameState) {
+// TODO: split rendering into the scene itself and the UI
+// TODO: write the UI
+export async function render(gameState: GameState) {
   bunny.position.set(gameState.x, gameState.y);
+  renderTrees(gameState.trees)
+  renderUI(gameState.score)
+}
 
-  // Listen for animate update
-  app.ticker.add((time) => {
-    // Just for fun, let's rotate mr rabbit a little.
-    // * Delta is 1 if running at 100% performance *
-    // * Creates frame-independent transformation *
-    bunny.rotation += 0.1 * time.deltaTime;
-  });
+function renderTrees(trees: Tree[]) {
+  trees.forEach(tree => {
+    const treeSprite = myTrees.get(tree.id)
+    if (treeSprite) {
+      treeSprite.position.set(tree.x, tree.y)
+    } else {
+      const newSprite = new Sprite(treeTexture);
+      newSprite.position.set(tree.x, tree.y)
+      app.stage.addChild(newSprite)
+      myTrees.set(tree.id, newSprite)
+    }
+  })
 }

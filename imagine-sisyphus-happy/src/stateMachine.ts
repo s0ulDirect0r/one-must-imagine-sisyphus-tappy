@@ -1,3 +1,5 @@
+import { KeyState } from "./input";
+
 export type GameState = {
   x: number;
   y: number;
@@ -5,7 +7,14 @@ export type GameState = {
   elevation: number;
   score: number;
   streak: number;
+  trees: Tree[]
 };
+
+export type Tree = {
+  id: string,
+  x: number,
+  y: number
+}
 
 export const initialGameState: GameState = {
   x: 100,
@@ -14,29 +23,39 @@ export const initialGameState: GameState = {
   elevation: 0,
   score: 0,
   streak: 0,
+  trees: []
 };
 
-export function updateGame(gameState: GameState) {
-  const newGameState = movePlayer(gameState);
-  // We will mutate newGameState however necessary to match
-  // the current inputs and outputs and obstacles and etc.
-  // These will be from various different components
-  // and from StateMachine
-
-  // Communicate with State Machine
-  // Communicate with Audio
-  // Communicate with Renderer
-
+export function updateGame(inputs: Map<string, KeyState>, gameState: GameState) {
+  // TODO: split this up into different files
+  // player file? 
+  // obstacle generation system?
+  // score system?
+  let newGameState = movePlayer(gameState);
+  newGameState = handleTreePlacement(inputs, newGameState);
   return newGameState;
 }
-
 // An example of some logic that we will move to a component later.
 function movePlayer(gameState: GameState) {
-  console.log("changing...", gameState);
   const newGameState = {
     ...gameState,
     x: gameState.x + 1,
   };
-  console.log("newGameState:", newGameState);
   return newGameState;
+}
+
+function handleTreePlacement(inputs: Map<string, KeyState>, gameState: GameState): GameState {
+  console.log("inputs: ", inputs)
+  if (inputs.get("Space")?.pressed ?? false) {
+    const newX = Math.floor(Math.random() * 500)
+    const newY = Math.floor(Math.random() * 500)
+    const newTreeArray = [...gameState.trees,
+    { id: crypto.randomUUID(), x: newX, y: newY }]
+    return {
+      ...gameState,
+      trees: newTreeArray,
+    }
+  }
+
+  return gameState
 }
