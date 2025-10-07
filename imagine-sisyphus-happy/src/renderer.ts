@@ -61,15 +61,15 @@ function initializeGrid() {
   });
 
   // To center the grid in the container, use half of
-  // `gridCellWidth` * `cellPixelLength` => 15*10 = 75
-  // `gridCellHeight` * `cellPixelLength` => 10*10 = 55
-  grid.position.set(-75, -50);
+  // `gridCellWidth` * `cellPixelLength` => 10*10 = 50
+  // `gridCellHeight` * `cellPixelLength` => 15*10 = 75
+  grid.position.set(-50, -75);
 
   const container = new Container();
 
   container.addChild(grid);
   container.position.set(app.screen.width / 2, app.screen.height / 2);
-  container.scale = 8;
+  container.scale = 4;
   return container;
 }
 
@@ -94,8 +94,8 @@ function renderTrees(trees: Tree[]) {
  */
 function buildGrid(graphics: Graphics) {
   // TODO Connect the grid to the gamestate information about the grid.
-  const gridCellWidth = 10;
-  const gridCellHeight = 15;
+  const gridCellWidth = 15;
+  const gridCellHeight = 10;
   const cellPixelLength = 10;
 
   graphics = graphics.stroke({ width: 1, color: 0xff0000, pixelLine: true });
