@@ -1,4 +1,9 @@
 import { KeyState } from "./input";
+import { updateObstacles } from "./obstacle";
+
+export const GRID_WIDTH = 10
+export const GRID_HEIGHT = 15
+export const MAX_OBSTACLES = 12
 
 export type GameState = {
   x: number;
@@ -32,7 +37,8 @@ export function updateGame(inputs: Map<string, KeyState>, gameState: GameState) 
   // obstacle generation system?
   // score system?
   let newGameState = movePlayer(gameState);
-  newGameState = handleTreePlacement(inputs, newGameState);
+  // newGameState = handleTreePlacement(inputs, newGameState);
+  newGameState = updateObstacles(inputs, gameState);
   return newGameState;
 }
 // An example of some logic that we will move to a component later.
@@ -44,18 +50,18 @@ function movePlayer(gameState: GameState) {
   return newGameState;
 }
 
-function handleTreePlacement(inputs: Map<string, KeyState>, gameState: GameState): GameState {
-  console.log("inputs: ", inputs)
-  if (inputs.get("Space")?.pressed ?? false) {
-    const newX = Math.floor(Math.random() * 500)
-    const newY = Math.floor(Math.random() * 500)
-    const newTreeArray = [...gameState.trees,
-    { id: crypto.randomUUID(), x: newX, y: newY }]
-    return {
-      ...gameState,
-      trees: newTreeArray,
-    }
-  }
+// function handleTreePlacement(inputs: Map<string, KeyState>, gameState: GameState): GameState {
+//   console.log("inputs: ", inputs)
+//   if (inputs.get("Space")?.pressed ?? false) {
+//     const newX = Math.floor(Math.random() * 500)
+//     const newY = Math.floor(Math.random() * 500)
+//     const newTreeArray = [...gameState.trees,
+//     { id: crypto.randomUUID(), x: newX, y: newY }]
+//     return {
+//       ...gameState,
+//       trees: newTreeArray,
+//     }
+//   }
 
-  return gameState
-}
+//   return gameState
+// }
