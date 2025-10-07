@@ -15,32 +15,32 @@ export function updateObstacles(inputs: Map<string, KeyState>, gameState: GameSt
   // TODO: might need to do filtering order to conform max obstacle size
   if (inputs.get("Space")?.pressed ?? false) {
     // TODO: obstacle movement may eventually need its own function
-    const movedTrees = gameState.trees.map(tree => ({ ...tree, y: tree.y - 1 }))
-    const boundedTrees = movedTrees.filter(tree => tree.y >= 0)
+    const movedObstacles = gameState.obstacles.map(obs => ({ ...obs, y: obs.y - 1 }))
+    const bounded = movedObstacles.filter(obs => obs.y >= 0)
 
     // TODO: possible to generate multiple obstacles per line? 
-    if (gameState.trees.length < MAX_OBSTACLES) {
+    if (bounded.length < MAX_OBSTACLES) {
       const newX = Math.floor(Math.random() * (GRID_WIDTH - 1))
       const newY = GRID_HEIGHT - 1
-      const newTree = {
+      const newObstacle = {
         id: crypto.randomUUID(),
         x: newX,
         y: newY
       }
 
-      const newTreeArray = [...boundedTrees, newTree]
+      const newTreeArray = [...bounded, newObstacle]
       const newGameState = {
         ...gameState,
-        trees: newTreeArray,
+        obstacles: newTreeArray,
       }
-      console.log(newGameState.trees)
+      console.log(newGameState.obstacles)
       return newGameState
     } else {
       const newGameState = {
         ...gameState,
-        trees: boundedTrees
+        trees: bounded
       }
-      console.log(newGameState.trees)
+      console.log(newGameState.obstacles)
       return newGameState
     }
   }
