@@ -39,8 +39,8 @@ export async function initialize(gameState) {
 // TODO: write the UI
 export async function render(gameState: GameState) {
   bunny.position.set(gameState.x, gameState.y);
-  renderTrees(gameState.trees)
-  renderUI(gameState.score)
+  renderTrees(gameState.trees);
+  renderUI(app, gameState.score, gameState.streak);
 }
 
 function renderTrees(trees: Tree[]) {
