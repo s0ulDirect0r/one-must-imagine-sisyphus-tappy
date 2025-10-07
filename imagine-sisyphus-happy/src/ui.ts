@@ -1,5 +1,4 @@
 import "./main.css";
-// import dominican from "../src/assets/fonts/dominican/DOMINICA.TTF";
 import { Application, Text, TextStyle } from "pixi.js";
 let scoreText: Text;
 let streakText: Text;
