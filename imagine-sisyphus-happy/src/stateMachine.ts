@@ -32,6 +32,13 @@ export const initialGameState: GameState = {
 
 export function updateGame(gameState: GameState) {
   let newGameState = movePlayer(gameState);
+  // check if Audio has been loaded in renderer
+  if (gameState.needsAudio) {
+
+    //play song
+    playAudio();
+
+  }
 
   if (isAudioPlaying()) {
     const expected = expectUserInput(newGameState.timePassedSinceSongStarted);

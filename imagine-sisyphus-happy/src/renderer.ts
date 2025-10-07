@@ -1,7 +1,7 @@
 import { Application, Assets, Sprite } from "pixi.js";
 import { startGameLoop, type GameState } from "./coordinator";
-import { playAudio } from "./audio";
-import { startGame } from "./stateMachine";
+import { loadAudio } from "./audio";
+import { setUpMetronome } from "./metronome";
 
 let app;
 let bunny;
@@ -16,6 +16,17 @@ export async function initialize(gameState) {
 
   // Append the application canvas to the document body
   document.getElementById("pixi-container")!.appendChild(app.canvas);
+
+  //Load song, setup metronome with song 
+
+  const { currentTime, bpm, songDuration } = await loadAudio()
+
+  gameState.songBpm = bpm;
+  gameState.songDuration = songDuration;
+  gameState.timePassedSinceSongStarted = currentTime;
+  gameState.needsAudio = false;
+  setUpMetronome(bpm)
+
 
   // Load the bunny texture
   const texture = await Assets.load("/assets/bunny.png");
@@ -57,7 +68,6 @@ export async function initialize(gameState) {
 }
 
 export async function render(gameState) {
-  console.log("STATSATATAT", gameState.expectMove)
   if (gameState.expectMove === true) {
 
     metroSprite.x = 120
