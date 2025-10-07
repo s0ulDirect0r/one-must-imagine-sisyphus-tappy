@@ -37,8 +37,7 @@ export function updateGame(inputs: Map<string, KeyState>, gameState: GameState) 
   // obstacle generation system?
   // score system?
   let newGameState = movePlayer(gameState);
-  // newGameState = handleTreePlacement(inputs, newGameState);
-  newGameState = updateObstacles(inputs, gameState);
+  newGameState = updateObstacles(inputs, gameState)
   return newGameState;
 }
 // An example of some logic that we will move to a component later.
@@ -51,7 +50,6 @@ function movePlayer(gameState: GameState) {
 }
 
 // function handleTreePlacement(inputs: Map<string, KeyState>, gameState: GameState): GameState {
-//   console.log("inputs: ", inputs)
 //   if (inputs.get("Space")?.pressed ?? false) {
 //     const newX = Math.floor(Math.random() * 500)
 //     const newY = Math.floor(Math.random() * 500)
