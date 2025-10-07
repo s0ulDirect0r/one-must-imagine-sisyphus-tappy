@@ -6,6 +6,7 @@ let gameState: GameState;
 export function initializeGameState(): GameState {
   gameState = stateMachine.initialGameState;
 
+
   // passing it off to the renderer
   renderer.initialize(gameState);
 }
@@ -19,7 +20,6 @@ export function startGameLoop() {
 
 // This will run 60x per second.
 export function gameLoop() {
-  console.log("looping");
   // logic
   const newState = stateMachine.updateGame(gameState); // call all the things that change it
 

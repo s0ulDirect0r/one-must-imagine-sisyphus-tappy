@@ -1,3 +1,5 @@
+import { playAudio } from "./audio";
+
 export type GameState = {
   x: number;
   y: number;
@@ -16,7 +18,19 @@ export const initialGameState: GameState = {
   streak: 0,
 };
 
+// function will run when we 
+export function startGame() {
+  // start Audio when game starts
+  const { songTime, bpm, songDuration } = playAudio("/assets/garbage.mp3")
+  console.log(songTime)
+  console.log(bpm)
+  console.log(songDuration)
+
+}
+
 export function updateGame(gameState: GameState) {
+
+
   const newGameState = movePlayer(gameState);
   // We will mutate newGameState however necessary to match
   // the current inputs and outputs and obstacles and etc.
@@ -32,11 +46,9 @@ export function updateGame(gameState: GameState) {
 
 // An example of some logic that we will move to a component later.
 function movePlayer(gameState: GameState) {
-  console.log("changing...", gameState);
   const newGameState = {
     ...gameState,
     x: gameState.x + 1,
   };
-  console.log("newGameState:", newGameState);
   return newGameState;
 }
