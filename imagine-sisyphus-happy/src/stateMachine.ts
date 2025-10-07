@@ -14,7 +14,8 @@ export type GameState = {
   elevation: number;
   score: number;
   streak: number;
-  obstacles: Obstacle[]
+  debug: boolean;
+  obstacles: Obstacle[];
   songBpm: number;
   timePassedSinceSongStarted: number;
   songDuration: number;
@@ -36,7 +37,8 @@ export const initialGameState: GameState = {
   elevation: 0,
   score: 0,
   streak: 0,
-  obstacles: []
+  debug: true,
+  obstacles: [],
   songBpm: 0,
   timePassedSinceSongStarted: 0,
   songDuration: 0,
