@@ -1,17 +1,7 @@
-import {
-  Application,
-  Assets,
-  Sprite,
-  Container,
-  Graphics,
-  Text,
-  TextStyle,
-} from "pixi.js";
+import { Application, Container, Graphics } from "pixi.js";
 import type { GameState } from "./stateMachine";
 import { initializeUIElements, renderUI } from "./ui";
 import { initDevtools } from "@pixi/devtools";
-import { loadAudio } from "./audio";
-import { setUpMetronome } from "./metronome";
 
 let app: Application;
 
@@ -42,7 +32,7 @@ export async function initialize(gameState: GameState) {
 // TODO: split rendering into the scene itself and the UI
 // TODO: write the UI
 export async function render(gameState: GameState) {
-  renderUI(gameState.elevation, gameState.streak);
+  renderUI(gameState.expectMove, gameState.elevation, gameState.streak);
 }
 
 function initializeGrid() {

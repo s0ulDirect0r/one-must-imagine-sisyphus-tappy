@@ -24,9 +24,9 @@ export function startGameLoop() {
 
 // This will run 60x per second.
 export function gameLoop() {
-  const newInputs = inputs.updateInputs();
+  // const newInputs = inputs.updateInputs();
   // logic
-  const newState = stateMachine.updateGame(newInputs, gameState); // call all the things that change it
+  const newState = stateMachine.updateGame(inputs.inputState, gameState); // call all the things that change it
   if (gameState.needsAudio) {
     setUpMetronome(bpm);
     playAudio();
