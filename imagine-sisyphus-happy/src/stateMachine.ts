@@ -5,8 +5,9 @@ export const GRID_WIDTH = 10;
 export const GRID_HEIGHT = 15;
 export const MAX_OBSTACLES = 12;
 
-import { playAudio, isAudioPlaying, getCurrentAudioTime } from "./audio";
-import { expectUserInput } from "./metronome";
+import { playAudio, isAudioPlaying, getCurrentAudioTime, loadAudio } from "./audio";
+import { setUpMetronome, expectUserInput } from "./metronome";
+//import { movePlayer } from "./Player";
 export type GameState = {
   player: Player;
   bpm: number;
@@ -86,7 +87,10 @@ export function updateGame(
 
   newGameState = updateObstacles(inputs, newGameState);
   return newGameState;
+
 }
+
+
 
 // An example of some logic that we will move to a component later.
 function movePlayer(gameState: GameState) {
