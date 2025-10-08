@@ -7,6 +7,7 @@ export const MAX_OBSTACLES = 12;
 
 import { playAudio, isAudioPlaying, getCurrentAudioTime, loadAudio } from "./audio";
 import { setUpMetronome, expectUserInput } from "./metronome";
+//import { movePlayer } from "./Player";
 export type GameState = {
   player: Player;
   bpm: number;
@@ -75,12 +76,19 @@ export function updateGame(inputs: Map<string, KeyState>, gameState: GameState) 
     gameState.needsAudio = true
   }
 
+
+
+
+
   if (inputs.get("Space")?.pressed) {
     newGameState = movePlayer(gameState);
   }
   newGameState = updateObstacles(inputs, newGameState);
   return newGameState;
+
 }
+
+
 
 // An example of some logic that we will move to a component later.
 function movePlayer(gameState: GameState) {
@@ -107,3 +115,7 @@ function movePlayer(gameState: GameState) {
 
   return newGameState;
 }
+
+
+
+
