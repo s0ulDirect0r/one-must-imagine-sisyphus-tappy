@@ -28,13 +28,13 @@ export function gameLoop() {
   // logic
   const newState = stateMachine.updateGame(newInputs, gameState); // call all the things that change it
   if (gameState.needsAudio) {
+    setUpMetronome(bpm);
     playAudio();
   } else {
     gameState.songBpm = bpm;
     gameState.songDuration = songDuration;
     gameState.timePassedSinceSongStarted = currentTime;
     gameState.needsAudio = false;
-    setUpMetronome(bpm);
   }
 
   gameState = newState;
