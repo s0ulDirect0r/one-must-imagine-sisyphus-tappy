@@ -29,12 +29,20 @@ export function initializeUIElements(app: Application) {
 
   if (DEBUG_MODE) {
     debugText = new Text({ style: textStyle });
+<<<<<<< Updated upstream
     debugMetronomeText = new Text({ style: textStyle })
+=======
+    debugMetronomeText = new Text({ style: textStyle });
+>>>>>>> Stashed changes
 
     debugText.pivot.set(debugText.width / 2, 0);
     debugText.x = app.renderer.screen.width / 6;
     debugText.y = 100;
+<<<<<<< Updated upstream
     app.stage.addChild(debugText)
+=======
+    app.stage.addChild(debugText);
+>>>>>>> Stashed changes
 
     debugMetronomeText.pivot.set(debugMetronomeText.width / 2, 0);
     debugMetronomeText.x = app.renderer.screen.width / 8;
@@ -67,7 +75,6 @@ export function renderUI(
       );
     }
     debugText.text = textGuy;
-    console.log(expectMove);
     debugMetronomeText.text = `Metronome Debug State: \n${expectMove}`;
   }
 }
