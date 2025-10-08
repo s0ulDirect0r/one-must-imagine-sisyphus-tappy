@@ -10,8 +10,7 @@ import {
 import type { GameState } from "./stateMachine";
 import { initializeUIElements, renderUI } from "./ui";
 import { initDevtools } from "@pixi/devtools";
-import { loadAudio } from "./audio";
-import { setUpMetronome } from "./metronome";
+import { initializePlayer } from "./Player";
 
 let app: Application;
 
@@ -37,6 +36,7 @@ export async function initialize(gameState: GameState) {
   }
 
   initializeUIElements(app);
+  initializePlayer(app);
 }
 
 // TODO: split rendering into the scene itself and the UI
