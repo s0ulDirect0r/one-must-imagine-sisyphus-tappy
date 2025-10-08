@@ -2,7 +2,6 @@ export type KeyState = { pressed: boolean; justPressed: boolean };
 const keys: Map<string, KeyState> = new Map();
 
 export function initialize() {
-  console.log("am i initializing a lot?")
   window.addEventListener("keydown", (e) => {
     if (!keys.get(e.code)) {
       keys.set(e.code, { pressed: true, justPressed: true });
