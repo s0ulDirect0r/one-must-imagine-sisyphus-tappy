@@ -71,18 +71,12 @@ export function updateGame(
   }
 
   const spacePressed = inputState.get("Space")?.justPressed;
-  if (spacePressed) {
-    console.log(newGameState)
-  }
-
-  const judgement = judge(spacePressed, newGameState.expectMove, newGameState.elevation, newGameState.streak);
+  const judgement = judge(spacePressed, newGameState.expectMove, gameState.elevation, gameState.streak);
 
   if (judgement && judgement.elevation) {
-    console.log(judgement);
     newGameState = { ...newGameState, ...judgement };
     newGameState.player = movePlayer(gameState.player);
   } else {
-    console.log(judgement)
     newGameState = { ...newGameState, ...judgement };
   }
 
