@@ -58,7 +58,7 @@ export async function initialize(gameState: GameState) {
 // TODO: split rendering into the scene itself and the UI
 // TODO: write the UI
 export async function render(gameState: GameState) {
-  renderUI(gameState.expectMove, gameState.elevation, gameState.streak);
+  renderUI(gameState.expectMove, gameState.elevation, gameState.streak, gameState.lost);
   renderObstacles(app, gameState.obstacles, gameState.expectMove);
   renderBackgroundScreen(gameState.expectMove, app);
 }

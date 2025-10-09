@@ -18,6 +18,7 @@ export type GameState = {
   elevation: number;
   score: number;
   streak: number;
+  missStreak: number;
   debug: boolean;
   obstacles: Obstacle[];
   songBpm: number;
@@ -25,6 +26,7 @@ export type GameState = {
   songDuration: number;
   expectMove: boolean;
   needsAudio: boolean;
+  lost: boolean;
 };
 
 // The initial values of gameState.
@@ -38,6 +40,7 @@ export const gameState: GameState = {
   elevation: 0,
   score: 0,
   streak: 0,
+  missStreak: 0,
   debug: true,
   obstacles: [],
   songBpm: 0,
@@ -45,6 +48,7 @@ export const gameState: GameState = {
   songDuration: 0,
   expectMove: false,
   needsAudio: true,
+  lost: false,
 };
 
 export function updateGame(
@@ -76,6 +80,7 @@ export function updateGame(
     newGameState.expectMove,
     gameState.elevation,
     gameState.streak,
+    gameState.missStreak,
   );
   newGameState = { ...newGameState, ...judgement };
 
