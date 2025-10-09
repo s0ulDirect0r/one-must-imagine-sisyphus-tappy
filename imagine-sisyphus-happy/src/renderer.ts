@@ -15,8 +15,6 @@ import { loadAudio } from "./audio";
 import { setUpMetronome } from "./metronome";
 import * as background from "./background";
 import { initializePlayer } from "./Player";
-import { initialGameState } from "./stateMachine"
-
 
 let app: Application;
 const backgroundScreen = new Graphics();
