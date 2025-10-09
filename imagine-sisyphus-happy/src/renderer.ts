@@ -8,6 +8,7 @@ import {
   Text,
   TextStyle,
   Texture,
+  ColorMatrixFilter,
 } from "pixi.js";
 import type { GameState } from "./stateMachine";
 import * as ui from "./ui";
@@ -20,6 +21,7 @@ import * as screen from "./backgroundScreen";
 let app: Application;
 let obstacleTexture: Texture;
 let lastState: GameState;
+let colorMatrix: ColorMatrixFilter;
 
 // Initialize the application
 export async function initialize(gameState: GameState) {
