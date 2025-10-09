@@ -1,4 +1,5 @@
 import { inputState, KeyState } from "./input";
+import { judge } from "./judge";
 import { updateObstacles, type Obstacle } from "./obstacle";
 
 export const GRID_WIDTH = 10;
@@ -69,18 +70,20 @@ export function updateGame(
     newGameState.needsAudio = true;
   }
 
-  if (inputState.get("Space")?.justPressed && newGameState.expectMove) {
-    const elevationChange = gameState.elevation + 100;
-    const streakChange = gameState.streak + 1;
+  const spacePressed = inputState.get("Space")?.justPressed;
+  if (spacePressed) {
+    console.log(newGameState)
+  }
 
-    newGameState.elevation = elevationChange;
-    newGameState.streak = streakChange;
+  const judgement = judge(spacePressed, newGameState.expectMove, newGameState.elevation, newGameState.streak);
 
-    console.log("moving");
+  if (judgement && judgement.elevation) {
+    console.log(judgement);
+    newGameState = { ...newGameState, ...judgement };
     newGameState.player = movePlayer(gameState.player);
-  } else if (inputState.get("Space")?.justPressed && !newGameState.expectMove) {
-    console.log("punishing");
-    newGameState.streak = 0;
+  } else {
+    console.log(judgement)
+    newGameState = { ...newGameState, ...judgement };
   }
 
   newGameState.obstacles = updateObstacles(inputs, gameState.obstacles);
