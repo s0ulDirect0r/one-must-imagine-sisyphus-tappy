@@ -4,6 +4,7 @@ import {
   Sprite,
   Container,
   Graphics,
+  Ticker,
   Text,
   TextStyle,
 } from "pixi.js";
@@ -12,6 +13,7 @@ import { initializeUIElements, renderUI } from "./ui";
 import { initDevtools } from "@pixi/devtools";
 import { loadAudio } from "./audio";
 import { setUpMetronome } from "./metronome";
+import * as background from "./background";
 
 let app: Application;
 
@@ -29,14 +31,15 @@ export async function initialize(gameState: GameState) {
   // Append the application canvas to the document body
   document.getElementById("pixi-container")!.appendChild(app.canvas);
 
-  //Load song, setup metronome with song
+  const bg = await background.init(app.screen.width, app.screen.height);
+  app.stage.addChild(bg);
 
-  if (gameState.debug) {
-    const container = initializeGrid();
-    app.stage.addChild(container);
-  }
+  app.ticker.add((ticker) => {
+    background.frame(ticker);
+  });
 
-  initializeUIElements(app);
+  // const myGrid = initializeGrid();
+  // app.stage.addChild(myGrid);
 }
 
 // TODO: split rendering into the scene itself and the UI
