@@ -75,7 +75,7 @@ export function updateGame(
     newGameState.streak = streakChange;
 
     console.log("moving");
-    newGameState.player = movePlayer(newGameState.player);
+    newGameState.player = movePlayer(gameState.player);
   } else if (inputState.get("Space")?.justPressed && !newGameState.expectMove) {
     console.log("punishing");
     newGameState.streak = 0;
