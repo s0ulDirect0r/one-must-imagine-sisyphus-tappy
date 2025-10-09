@@ -3,6 +3,7 @@ import type { GameState } from "./stateMachine";
 import { initializeUIElements, renderUI } from "./ui";
 import { initDevtools } from "@pixi/devtools";
 import { initializePlayer } from "./Player";
+import { initialGameState } from "./stateMachine";
 
 let app: Application;
 
@@ -28,7 +29,7 @@ export async function initialize(gameState: GameState) {
   }
 
   initializeUIElements(app);
-  initializePlayer(app);
+  initializePlayer(app, initialGameState.player);
 }
 
 // TODO: split rendering into the scene itself and the UI
