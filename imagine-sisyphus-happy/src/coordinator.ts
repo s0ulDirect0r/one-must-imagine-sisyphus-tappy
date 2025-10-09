@@ -5,7 +5,7 @@ import type { GameState } from "./stateMachine";
 import { loadAudio, playAudio } from "./audio";
 import { setUpMetronome } from "./metronome";
 
-const gameState = stateMachine.gameState;
+let gameState = stateMachine.gameState;
 let { currentTime, bpm, songDuration } = await loadAudio();
 
 export function initializeGameState(): void {
@@ -30,13 +30,13 @@ export function gameLoop() {
     setUpMetronome(bpm);
     playAudio();
   } else {
-    gameState.songBpm = bpm;
-    gameState.songDuration = songDuration;
-    gameState.timePassedSinceSongStarted = currentTime;
-    gameState.needsAudio = false;
+    newState.songBpm = bpm;
+    newState.songDuration = songDuration;
+    newState.timePassedSinceSongStarted = currentTime;
+    newState.needsAudio = false;
   }
 
-  gameState = newState;
+  gameState = { ...gameState, ...newState };
 
   // Render
   renderer.render(gameState);
