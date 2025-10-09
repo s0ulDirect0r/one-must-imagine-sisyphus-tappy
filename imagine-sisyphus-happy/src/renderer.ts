@@ -15,8 +15,6 @@ import { loadAudio } from "./audio";
 import { setUpMetronome } from "./metronome";
 import * as background from "./background";
 import { initializePlayer } from "./Player";
-import { initialGameState } from "./stateMachine"
-
 
 let app: Application;
 
@@ -44,7 +42,7 @@ export async function initialize(gameState: GameState) {
   // const myGrid = initializeGrid();
   // app.stage.addChild(myGrid);
   initializeUIElements(app);
-  initializePlayer(app, initialGameState.player);
+  initializePlayer(app, gameState.player);
 }
 
 // TODO: split rendering into the scene itself and the UI

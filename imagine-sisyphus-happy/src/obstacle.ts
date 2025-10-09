@@ -3,19 +3,25 @@
 // then move every obstacle down in the beat
 
 import { KeyState } from "./input"
-import { GameState, GRID_HEIGHT, GRID_WIDTH, MAX_OBSTACLES, Obstacle } from "./stateMachine"
+import { GameState, GRID_HEIGHT, GRID_WIDTH, MAX_OBSTACLES } from "./stateMachine"
+
+export type Obstacle = {
+  id: string;
+  x: number;
+  y: number;
+};
 
 // mvp: generate an obstacle for every space press, and move each obstacle down by one
 // TODO: pass obstacle updates to renderer, make it it's own function?
 // TODO: handle player movement? need to calculate elevation and player position
-export function updateObstacles(inputs: Map<string, KeyState>, gameState: GameState): GameState {
+export function updateObstacles(inputs: Map<string, KeyState>, obstacles: Obstacle[]): Obstacle[] {
   // console.log("inputs: ", inputs)
   // for now, space press represents new beat
   // TODO: sync movement updates to metronome
   // TODO: might need to do filtering order to conform max obstacle size
   if (inputs.get("Space")?.pressed ?? false) {
     // TODO: obstacle movement may eventually need its own function
-    const movedObstacles = gameState.obstacles.map(obs => ({ ...obs, y: obs.y - 1 }))
+    const movedObstacles = obstacles.map(obs => ({ ...obs, y: obs.y - 1 }))
     const bounded = movedObstacles.filter(obs => obs.y >= 0)
 
     // TODO: possible to generate multiple obstacles per line? 
@@ -30,13 +36,9 @@ export function updateObstacles(inputs: Map<string, KeyState>, gameState: GameSt
       ]
       : bounded
 
-    const newGameState = {
-      ...gameState,
-      obstacles: spawned,
-    }
 
-    return newGameState
+    return spawned
   }
 
-  return gameState
+  return obstacles
 }
