@@ -24,7 +24,6 @@ export function startGameLoop() {
 
 // This will run 60x per second.
 export function gameLoop() {
-  // const newInputs = inputs.updateInputs();
   // logic
   const newState = stateMachine.updateGame(inputs.inputState, gameState); // call all the things that change it
   if (gameState.needsAudio) {
@@ -38,6 +37,8 @@ export function gameLoop() {
   }
 
   gameState = newState;
+
+  inputs.updateInputs();
 
   // Render
   renderer.render(gameState);

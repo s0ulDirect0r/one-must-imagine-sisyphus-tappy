@@ -35,7 +35,6 @@ export function updateObstacles(inputs: Map<string, KeyState>, gameState: GameSt
       obstacles: spawned,
     }
 
-    console.log(newGameState.obstacles)
     return newGameState
   }
 

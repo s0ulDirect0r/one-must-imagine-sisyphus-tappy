@@ -64,7 +64,7 @@ export function updateGame(
   }
 
   if (isAudioPlaying()) {
-    const currentTime = getCurrentAudioTime()
+    const currentTime = getCurrentAudioTime();
     const expected = expectUserInput(currentTime);
     newGameState = {
       ...gameState,
@@ -78,21 +78,21 @@ export function updateGame(
     gameState.needsAudio = true;
   }
 
-  if (inputState.get("Space")?.pressed && newGameState.expectMove) {
-    let elevationChange = gameState.elevation + 100;
-    let streakChange = gameState.streak + 1;
+  if (inputState.get("Space")?.justPressed && newGameState.expectMove) {
+    const elevationChange = gameState.elevation + 100;
+    const streakChange = gameState.streak + 1;
 
     newGameState = {
       ...gameState,
       elevation: elevationChange,
       streak: streakChange,
     };
-
+    console.log('moving')
     newGameState = movePlayer(newGameState);
+  } else if (inputState.get("Space")?.justPressed && !newGameState.expectMove) {
+    console.log('punishing')
+    newGameState = punishPlayer(newGameState);
   }
-  // } else if (inputState.get("Space")?.pressed && !newGameState.expectMove) {
-  //   newGameState = punishPlayer(newGameState);
-  // }
 
   newGameState = updateObstacles(inputs, newGameState);
   return newGameState;
