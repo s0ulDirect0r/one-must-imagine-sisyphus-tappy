@@ -78,16 +78,9 @@ export function updateGame(
     newGameState.player = movePlayer(newGameState.player);
   } else if (inputState.get("Space")?.justPressed && !newGameState.expectMove) {
     console.log("punishing");
-    newGameState.player = punishPlayer(newGameState.player);
+    newGameState.streak = 0;
   }
 
   newGameState.obstacles = updateObstacles(inputs, gameState.obstacles);
   return newGameState;
-}
-
-function punishPlayer(gameState: GameState) {
-  return {
-    ...gameState,
-    streak: 0,
-  };
 }
