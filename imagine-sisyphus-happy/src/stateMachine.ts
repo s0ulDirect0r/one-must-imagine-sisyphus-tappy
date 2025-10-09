@@ -60,7 +60,7 @@ export function updateGame(
   }
 
   if (isAudioPlaying()) {
-    const currentTime = getCurrentAudioTime() + TIME_OFFSET
+    const currentTime = getCurrentAudioTime() + TIME_OFFSET;
     const expected = expectUserInput(currentTime);
     newGameState.timePassedSinceSongStarted = currentTime;
     newGameState.expectMove = expected;
@@ -71,13 +71,16 @@ export function updateGame(
   }
 
   const spacePressed = inputState.get("Space")?.justPressed;
-  const judgement = judge(spacePressed, newGameState.expectMove, gameState.elevation, gameState.streak);
+  const judgement = judge(
+    spacePressed,
+    newGameState.expectMove,
+    gameState.elevation,
+    gameState.streak,
+  );
+  newGameState = { ...newGameState, ...judgement };
 
   if (judgement && judgement.elevation) {
-    newGameState = { ...newGameState, ...judgement };
     newGameState.player = movePlayer(gameState.player);
-  } else {
-    newGameState = { ...newGameState, ...judgement };
   }
 
   newGameState.obstacles = updateObstacles(inputs, gameState.obstacles);
