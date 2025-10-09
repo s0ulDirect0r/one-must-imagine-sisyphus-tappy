@@ -48,8 +48,8 @@ export function initFrame(width: number, height: number) {
   gameOverText.anchor.set(0.5, 0.5);
 
   // Position at screen center
-  gameOverText.x = app.screen.width / 2;
-  gameOverText.y = app.screen.height / 2;
+  gameOverText.x = width / 2;
+  gameOverText.y = height / 2;
 
   // Make sure it's on top
   gameOverText.zIndex = 1000;
@@ -57,11 +57,6 @@ export function initFrame(width: number, height: number) {
   // Add to stage
 
   // Make sure z-index sorting is enabled on the stage
-  app.stage.sortableChildren = true;
-
-  app.stage.addChild(elevationText);
-  app.stage.addChild(streakText);
-  app.stage.addChild(gameOverText);
 
   if (DEBUG_MODE) {
     debugText = new Text({ style: textStyle });
@@ -70,7 +65,6 @@ export function initFrame(width: number, height: number) {
     debugText.pivot.set(debugText.width / 2, 0);
     debugText.x = width / 6;
     debugText.y = 100;
-    app.stage.addChild(debugText);
 
     debugMetronomeText.pivot.set(debugMetronomeText.width / 2, 0);
     debugMetronomeText.x = width / 8;

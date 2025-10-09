@@ -17,6 +17,7 @@ import * as background from "./background";
 import { Obstacle } from "./obstacle";
 import * as player from "./Player";
 import * as screen from "./backgroundScreen";
+import { DEBUG_MODE } from "./debug";
 
 let app: Application;
 let obstacleTexture: Texture;
@@ -35,20 +36,31 @@ export async function initialize(gameState: GameState) {
     background: "#1099bb",
     resizeTo: window,
   });
-
-  const width = app.screen.width;
-  const height = app.screen.height;
+  const { width, height } = app.screen;
 
   // Append the application canvas to the document body
   document.getElementById("pixi-container")!.appendChild(app.canvas);
 
   const bg = await background.initFrame(width, height);
   app.stage.addChild(bg);
-  app.ticker.add((ticker) => {
-    background.frame(ticker);
-  });
 
-  const { width, height } = app.screen;
+  // TODO
+  const bgScreen = screen.initFrame(app);
+  app.stage.addChild(bgScreen);
+
+  const playerSprite = await player.initFrame(width, height, gameState.player);
+  app.stage.addChild(playerSprite);
+
+  const { elevationText, streakText, debugText, debugMetronomeText } =
+    ui.initFrame(width, height);
+
+  app.stage.addChild(elevationText);
+  app.stage.addChild(streakText);
+  if (DEBUG_MODE) {
+    app.stage.addChild(debugText);
+    app.stage.addChild(debugMetronomeText);
+  }
+
   const borderWidth = 10;
   const holeWidth = width - borderWidth * 2;
   const holeHeight = height - borderWidth * 2;
@@ -68,26 +80,6 @@ export async function initialize(gameState: GameState) {
   //   border.alpha -= ticker.deltaMS;
   // });
 
-  // const myGrid = initializeGrid();
-  // app.stage.addChild(myGrid);
-  initializeUIElements(app);
-  initializePlayer(app, gameState.player);
-
-  // TODO
-  const bgScreen = screen.initFrame(app);
-  app.stage.addChild(bgScreen);
-
-  const playerSprite = await player.initFrame(width, height, gameState.player);
-  app.stage.addChild(playerSprite);
-
-  const { elevationText, streakText, debugText, debugMetronomeText } =
-    ui.initFrame(width, height);
-
-  app.stage.addChild(elevationText);
-  app.stage.addChild(streakText);
-  // app.stage.addChild(debugText);
-  // app.stage.addChild(debugMetronomeText);
-
   app.ticker.add((ticker) => {
     if (!lastState) return;
     drawScene(lastState, ticker); // pure draw call
@@ -101,13 +93,11 @@ export async function render(state: GameState) {
 }
 
 async function drawScene(state: GameState, ticker: Ticker) {
-  renderUI(state.expectMove, state.elevation, state.streak, state.lost);
-  renderBackgroundScreen(state.expectMove, app);
-  renderObstacles(app, state.obstacles, state.expectMove);
   background.frame(state, ticker);
   screen.frame(state.expectMove, app);
-  ui.frame(state.expectMove, state.elevation, state.streak);
+  renderObstacles(app, state.obstacles);
   player.frame(state.player);
+  ui.frame(state.expectMove, state.elevation, state.streak, state.lost, ticker);
 }
 
 const myObstacles: Map<string, Sprite> = new Map();
