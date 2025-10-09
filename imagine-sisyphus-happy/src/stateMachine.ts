@@ -1,4 +1,4 @@
-import { KeyState } from "./input";
+import { inputState, KeyState } from "./input";
 import { updateObstacles } from "./obstacle";
 
 export const GRID_WIDTH = 10;
@@ -25,10 +25,10 @@ export type GameState = {
 };
 
 export type Obstacle = {
-  id: string,
-  x: number,
-  y: number
-}
+  id: string;
+  x: number;
+  y: number;
+};
 
 
 
@@ -48,12 +48,14 @@ export const initialGameState: GameState = {
   timePassedSinceSongStarted: 0,
   songDuration: 0,
   expectMove: false,
-  needsAudio: true
+  needsAudio: true,
 };
 
-
-export function updateGame(inputs: Map<string, KeyState>, gameState: GameState) {
-  let newGameState: GameState
+export function updateGame(
+  inputs: Map<string, KeyState>,
+  gameState: GameState,
+) {
+  let newGameState: GameState;
 
   // check if Audio has been loaded in renderer
   if (gameState.needsAudio) {
@@ -67,22 +69,21 @@ export function updateGame(inputs: Map<string, KeyState>, gameState: GameState) 
       ...gameState,
       timePassedSinceSongStarted: getCurrentAudioTime(),
       expectMove: expected,
-      needsAudio: false
+      needsAudio: false,
     };
   } else {
     // Just mark that we need to load audio next tick
-    newGameState = gameState
-    gameState.needsAudio = true
+    newGameState = gameState;
+    gameState.needsAudio = true;
   }
 
-
-
-
-
-  if (inputs.get("Space")?.pressed) {
-    newGameState = movePlayer(gameState);
-    console.log(newGameState.player.y)
+  if (inputState.get("Space")?.pressed && newGameState.expectMove) {
+    newGameState = movePlayer(newGameState);
   }
+  // } else if (inputState.get("Space")?.pressed && !newGameState.expectMove) {
+  //   newGameState = punishPlayer(newGameState);
+  // }
+
   newGameState = updateObstacles(inputs, newGameState);
   return newGameState;
 
@@ -92,6 +93,9 @@ export function updateGame(inputs: Map<string, KeyState>, gameState: GameState) 
 
 
 
-
-
-
+function punishPlayer(gameState: GameState) {
+  return {
+    ...gameState,
+    streak: 0,
+  };
+}
