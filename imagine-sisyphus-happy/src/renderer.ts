@@ -53,12 +53,12 @@ export async function initialize(gameState: GameState) {
   const animationDuration = 250;
   app.stage.addChild(border);
   // TODO: implement border fade with background logic??
-  app.ticker.add((ticker) => {
-    if (gameState.expectMove) {
-      border.alpha = 1;
-    }
-    border.alpha -= ticker.deltaMS;
-  });
+  // app.ticker.add((ticker) => {
+  //   if (gameState.expectMove) {
+  //     border.alpha = 1;
+  //   }
+  //   border.alpha -= ticker.deltaMS;
+  // });
 
   // const myGrid = initializeGrid();
   // app.stage.addChild(myGrid);
