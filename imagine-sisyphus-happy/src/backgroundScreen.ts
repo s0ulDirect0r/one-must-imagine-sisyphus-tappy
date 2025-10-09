@@ -3,6 +3,8 @@ import { getCurrentAudioTime } from "./audio";
 
 const backgroundScreen = new Graphics();
 const FLASH_DURATION = 0.6;
+const VISUAL_OFFSET = 0.06;
+
 let lastBeatTime = 0;
 let flashing = false;
 
@@ -29,21 +31,27 @@ export function changeBackgroundColor(color: string, app: Application) {
     backgroundScreen.fill();
 }
 
-export function renderBackgroundScreen(expectMove: boolean, app: Application) {
-    const now = getCurrentAudioTime() + .07;
 
-    // Trigger flash only when expectMove just started
-    if (expectMove) {
-        // If we're within beat window, keep flashing active
-        if (!flashing) {
-            flashing = true;
-            lastBeatTime = now;
-            changeBackgroundColor("#cc33ff", app);
-        }
-    } else if (flashing && now - lastBeatTime > FLASH_DURATION) {
-        flashing = false;
-        changeBackgroundColor("#33ff85", app);
+export function renderBackgroundScreen(expectMove: boolean, app: Application) {
+    const now = getCurrentAudioTime() + VISUAL_OFFSET;
+
+    // Start flash when expectMove becomes true
+    if (expectMove && !flashing) {
+        flashing = true;
+        lastBeatTime = now;
     }
 
+    // Determine current flash color
+    let color = "#33ff85"; // default
+    if (flashing) {
+        color = "#cc33ff";
+    }
 
+    // Draw the background every frame
+    changeBackgroundColor(color, app);
+
+    // End flash after FLASH_DURATION
+    if (flashing && now - lastBeatTime >= FLASH_DURATION) {
+        flashing = false;
+    }
 }

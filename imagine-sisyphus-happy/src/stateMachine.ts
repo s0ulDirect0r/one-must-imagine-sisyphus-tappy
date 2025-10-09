@@ -53,6 +53,7 @@ export function updateGame(
   gameState: GameState,
 ): Partial<GameState> {
   let newGameState: Partial<GameState> = {};
+  let expected = false
 
   // check if Audio has been loaded in renderer
   if (gameState.needsAudio) {
@@ -66,7 +67,7 @@ export function updateGame(
 
   if (isAudioPlaying()) {
     const currentTime = getCurrentAudioTime() - TIME_OFFSET
-    const expected = isInBeatWindow(currentTime, 136, gameState.songStartTime, 0.12)
+    expected = isInBeatWindow(currentTime, 136, gameState.songStartTime)
     newGameState.expectMove = expected
     newGameState.timePassedSinceSongStarted = currentTime;
 
