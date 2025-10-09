@@ -78,6 +78,15 @@ export function updateGame(
   }
 
   if (inputState.get("Space")?.pressed && newGameState.expectMove) {
+    let elevationChange = gameState.elevation + 100;
+    let streakChange = gameState.streak + 1;
+  
+    const newGameState = {
+      ...gameState,
+      elevation: elevationChange,
+      streak: streakChange,
+    };
+
     newGameState = movePlayer(newGameState);
   }
   // } else if (inputState.get("Space")?.pressed && !newGameState.expectMove) {
