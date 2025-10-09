@@ -1,7 +1,9 @@
 import { DEBUG_MODE } from "./debug";
 import { inputState } from "./input";
 import "./main.css";
-import { Application, Text, TextStyle } from "pixi.js";
+import { Application, Text, TextStyle, Graphics } from "pixi.js";
+import { changeBackgroundColor } from "./renderer";
+import { getCurrentAudioTime } from "./audio";
 let elevationText: Text;
 let streakText: Text;
 let debugText: Text;
@@ -34,7 +36,7 @@ export function initializeUIElements(app: Application) {
     debugText.pivot.set(debugText.width / 2, 0);
     debugText.x = app.renderer.screen.width / 6;
     debugText.y = 100;
-    app.stage.addChild(debugText);
+    app.stage.addChild(debugText)
 
     debugMetronomeText.pivot.set(debugMetronomeText.width / 2, 0);
     debugMetronomeText.x = app.renderer.screen.width / 8;
@@ -45,6 +47,9 @@ export function initializeUIElements(app: Application) {
   return { elevationText, streakText };
 }
 
+let lastBeatTime = 0;
+let flashing = false;
+
 export function renderUI(
   expectMove: boolean,
   elevation: number,
@@ -53,20 +58,28 @@ export function renderUI(
   elevationText.text = `${elevation} ft`;
   streakText.text = `${streak}x`;
 
-  if (DEBUG_MODE) {
-    const entries = inputState.entries();
-    let textGuy = "Key Debug State: \n";
-    for (const [key, value] of entries) {
-      textGuy = textGuy.concat(
-        key,
-        ":    ",
-        String(value.pressed),
-        "     ",
-        String(value.justPressed),
-        "\n",
-      );
-    }
-    debugText.text = textGuy;
-    debugMetronomeText.text = `Metronome Debug State: \n${expectMove}`;
-  }
+
 }
+
+
+/*
+
+if (DEBUG_MODE) {
+  const entries = inputState.entries();
+  let textGuy = "Key Debug State: \n";
+  for (const [key, value] of entries) {
+    textGuy = textGuy.concat(
+      key,
+      ":    ",
+      String(value.pressed),
+      "     ",
+      String(value.justPressed),
+      "\n",
+    );
+  }
+  debugText.text = textGuy;
+  debugMetronomeText.text = `Metronome Debug State: \n${expectMove}`;
+}
+
+*/
+
