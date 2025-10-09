@@ -1,5 +1,5 @@
 import { inputState, KeyState } from "./input";
-import { updateObstacles } from "./obstacle";
+import { updateObstacles, type Obstacle } from "./obstacle";
 
 export const GRID_WIDTH = 10;
 export const GRID_HEIGHT = 15;
@@ -24,19 +24,12 @@ export type GameState = {
   needsAudio: boolean;
 };
 
-export type Obstacle = {
-  id: string;
-  x: number;
-  y: number;
-};
-
-
-
-export const initialGameState: GameState = {
+// The initial values of gameState.
+export const gameState: GameState = {
   player: {
     x: screen.width / 2,
     y: screen.height / 2 + 200, // TODO need app screen specifically?
-    speed: 0.1
+    speed: 0.1,
   },
   bpm: 0,
   elevation: 0,
@@ -54,8 +47,8 @@ export const initialGameState: GameState = {
 export function updateGame(
   inputs: Map<string, KeyState>,
   gameState: GameState,
-) {
-  let newGameState: GameState;
+): Partial<GameState> {
+  let newGameState: Partial<GameState> = {};
 
   // check if Audio has been loaded in renderer
   if (gameState.needsAudio) {
@@ -64,37 +57,30 @@ export function updateGame(
   }
 
   if (isAudioPlaying()) {
-    const currentTime = getCurrentAudioTime()
+    const currentTime = getCurrentAudioTime();
     const expected = expectUserInput(currentTime);
-    newGameState = {
-      ...gameState,
-      timePassedSinceSongStarted: currentTime,
-      expectMove: expected,
-      needsAudio: false,
-    };
+    newGameState.timePassedSinceSongStarted = currentTime;
+    newGameState.expectMove = expected;
+    newGameState.needsAudio = false;
   } else {
     // Just mark that we need to load audio next tick
-    newGameState = gameState;
-    gameState.needsAudio = true;
+    newGameState.needsAudio = true;
   }
 
-  if (inputState.get("Space")?.pressed && newGameState.expectMove) {
+  if (inputState.get("Space")?.pressed && gameState.expectMove) {
     let elevationChange = gameState.elevation + 100;
     let streakChange = gameState.streak + 1;
 
-    newGameState = {
-      ...gameState,
-      elevation: elevationChange,
-      streak: streakChange,
-    };
+    newGameState.elevation = elevationChange;
+    newGameState.streak = streakChange;
 
-    newGameState = movePlayer(newGameState);
+    newGameState.player = movePlayer(gameState.player);
   }
   // } else if (inputState.get("Space")?.pressed && !newGameState.expectMove) {
   //   newGameState = punishPlayer(newGameState);
   // }
 
-  newGameState = updateObstacles(inputs, newGameState);
+  newGameState.obstacles = updateObstacles(inputs, gameState.obstacles);
   return newGameState;
 }
 
