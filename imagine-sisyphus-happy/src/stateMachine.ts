@@ -1,9 +1,10 @@
 import { inputState, KeyState } from "./input";
+import { judge } from "./judge";
 import { updateObstacles, type Obstacle } from "./obstacle";
 
 export const GRID_WIDTH = 10;
 export const GRID_HEIGHT = 15;
-export const MAX_OBSTACLES = 12;
+export const MAX_OBSTACLES = 1;
 export const TIME_OFFSET = 0.05
 
 import { playAudio, isAudioPlaying, getCurrentAudioTime } from "./audio";
@@ -67,6 +68,7 @@ export function updateGame(
     const currentTime = getCurrentAudioTime() - TIME_OFFSET
     const expected = isInBeatWindow(currentTime, 136, gameState.songStartTime, 0.12)
     newGameState.expectMove = expected
+    newGameState.timePassedSinceSongStarted = currentTime;
 
     console.log({
       currentTime,
@@ -82,20 +84,19 @@ export function updateGame(
     newGameState.needsAudio = true;
   }
 
-  if (inputState.get("Space")?.justPressed && newGameState.expectMove) {
-    const elevationChange = gameState.elevation + 100;
-    const streakChange = gameState.streak + 1;
+  const spacePressed = inputState.get("Space")?.justPressed;
+  const judgement = judge(
+    spacePressed,
+    newGameState.expectMove,
+    gameState.elevation,
+    gameState.streak,
+  );
+  newGameState = { ...newGameState, ...judgement };
 
-    newGameState.elevation = elevationChange;
-    newGameState.streak = streakChange;
-
-    console.log("moving");
+  if (judgement && judgement.elevation) {
     newGameState.player = movePlayer(gameState.player);
-  } else if (inputState.get("Space")?.justPressed && !newGameState.expectMove) {
-    console.log("punishing");
-    newGameState.streak = 0;
   }
 
-  newGameState.obstacles = updateObstacles(inputs, gameState.obstacles);
+  newGameState.obstacles = updateObstacles(gameState.obstacles, gameState.expectMove);
   return newGameState;
 }
