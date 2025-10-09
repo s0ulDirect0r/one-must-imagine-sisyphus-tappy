@@ -10,11 +10,11 @@ import {
   Texture,
 } from "pixi.js";
 import type { GameState } from "./stateMachine";
-import { initializeUIElements, renderUI } from "./ui";
+import * as ui from "./ui";
 import { initDevtools } from "@pixi/devtools";
 import * as background from "./background";
-import { initializePlayer } from "./Player";
 import { Obstacle } from "./obstacle";
+import * as player from "./Player";
 import {
   initializeBackgroundScreen,
   renderBackgroundScreen,
@@ -40,7 +40,7 @@ export async function initialize(gameState: GameState) {
   // Append the application canvas to the document body
   document.getElementById("pixi-container")!.appendChild(app.canvas);
 
-  const bg = await background.init(app.screen.width, app.screen.height);
+  const bg = await background.initFrame(app.screen.width, app.screen.height);
   app.stage.addChild(bg);
   app.ticker.add((ticker) => {
     background.frame(ticker);
@@ -74,6 +74,21 @@ export async function initialize(gameState: GameState) {
   const bgScreen = initializeBackgroundScreen(app);
   app.stage.addChild(bgScreen);
 
+  const playerSprite = await player.initFrame(
+    app.screen.width,
+    app.screen.height,
+    gameState.player,
+  );
+  app.stage.addChild(playerSprite);
+
+  const { elevationText, streakText, debugText, debugMetronomeText } =
+    ui.initFrame(app.screen.width, app.screen.height);
+
+  app.stage.addChild(elevationText);
+  app.stage.addChild(streakText);
+  // app.stage.addChild(debugText);
+  // app.stage.addChild(debugMetronomeText);
+
   app.ticker.add((ticker) => {
     if (!lastState) return;
     drawScene(lastState, ticker); // pure draw call
@@ -91,6 +106,9 @@ async function drawScene(state: GameState, ticker: Ticker) {
   renderBackgroundScreen(state.expectMove, app);
   renderObstacles(app, state.obstacles, state.expectMove);
   background.frame(state, ticker);
+  renderBackgroundScreen(state.expectMove, app);
+  ui.frame(state.expectMove, state.elevation, state.streak);
+  player.frame(state.player);
 }
 
 const myObstacles: Map<string, Sprite> = new Map();

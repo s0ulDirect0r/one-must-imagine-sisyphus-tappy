@@ -13,7 +13,7 @@ const SCROLL_RATE = TILE_LENGTH / FPS; // One Tile per Second
 
 // Delta time is 60 units per second.
 
-export async function init(width: number, height: number) {
+export async function initFrame(width: number, height: number) {
   // console.log("tinyswords", JSON.stringify(tinyswords));
   // console.log("groundjson", JSON.parse("/assets/ground.json"))
 
