@@ -8,9 +8,8 @@ export const MAX_OBSTACLES = 1;
 export const TIME_OFFSET = 0.05
 
 import { playAudio, isAudioPlaying, getCurrentAudioTime } from "./audio";
-import { expectUserInput } from "./metronome";
+import { isInBeatWindow } from "./metronome";
 import { Player, movePlayer } from "./Player";
-import { renderUI } from "./ui";
 //import { movePlayer } from "./Player";
 export type GameState = {
   player: Player;
@@ -25,6 +24,7 @@ export type GameState = {
   songDuration: number;
   expectMove: boolean;
   needsAudio: boolean;
+  songStartTime: number;
 };
 
 // The initial values of gameState.
@@ -45,6 +45,7 @@ export const gameState: GameState = {
   songDuration: 0,
   expectMove: false,
   needsAudio: true,
+  songStartTime: 0,
 };
 
 export function updateGame(
@@ -52,19 +53,33 @@ export function updateGame(
   gameState: GameState,
 ): Partial<GameState> {
   let newGameState: Partial<GameState> = {};
+  let expected = false
 
   // check if Audio has been loaded in renderer
   if (gameState.needsAudio) {
     //play song
-    playAudio();
+    const now = performance.now() / 1000
+
+    if (!gameState.songStartTime) {
+      newGameState.songStartTime = now
+    }
   }
 
   if (isAudioPlaying()) {
-    const currentTime = getCurrentAudioTime() + TIME_OFFSET;
-    const expected = expectUserInput(currentTime);
+    const currentTime = getCurrentAudioTime() - TIME_OFFSET
+    expected = isInBeatWindow(currentTime, 136, gameState.songStartTime)
+    newGameState.expectMove = expected
     newGameState.timePassedSinceSongStarted = currentTime;
-    newGameState.expectMove = expected;
-    newGameState.needsAudio = false;
+
+    console.log({
+      currentTime,
+      songStartTime: gameState.songStartTime,
+      elapsed: currentTime - gameState.songStartTime,
+      bpm: 136,
+      secondsPerBeat: 60 / gameState.songBpm,
+      expected,
+    });
+
   } else {
     // Just mark that we need to load audio next tick
     newGameState.needsAudio = true;
