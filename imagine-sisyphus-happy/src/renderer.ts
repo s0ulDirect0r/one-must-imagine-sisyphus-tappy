@@ -1,9 +1,22 @@
-import { Application, Container, Graphics } from "pixi.js";
+import {
+  Application,
+  Assets,
+  Sprite,
+  Container,
+  Graphics,
+  Ticker,
+  Text,
+  TextStyle,
+} from "pixi.js";
 import type { GameState } from "./stateMachine";
 import { initializeUIElements, renderUI } from "./ui";
 import { initDevtools } from "@pixi/devtools";
+import { loadAudio } from "./audio";
+import { setUpMetronome } from "./metronome";
+import * as background from "./background";
 import { initializePlayer } from "./Player";
-import { initialGameState } from "./stateMachine";
+import { initialGameState } from "./stateMachine"
+
 
 let app: Application;
 
@@ -21,13 +34,15 @@ export async function initialize(gameState: GameState) {
   // Append the application canvas to the document body
   document.getElementById("pixi-container")!.appendChild(app.canvas);
 
-  //Load song, setup metronome with song
+  const bg = await background.init(app.screen.width, app.screen.height);
+  app.stage.addChild(bg);
 
-  if (gameState.debug) {
-    const container = initializeGrid();
-    app.stage.addChild(container);
-  }
+  app.ticker.add((ticker) => {
+    background.frame(ticker);
+  });
 
+  // const myGrid = initializeGrid();
+  // app.stage.addChild(myGrid);
   initializeUIElements(app);
   initializePlayer(app, initialGameState.player);
 }
