@@ -80,8 +80,8 @@ export function updateGame(
   if (inputState.get("Space")?.pressed && newGameState.expectMove) {
     let elevationChange = gameState.elevation + 100;
     let streakChange = gameState.streak + 1;
-  
-    const newGameState = {
+
+    newGameState = {
       ...gameState,
       elevation: elevationChange,
       streak: streakChange,
@@ -95,7 +95,6 @@ export function updateGame(
 
   newGameState = updateObstacles(inputs, newGameState);
   return newGameState;
-
 }
 
 
