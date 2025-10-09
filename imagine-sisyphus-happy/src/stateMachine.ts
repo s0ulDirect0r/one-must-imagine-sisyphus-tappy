@@ -1,4 +1,4 @@
-import { KeyState } from "./input";
+import { inputState, KeyState } from "./input";
 import { updateObstacles } from "./obstacle";
 
 export const GRID_WIDTH = 10;
@@ -7,6 +7,8 @@ export const MAX_OBSTACLES = 12;
 
 import { playAudio, isAudioPlaying, getCurrentAudioTime, loadAudio } from "./audio";
 import { setUpMetronome, expectUserInput } from "./metronome";
+import { Player, movePlayer } from "./Player";
+//import { movePlayer } from "./Player";
 export type GameState = {
   player: Player;
   bpm: number;
@@ -23,20 +25,18 @@ export type GameState = {
 };
 
 export type Obstacle = {
-  id: string,
-  x: number,
-  y: number
-}
-
-export type Player = {
+  id: string;
   x: number;
   y: number;
 };
 
+
+
 export const initialGameState: GameState = {
   player: {
-    x: Math.floor(GRID_WIDTH / 2),
-    y: Math.floor(GRID_HEIGHT / 3),
+    x: screen.width / 2,
+    y: screen.height / 2 + 200, // TODO need app screen specifically?
+    speed: 0.1
   },
   bpm: 0,
   elevation: 0,
@@ -48,12 +48,14 @@ export const initialGameState: GameState = {
   timePassedSinceSongStarted: 0,
   songDuration: 0,
   expectMove: false,
-  needsAudio: true
+  needsAudio: true,
 };
 
-
-export function updateGame(inputs: Map<string, KeyState>, gameState: GameState) {
-  let newGameState: GameState
+export function updateGame(
+  inputs: Map<string, KeyState>,
+  gameState: GameState,
+) {
+  let newGameState: GameState;
 
   // check if Audio has been loaded in renderer
   if (gameState.needsAudio) {
@@ -67,43 +69,41 @@ export function updateGame(inputs: Map<string, KeyState>, gameState: GameState) 
       ...gameState,
       timePassedSinceSongStarted: getCurrentAudioTime(),
       expectMove: expected,
-      needsAudio: false
+      needsAudio: false,
     };
   } else {
     // Just mark that we need to load audio next tick
-    newGameState = gameState
-    gameState.needsAudio = true
+    newGameState = gameState;
+    gameState.needsAudio = true;
   }
 
-  if (inputs.get("Space")?.pressed) {
-    newGameState = movePlayer(gameState);
+  if (inputState.get("Space")?.pressed && newGameState.expectMove) {
+    let elevationChange = gameState.elevation + 100;
+    let streakChange = gameState.streak + 1;
+
+    newGameState = {
+      ...gameState,
+      elevation: elevationChange,
+      streak: streakChange,
+    };
+
+    newGameState = movePlayer(newGameState);
   }
+  // } else if (inputState.get("Space")?.pressed && !newGameState.expectMove) {
+  //   newGameState = punishPlayer(newGameState);
+  // }
+
   newGameState = updateObstacles(inputs, newGameState);
   return newGameState;
 }
 
-// An example of some logic that we will move to a component later.
-function movePlayer(gameState: GameState) {
-  // A player has pressed the up key and the player is moving!
-  // If "beatWindow = open", move the player forward and increase elevation
-  // if "beatWindow = closed" player does NOT move forward, log a miss
-  let elevationChange;
-  let streakChange;
 
-  // TODO: Change if argument to gameState.expectMove
-  if (true) {
-    elevationChange = gameState.elevation + 100;
-    streakChange = gameState.streak + 1;
-  } else {
-    elevationChange = gameState.elevation;
-    streakChange = 0;
-  }
 
-  const newGameState = {
+
+
+function punishPlayer(gameState: GameState) {
+  return {
     ...gameState,
-    elevation: elevationChange,
-    streak: streakChange,
+    streak: 0,
   };
-
-  return newGameState;
 }

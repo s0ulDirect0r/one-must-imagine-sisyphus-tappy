@@ -14,6 +14,9 @@ import { initDevtools } from "@pixi/devtools";
 import { loadAudio } from "./audio";
 import { setUpMetronome } from "./metronome";
 import * as background from "./background";
+import { initializePlayer } from "./Player";
+import { initialGameState } from "./stateMachine"
+
 
 let app: Application;
 
@@ -40,12 +43,14 @@ export async function initialize(gameState: GameState) {
 
   // const myGrid = initializeGrid();
   // app.stage.addChild(myGrid);
+  initializeUIElements(app);
+  initializePlayer(app, initialGameState.player);
 }
 
 // TODO: split rendering into the scene itself and the UI
 // TODO: write the UI
 export async function render(gameState: GameState) {
-  renderUI(gameState.elevation, gameState.streak);
+  renderUI(gameState.expectMove, gameState.elevation, gameState.streak);
 }
 
 function initializeGrid() {
