@@ -64,10 +64,11 @@ export function updateGame(
   }
 
   if (isAudioPlaying()) {
-    const expected = expectUserInput(gameState.timePassedSinceSongStarted);
+    const currentTime = getCurrentAudioTime()
+    const expected = expectUserInput(currentTime);
     newGameState = {
       ...gameState,
-      timePassedSinceSongStarted: getCurrentAudioTime(),
+      timePassedSinceSongStarted: currentTime,
       expectMove: expected,
       needsAudio: false,
     };
