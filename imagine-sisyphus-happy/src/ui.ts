@@ -9,7 +9,7 @@ let gameOverText: Text;
 let debugText: Text;
 let debugMetronomeText: Text;
 
-export function initializeUIElements(app: Application) {
+export function initFrame(width: number, height: number) {
   // create UI elements
   // should these be initialized elsewhere?
   const textStyle = new TextStyle({
@@ -37,19 +37,19 @@ export function initializeUIElements(app: Application) {
   gameOverText = new Text({ style: gameOverTextStyle });
 
   streakText.pivot.set(streakText.width / 3, streakText.height);
-  streakText.x = app.renderer.screen.width / 2.5;
-  streakText.y = app.renderer.screen.height;
+  streakText.x = width / 2.5;
+  streakText.y = height;
 
   elevationText.pivot.set(elevationText.width / 2, 0);
-  elevationText.x = app.renderer.screen.width / 2.5;
+  elevationText.x = width / 2.5;
   elevationText.y = 0;
 
   // Anchor to center of text (0.5, 0.5 = middle)
   gameOverText.anchor.set(0.5, 0.5);
 
   // Position at screen center
-  gameOverText.x = app.screen.width / 2;
-  gameOverText.y = app.screen.height / 2;
+  gameOverText.x = width / 2;
+  gameOverText.y = height / 2;
 
   // Make sure it's on top
   gameOverText.zIndex = 1000;
@@ -57,38 +57,32 @@ export function initializeUIElements(app: Application) {
   // Add to stage
 
   // Make sure z-index sorting is enabled on the stage
-  app.stage.sortableChildren = true;
-
-  app.stage.addChild(elevationText);
-  app.stage.addChild(streakText);
-  app.stage.addChild(gameOverText);
 
   if (DEBUG_MODE) {
     debugText = new Text({ style: textStyle });
     debugMetronomeText = new Text({ style: textStyle });
 
     debugText.pivot.set(debugText.width / 2, 0);
-    debugText.x = app.renderer.screen.width / 6;
+    debugText.x = width / 6;
     debugText.y = 100;
-    app.stage.addChild(debugText);
 
     debugMetronomeText.pivot.set(debugMetronomeText.width / 2, 0);
-    debugMetronomeText.x = app.renderer.screen.width / 8;
+    debugMetronomeText.x = width / 8;
     debugMetronomeText.y = 200;
-    app.stage.addChild(debugMetronomeText);
   }
 
-  return { elevationText, streakText };
+  return { elevationText, streakText, debugText, debugMetronomeText };
 }
 
 let lastBeatTime = 0;
 let flashing = false;
 
-export function renderUI(
+export function frame(
   expectMove: boolean,
   elevation: number,
   streak: number,
   lost: boolean,
+  ticker?: Ticker,
 ) {
   elevationText.text = `${elevation} ft`;
   streakText.text = `${streak}x`;
