@@ -3,7 +3,7 @@ import { updateObstacles, type Obstacle } from "./obstacle";
 
 export const GRID_WIDTH = 10;
 export const GRID_HEIGHT = 15;
-export const MAX_OBSTACLES = 12;
+export const MAX_OBSTACLES = 2;
 
 import { playAudio, isAudioPlaying, getCurrentAudioTime } from "./audio";
 import { expectUserInput } from "./metronome";

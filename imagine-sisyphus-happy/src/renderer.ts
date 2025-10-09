@@ -7,6 +7,7 @@ import {
   Ticker,
   Text,
   TextStyle,
+  Texture,
 } from "pixi.js";
 import type { GameState } from "./stateMachine";
 import { initializeUIElements, renderUI } from "./ui";
@@ -15,14 +16,18 @@ import { loadAudio } from "./audio";
 import { setUpMetronome } from "./metronome";
 import * as background from "./background";
 import { initializePlayer } from "./Player";
+import { Obstacle } from "./obstacle";
 
 let app: Application;
+let obstacleTexture: Texture;
 
 // Initialize the application
 export async function initialize(gameState: GameState) {
   // Create a new application
   app = new Application();
   initDevtools({ app });
+
+  obstacleTexture = await Assets.load("/assets/tree.png");
 
   await app.init({
     background: "#1099bb",
@@ -49,6 +54,7 @@ export async function initialize(gameState: GameState) {
 // TODO: write the UI
 export async function render(gameState: GameState) {
   renderUI(gameState.expectMove, gameState.elevation, gameState.streak);
+  renderObstacles(app, gameState.obstacles);
 }
 
 function initializeGrid() {
@@ -102,4 +108,22 @@ function buildGrid(graphics: Graphics) {
   }
 
   return graphics;
+}
+
+const myObstacles: Map<string, Sprite> = new Map();
+
+// how am i going to keep track of myObstacles?
+// TODO: do we need to check if obstacle is already rendered?
+export async function renderObstacles(app: Application, obstacles: Obstacle[]) {
+  obstacles.forEach((obstacle) => {
+    const obstacleSprite = myObstacles.get(obstacle.id);
+    if (obstacleSprite) {
+      obstacleSprite.position.set(obstacle.x, obstacle.y);
+    } else {
+      const newSprite = new Sprite(obstacleTexture); // how to pass texture?
+      newSprite.position.set(obstacle.x, obstacle.y);
+      app.stage.addChild(newSprite);
+      myObstacles.set(obstacle.id, newSprite);
+    }
+  });
 }
