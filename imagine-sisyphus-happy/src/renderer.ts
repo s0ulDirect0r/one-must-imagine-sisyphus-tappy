@@ -8,20 +8,21 @@ import {
   Text,
   TextStyle,
   Texture,
+  ColorMatrixFilter,
 } from "pixi.js";
 import type { GameState } from "./stateMachine";
-import { initializeUIElements, renderUI } from "./ui";
+import * as ui from "./ui";
 import { initDevtools } from "@pixi/devtools";
 import * as background from "./background";
-import { initializePlayer } from "./Player";
 import { Obstacle } from "./obstacle";
-import {
-  initializeBackgroundScreen,
-  renderBackgroundScreen,
-} from "./backgroundScreen";
+import * as player from "./Player";
+import * as screen from "./backgroundScreen";
+import { DEBUG_MODE } from "./debug";
 
 let app: Application;
 let obstacleTexture: Texture;
+let lastState: GameState;
+let colorMatrix: ColorMatrixFilter;
 
 // Initialize the application
 export async function initialize(gameState: GameState) {
@@ -35,17 +36,31 @@ export async function initialize(gameState: GameState) {
     background: "#1099bb",
     resizeTo: window,
   });
+  const { width, height } = app.screen;
 
   // Append the application canvas to the document body
   document.getElementById("pixi-container")!.appendChild(app.canvas);
 
-  const bg = await background.init(app.screen.width, app.screen.height);
+  const bg = await background.initFrame(width, height);
   app.stage.addChild(bg);
-  app.ticker.add((ticker) => {
-    background.frame(ticker);
-  });
 
-  const { width, height } = app.screen;
+  // TODO
+  const bgScreen = screen.initFrame(app);
+  app.stage.addChild(bgScreen);
+
+  const playerSprite = await player.initFrame(width, height, gameState.player);
+  app.stage.addChild(playerSprite);
+
+  const { elevationText, streakText, debugText, debugMetronomeText } =
+    ui.initFrame(width, height);
+
+  app.stage.addChild(elevationText);
+  app.stage.addChild(streakText);
+  if (DEBUG_MODE) {
+    app.stage.addChild(debugText);
+    app.stage.addChild(debugMetronomeText);
+  }
+
   const borderWidth = 10;
   const holeWidth = width - borderWidth * 2;
   const holeHeight = height - borderWidth * 2;
@@ -65,21 +80,24 @@ export async function initialize(gameState: GameState) {
   //   border.alpha -= ticker.deltaMS;
   // });
 
-  // const myGrid = initializeGrid();
-  // app.stage.addChild(myGrid);
-  initializeUIElements(app);
-  initializePlayer(app, gameState.player);
-
-  const bgScreen = initializeBackgroundScreen(app);
-  app.stage.addChild(bgScreen);
+  app.ticker.add((ticker) => {
+    if (!lastState) return;
+    drawScene(lastState, ticker); // pure draw call
+  });
 }
 
 // TODO: split rendering into the scene itself and the UI
 // TODO: write the UI
-export async function render(gameState: GameState) {
-  renderUI(gameState.expectMove, gameState.elevation, gameState.streak, gameState.lost);
-  renderObstacles(app, gameState.obstacles, gameState.expectMove);
-  renderBackgroundScreen(gameState.expectMove, app);
+export async function render(state: GameState) {
+  lastState = state; // atomic pointer swap
+}
+
+async function drawScene(state: GameState, ticker: Ticker) {
+  background.frame(state, ticker);
+  screen.frame(state.expectMove, app);
+  renderObstacles(app, state.obstacles);
+  player.frame(state.player);
+  ui.frame(state.expectMove, state.elevation, state.streak, state.lost, ticker);
 }
 
 const myObstacles: Map<string, Sprite> = new Map();

@@ -1,5 +1,6 @@
 import { Assets, Ticker, Container } from "pixi.js";
 import { CompositeTilemap } from "@pixi/tilemap";
+import { type GameState } from "./stateMachine";
 
 let tiles: CompositeTilemap;
 let gridDeltaY = 0;
@@ -12,7 +13,7 @@ const SCROLL_RATE = TILE_LENGTH / FPS; // One Tile per Second
 
 // Delta time is 60 units per second.
 
-export async function init(width: number, height: number) {
+export async function initFrame(width: number, height: number) {
   // console.log("tinyswords", JSON.stringify(tinyswords));
   // console.log("groundjson", JSON.parse("/assets/ground.json"))
 
@@ -45,7 +46,7 @@ export async function init(width: number, height: number) {
 
 let polarity = -1;
 
-export async function frame(ticker) {
+export async function frame(state: GameState, ticker: Ticker) {
   if (gridDeltaY > 2 * gridDeltaCap) {
     gridDeltaY = 0;
     polarity = -polarity;
