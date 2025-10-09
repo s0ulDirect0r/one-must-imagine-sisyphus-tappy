@@ -15,10 +15,7 @@ import { initDevtools } from "@pixi/devtools";
 import * as background from "./background";
 import { Obstacle } from "./obstacle";
 import * as player from "./Player";
-import {
-  initializeBackgroundScreen,
-  renderBackgroundScreen,
-} from "./backgroundScreen";
+import * as screen from "./backgroundScreen";
 
 let app: Application;
 let obstacleTexture: Texture;
@@ -37,10 +34,13 @@ export async function initialize(gameState: GameState) {
     resizeTo: window,
   });
 
+  const width = app.screen.width;
+  const height = app.screen.height;
+
   // Append the application canvas to the document body
   document.getElementById("pixi-container")!.appendChild(app.canvas);
 
-  const bg = await background.initFrame(app.screen.width, app.screen.height);
+  const bg = await background.initFrame(width, height);
   app.stage.addChild(bg);
   app.ticker.add((ticker) => {
     background.frame(ticker);
@@ -71,18 +71,15 @@ export async function initialize(gameState: GameState) {
   initializeUIElements(app);
   initializePlayer(app, gameState.player);
 
-  const bgScreen = initializeBackgroundScreen(app);
+  // TODO
+  const bgScreen = screen.initFrame(app);
   app.stage.addChild(bgScreen);
 
-  const playerSprite = await player.initFrame(
-    app.screen.width,
-    app.screen.height,
-    gameState.player,
-  );
+  const playerSprite = await player.initFrame(width, height, gameState.player);
   app.stage.addChild(playerSprite);
 
   const { elevationText, streakText, debugText, debugMetronomeText } =
-    ui.initFrame(app.screen.width, app.screen.height);
+    ui.initFrame(width, height);
 
   app.stage.addChild(elevationText);
   app.stage.addChild(streakText);
@@ -106,7 +103,7 @@ async function drawScene(state: GameState, ticker: Ticker) {
   renderBackgroundScreen(state.expectMove, app);
   renderObstacles(app, state.obstacles, state.expectMove);
   background.frame(state, ticker);
-  renderBackgroundScreen(state.expectMove, app);
+  screen.frame(state.expectMove, app);
   ui.frame(state.expectMove, state.elevation, state.streak);
   player.frame(state.player);
 }
