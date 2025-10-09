@@ -52,8 +52,10 @@ export async function initialize(gameState: GameState) {
 
   const animationDuration = 250;
   app.stage.addChild(border);
+  // TODO: change ticker timing to sync with bg
   app.ticker.add((ticker) => {
-    const progress = ticker.deltaMS / 
+    const progress = ticker.deltaMS / animationDuration
+    border.alpha = Math.min(1, progress)
   });
 
   // const myGrid = initializeGrid();
