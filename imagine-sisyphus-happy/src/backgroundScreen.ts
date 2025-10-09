@@ -5,7 +5,6 @@ const backgroundScreen = new Graphics();
 const FLASH_DURATION = 0.6;
 const VISUAL_OFFSET = 0.07;
 
-
 let lastBeatTime = 0;
 let flashing = false;
 
@@ -25,10 +24,10 @@ export function initFrame(app: Application) {
 
     // Handle window resizing to keep the square full-screen
     window.addEventListener("resize", () => {
-        backgroundScreen.rect(0, 0, app.screen.width, app.screen.height);
+      backgroundScreen.rect(0, 0, app.screen.width, app.screen.height);
     });
-
-    return backgroundScreen;
+  });
+  return backgroundScreen;
 }
 
 export function changeBackgroundColor(color: number, app: Application) {
@@ -38,7 +37,7 @@ export function changeBackgroundColor(color: number, app: Application) {
   backgroundScreen.fill();
 }
 
-export function frame(expectMove: boolean) {
+export function frame(expectMove: boolean, app: Application) {
   const now = getCurrentAudioTime() + VISUAL_OFFSET;
 
   // Start flash when expectMove becomes true
@@ -54,7 +53,7 @@ export function frame(expectMove: boolean) {
   }
 
   // Draw the background every frame
-  changeBackgroundColor(color);
+  changeBackgroundColor(color, app);
 
   // End flash after FLASH_DURATION
   if (flashing && now - lastBeatTime >= FLASH_DURATION) {
