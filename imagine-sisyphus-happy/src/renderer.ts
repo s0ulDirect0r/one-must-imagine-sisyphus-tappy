@@ -54,7 +54,7 @@ export async function initialize(gameState: GameState) {
 // TODO: write the UI
 export async function render(gameState: GameState) {
   renderUI(gameState.expectMove, gameState.elevation, gameState.streak);
-  renderObstacles(app, gameState.obstacles);
+  renderObstacles(app, gameState.obstacles, gameState.expectMove);
 }
 
 function initializeGrid() {

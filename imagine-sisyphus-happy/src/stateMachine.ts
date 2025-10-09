@@ -3,7 +3,7 @@ import { updateObstacles, type Obstacle } from "./obstacle";
 
 export const GRID_WIDTH = 10;
 export const GRID_HEIGHT = 15;
-export const MAX_OBSTACLES = 2;
+export const MAX_OBSTACLES = 1;
 
 import { playAudio, isAudioPlaying, getCurrentAudioTime } from "./audio";
 import { expectUserInput } from "./metronome";
@@ -81,6 +81,6 @@ export function updateGame(
     newGameState.streak = 0;
   }
 
-  newGameState.obstacles = updateObstacles(inputs, gameState.obstacles);
+  newGameState.obstacles = updateObstacles(gameState.obstacles, gameState.expectMove);
   return newGameState;
 }
