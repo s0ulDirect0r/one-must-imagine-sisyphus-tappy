@@ -9,7 +9,7 @@ export const TIME_OFFSET = 0.05
 
 import { playAudio, isAudioPlaying, getCurrentAudioTime } from "./audio";
 import { isInBeatWindow } from "./metronome";
-import { Player, movePlayer } from "./Player";
+import { Player, movePlayer, shiftPlayer } from "./Player";
 //import { movePlayer } from "./Player";
 export type GameState = {
   player: Player;
@@ -103,6 +103,12 @@ export function updateGame(
     newGameState.player = movePlayer(gameState.player);
   }
 
-  newGameState.obstacles = updateObstacles(gameState.obstacles, gameState.expectMove);
+  newGameState.player = shiftPlayer(gameState.player);
+
+  newGameState.obstacles = updateObstacles(
+    gameState.obstacles,
+    gameState.expectMove,
+  );
+
   return newGameState;
 }
