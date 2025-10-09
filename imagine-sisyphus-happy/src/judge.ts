@@ -18,9 +18,9 @@ export function judge(
   } else if ((!expectMove && spacePressed) || (expectMove && !spacePressed)) {
     const newMissStreak = currentMissStreak + 1;
     // LOSS CONDITION HERE
-    if (newMissStreak >= 20) {
-      return { lost: true };
-    }
+    // if (newMissStreak >= 20) {
+    //   return { lost: true };
+    // }
     return { streak: 0, missStreak: newMissStreak };
   }
   return {};
