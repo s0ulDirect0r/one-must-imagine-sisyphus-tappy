@@ -4,7 +4,6 @@ import "./main.css";
 import { Application, Text, TextStyle, Graphics } from "pixi.js";
 import { changeBackgroundColor } from "./renderer";
 import { getCurrentAudioTime } from "./audio";
-import { updateGame } from "./stateMachine";
 let elevationText: Text;
 let streakText: Text;
 let debugText: Text;

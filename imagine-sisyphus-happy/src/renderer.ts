@@ -43,10 +43,7 @@ export async function initialize(gameState: GameState) {
   // const myGrid = initializeGrid();
   // app.stage.addChild(myGrid);
   initializeUIElements(app);
-  initializePlayer(app, initialGameState.player);
-
-
-
+  initializePlayer(app, gameState.player);
 
   // Set the fill style with a color and alpha
   // 0x000000 is black, and 0.5 sets 50% opacity
@@ -60,8 +57,8 @@ export async function initialize(gameState: GameState) {
   app.stage.addChild(backgroundScreen);
 
   // Handle window resizing to keep the square full-screen
-  window.addEventListener('resize', () => {
-    backgroundScreen.rect(0, 0, app.screen.width, app.screen.height);
+  window.addEventListener("resize", () => {
+    backgroundFilter.rect(0, 0, app.screen.width, app.screen.height);
   });
 
 
