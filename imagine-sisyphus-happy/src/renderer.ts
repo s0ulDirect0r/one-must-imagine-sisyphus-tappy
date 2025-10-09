@@ -11,10 +11,9 @@ import {
 import type { GameState } from "./stateMachine";
 import { initializeUIElements, renderUI } from "./ui";
 import { initDevtools } from "@pixi/devtools";
-import { loadAudio } from "./audio";
-import { setUpMetronome } from "./metronome";
 import * as background from "./background";
 import { initializePlayer } from "./Player";
+import { renderBackgroundScreen } from "./backgroundScreen";
 
 let app: Application;
 const backgroundScreen = new Graphics();
@@ -81,7 +80,8 @@ export function changeBackgroundColor(color: string) {
 // TODO: split rendering into the scene itself and the UI
 // TODO: write the UI
 export async function render(gameState: GameState) {
-  renderUI(gameState.expectMove, gameState.elevation, gameState.streak, backgroundScreen);
+  renderUI(gameState.expectMove, gameState.elevation, gameState.streak);
+  renderBackgroundScreen(gameState.expectMove, app)
 }
 
 function initializeGrid() {

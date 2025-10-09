@@ -54,28 +54,11 @@ export function renderUI(
   expectMove: boolean,
   elevation: number,
   streak: number,
-  background: Graphics
 ) {
   elevationText.text = `${elevation} ft`;
   streakText.text = `${streak}x`;
 
-  const now = getCurrentAudioTime();
-  const flashDuration = 0.6; // seconds — try tweaking this
 
-  // Trigger flash only when expectMove just started
-  if (expectMove && !flashing) {
-    flashing = true;
-    lastBeatTime = now;
-    changeBackgroundColor("#cc33ff");
-    return "red"
-  }
-
-  // After flash duration, fade back
-  if (flashing && now - lastBeatTime > flashDuration) {
-    flashing = false;
-    changeBackgroundColor("#33ff85");
-    return "green"
-  }
 }
 
 
