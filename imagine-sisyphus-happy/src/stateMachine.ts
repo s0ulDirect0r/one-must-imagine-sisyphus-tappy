@@ -1,5 +1,5 @@
 import { inputState, KeyState } from "./input";
-import { updateObstacles, type Obstacle } from "./obstacle";
+import { updateObstacles } from "./obstacle";
 
 export const GRID_WIDTH = 10;
 export const GRID_HEIGHT = 15;
@@ -24,6 +24,12 @@ export type GameState = {
   needsAudio: boolean;
 };
 
+export type Obstacle = {
+  id: string;
+  x: number;
+  y: number;
+};
+
 // The initial values of gameState.
 export const gameState: GameState = {
   player: {
@@ -45,23 +51,13 @@ export const gameState: GameState = {
 };
 
 function updateGameState(updates: Partial<GameState>): void {
-  // Shallow merge for top-level properties
   Object.assign(gameState, updates);
-  // Deep merge for nested objects if needed
-  if (updates.player) {
-    Object.assign(gameState.player, updates.player);
-  }
-
-  if (updates.obstacles) {
-    Object.assign(gameState.obstacles, updates.obstacles);
-  }
 }
 
 export function updateGame(
   inputs: Map<string, KeyState>,
   gameState: GameState,
 ) {
-  const updates: Partial<GameState> = {};
   let newGameState: GameState;
 
   // check if Audio has been loaded in renderer
@@ -95,13 +91,13 @@ export function updateGame(
       streak: streakChange,
     };
 
-    Object.assign(updates, movePlayer(gameState));
+    newGameState = movePlayer(newGameState);
   }
   // } else if (inputState.get("Space")?.pressed && !newGameState.expectMove) {
   //   newGameState = punishPlayer(newGameState);
   // }
 
-  updates.obstacles = updateObstacles(inputs, gameState.obstacles);
+  newGameState = updateObstacles(inputs, newGameState);
   return newGameState;
 }
 
