@@ -19,6 +19,7 @@ import { initialGameState } from "./stateMachine"
 
 
 let app: Application;
+const backgroundScreen = new Graphics();
 
 // Initialize the application
 export async function initialize(gameState: GameState) {
@@ -45,12 +46,47 @@ export async function initialize(gameState: GameState) {
   // app.stage.addChild(myGrid);
   initializeUIElements(app);
   initializePlayer(app, initialGameState.player);
+
+
+
+
+  // Set the fill style with a color and alpha
+  // 0x000000 is black, and 0.5 sets 50% opacity
+  backgroundScreen.fill({ color: "#cc33ff", alpha: 0.5 });
+  backgroundScreen.rect(0, 0, app.screen.width, app.screen.height);
+  backgroundScreen.fill();
+
+  // Draw a giant rectangle that covers the full screen
+
+  // Add the square to the stage so it can be seen
+  app.stage.addChild(backgroundScreen);
+
+  // Handle window resizing to keep the square full-screen
+  window.addEventListener('resize', () => {
+    backgroundScreen.rect(0, 0, app.screen.width, app.screen.height);
+  });
+
+
+
+
+
+
+
+}
+
+
+export function changeBackgroundColor(color: string) {
+  backgroundScreen.clear();
+  backgroundScreen.fill({ color: color, alpha: 0.5 });
+  backgroundScreen.rect(0, 0, app.screen.width, app.screen.height);
+  backgroundScreen.fill();
+
 }
 
 // TODO: split rendering into the scene itself and the UI
 // TODO: write the UI
 export async function render(gameState: GameState) {
-  renderUI(gameState.expectMove, gameState.elevation, gameState.streak);
+  renderUI(gameState.expectMove, gameState.elevation, gameState.streak, backgroundScreen);
 }
 
 function initializeGrid() {
@@ -83,7 +119,7 @@ function buildGrid(graphics: Graphics) {
   const gridCellHeight = 10;
   const cellPixelLength = 10;
 
-  graphics = graphics.stroke({ width: 1, color: 0xff0000, pixelLine: true });
+  graphics = graphics.stroke({ width: 1, color: "#cc33ff", pixelLine: true });
   // Draw 10 vertical lines spaced cellPixelLength pixels apart
   for (let i = 0; i <= gridCellHeight; i++) {
     // Move to top of each line (x = i*10, y = 0)

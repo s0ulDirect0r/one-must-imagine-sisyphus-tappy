@@ -8,6 +8,7 @@ export const MAX_OBSTACLES = 12;
 import { playAudio, isAudioPlaying, getCurrentAudioTime, loadAudio } from "./audio";
 import { setUpMetronome, expectUserInput } from "./metronome";
 import { Player, movePlayer } from "./Player";
+import { renderUI } from "./ui";
 //import { movePlayer } from "./Player";
 export type GameState = {
   player: Player;
@@ -64,7 +65,7 @@ export function updateGame(
   }
 
   if (isAudioPlaying()) {
-    const currentTime = getCurrentAudioTime()
+    const currentTime = getCurrentAudioTime() + .05
     const expected = expectUserInput(currentTime);
     newGameState = {
       ...gameState,
@@ -78,6 +79,7 @@ export function updateGame(
     gameState.needsAudio = true;
   }
 
+
   if (inputState.get("Space")?.pressed && newGameState.expectMove) {
     let elevationChange = gameState.elevation + 100;
     let streakChange = gameState.streak + 1;
@@ -90,6 +92,8 @@ export function updateGame(
 
     newGameState = movePlayer(newGameState);
   }
+
+
   // } else if (inputState.get("Space")?.pressed && !newGameState.expectMove) {
   //   newGameState = punishPlayer(newGameState);
   // }
@@ -97,6 +101,8 @@ export function updateGame(
   newGameState = updateObstacles(inputs, newGameState);
   return newGameState;
 }
+
+
 
 
 

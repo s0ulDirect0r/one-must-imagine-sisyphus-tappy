@@ -5,7 +5,7 @@ let audio = new Audio("/assets/garbage.mp3")
 
 // loads audio and audio metadata, returns metadata
 export async function loadAudio() {
-    const bpm = 136 //theoretically get BPM from an API, i just hard coded it this time
+    const bpm = 68 //theoretically get BPM from an API, i just hard coded it this time
 
     await new Promise<void>((resolve, reject) => {
         audio.addEventListener("loadedmetadata", () => resolve(), { once: true });

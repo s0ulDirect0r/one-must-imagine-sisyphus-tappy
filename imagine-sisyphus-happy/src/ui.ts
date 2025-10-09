@@ -1,7 +1,10 @@
 import { DEBUG_MODE } from "./debug";
 import { inputState } from "./input";
 import "./main.css";
-import { Application, Text, TextStyle } from "pixi.js";
+import { Application, Text, TextStyle, Graphics } from "pixi.js";
+import { changeBackgroundColor } from "./renderer";
+import { getCurrentAudioTime } from "./audio";
+import { updateGame } from "./stateMachine";
 let elevationText: Text;
 let streakText: Text;
 let debugText: Text;
@@ -34,7 +37,7 @@ export function initializeUIElements(app: Application) {
     debugText.pivot.set(debugText.width / 2, 0);
     debugText.x = app.renderer.screen.width / 6;
     debugText.y = 100;
-    app.stage.addChild(debugText);
+    app.stage.addChild(debugText)
 
     debugMetronomeText.pivot.set(debugMetronomeText.width / 2, 0);
     debugMetronomeText.x = app.renderer.screen.width / 8;
@@ -45,28 +48,56 @@ export function initializeUIElements(app: Application) {
   return { elevationText, streakText };
 }
 
+let lastBeatTime = 0;
+let flashing = false;
+
 export function renderUI(
   expectMove: boolean,
   elevation: number,
   streak: number,
+  background: Graphics
 ) {
   elevationText.text = `${elevation} ft`;
   streakText.text = `${streak}x`;
 
-  if (DEBUG_MODE) {
-    const entries = inputState.entries();
-    let textGuy = "Key Debug State: \n";
-    for (const [key, value] of entries) {
-      textGuy = textGuy.concat(
-        key,
-        ":    ",
-        String(value.pressed),
-        "     ",
-        String(value.justPressed),
-        "\n",
-      );
-    }
-    debugText.text = textGuy;
-    debugMetronomeText.text = `Metronome Debug State: \n${expectMove}`;
+  const now = getCurrentAudioTime();
+  const flashDuration = 0.6; // seconds — try tweaking this
+
+  // Trigger flash only when expectMove just started
+  if (expectMove && !flashing) {
+    flashing = true;
+    lastBeatTime = now;
+    changeBackgroundColor("#cc33ff");
+    return "red"
+  }
+
+  // After flash duration, fade back
+  if (flashing && now - lastBeatTime > flashDuration) {
+    flashing = false;
+    changeBackgroundColor("#33ff85");
+    return "green"
   }
 }
+
+
+/*
+
+if (DEBUG_MODE) {
+  const entries = inputState.entries();
+  let textGuy = "Key Debug State: \n";
+  for (const [key, value] of entries) {
+    textGuy = textGuy.concat(
+      key,
+      ":    ",
+      String(value.pressed),
+      "     ",
+      String(value.justPressed),
+      "\n",
+    );
+  }
+  debugText.text = textGuy;
+  debugMetronomeText.text = `Metronome Debug State: \n${expectMove}`;
+}
+
+*/
+
