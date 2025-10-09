@@ -2,7 +2,6 @@ import { DEBUG_MODE } from "./debug";
 import { inputState } from "./input";
 import "./main.css";
 import { Application, Text, TextStyle, Graphics } from "pixi.js";
-import { changeBackgroundColor } from "./renderer";
 import { getCurrentAudioTime } from "./audio";
 let elevationText: Text;
 let streakText: Text;

@@ -3,7 +3,8 @@ import { getCurrentAudioTime } from "./audio";
 
 const backgroundScreen = new Graphics();
 const FLASH_DURATION = 0.6;
-const VISUAL_OFFSET = 0.06;
+const VISUAL_OFFSET = 0.07;
+
 
 let lastBeatTime = 0;
 let flashing = false;

@@ -3,7 +3,7 @@ import { getCurrentAudioTime } from "./audio";
 let lastBeat = 0;
 let beatDuration: number;
 let nextBeatPosition: number;
-const WINDOW = 0.15
+const WINDOW = 0.1
 
 export function setUpMetronome(bpm: number) {
     beatDuration = (60 / bpm); // 60/beatsperminuetn = seconds per beat 

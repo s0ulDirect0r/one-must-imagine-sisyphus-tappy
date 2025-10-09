@@ -8,7 +8,7 @@ export const MAX_OBSTACLES = 1;
 export const TIME_OFFSET = 0.05
 
 import { playAudio, isAudioPlaying, getCurrentAudioTime } from "./audio";
-import { expectUserInput, isInBeatWindow } from "./metronome";
+import { isInBeatWindow } from "./metronome";
 import { Player, movePlayer } from "./Player";
 //import { movePlayer } from "./Player";
 export type GameState = {
