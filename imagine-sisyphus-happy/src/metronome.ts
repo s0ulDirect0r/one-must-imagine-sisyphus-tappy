@@ -3,7 +3,7 @@ import { getCurrentAudioTime } from "./audio";
 let lastBeat = 0;
 let beatDuration: number;
 let nextBeatPosition: number;
-const WINDOW = 0.1
+const WINDOW = 0.25
 
 export function setUpMetronome(bpm: number) {
     beatDuration = (60 / bpm); // 60/beatsperminuetn = seconds per beat 
@@ -23,9 +23,10 @@ export function isInBeatWindow(
     const songTime = now - songStartTime; // elapsed time in song
 
     // Find the nearest beat time
-    const beatIndex = Math.round(songTime / secondsPerBeat);
+    const beatIndex = Math.floor(songTime / secondsPerBeat);
     const beatTime = beatIndex * secondsPerBeat;
 
     // Return true if current time is within the symmetric window
     return Math.abs(songTime - beatTime) <= WINDOW / 2;
 }
+

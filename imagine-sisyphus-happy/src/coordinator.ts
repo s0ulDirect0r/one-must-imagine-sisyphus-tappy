@@ -6,8 +6,7 @@ import { loadAudio, playAudio } from "./audio";
 import { setUpMetronome } from "./metronome";
 
 let gameState = stateMachine.gameState;
-let { currentTime, bpm, songDuration } = await loadAudio();
-let loopInterval: string | number | NodeJS.Timeout | undefined;
+let { bpm, songDuration } = await loadAudio();
 
 export function initializeGameState(): void {
   inputs.initialize();
@@ -33,10 +32,11 @@ export function gameLoop() {
   if (gameState.needsAudio) {
     setUpMetronome(bpm);
     playAudio();
+    newState.needsAudio = false;
   } else {
     newState.songBpm = bpm;
     newState.songDuration = songDuration;
-    newState.timePassedSinceSongStarted = currentTime;
+    newState.timePassedSinceSongStarted = 0;
     newState.needsAudio = false;
   }
 

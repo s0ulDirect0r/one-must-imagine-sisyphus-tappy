@@ -70,9 +70,12 @@ export function updateGame(
   }
 
   if (isAudioPlaying()) {
-    const currentTime = getCurrentAudioTime() - TIME_OFFSET
-    expected = isInBeatWindow(currentTime, 136, gameState.songStartTime)
-    newGameState.expectMove = expected
+
+    const elapsed = getCurrentAudioTime() - gameState.songStartTime;
+    const expected = isInBeatWindow(elapsed, 136, 0);
+    newGameState.expectMove = expected;
+    const currentTime = getCurrentAudioTime() + TIME_OFFSET
+
     newGameState.timePassedSinceSongStarted = currentTime;
 
     console.log({
