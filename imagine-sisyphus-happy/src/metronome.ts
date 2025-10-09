@@ -1,7 +1,7 @@
 let lastBeat = 0;
 let beatDurationMs: number;
 let nextBeatPosition: number;
-const window = .80;
+const window = 0.6;
 
 export function setUpMetronome(bpm: number) {
     beatDurationMs = (60 / bpm); // 60/beatsperminuetn = seconds per beat --> * 1000 = miliseconds per beat

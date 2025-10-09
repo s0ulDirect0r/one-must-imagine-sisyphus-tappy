@@ -1,13 +1,16 @@
 import { inputState, KeyState } from "./input";
+import { judge } from "./judge";
 import { updateObstacles, type Obstacle } from "./obstacle";
 
 export const GRID_WIDTH = 10;
 export const GRID_HEIGHT = 15;
 export const MAX_OBSTACLES = 1;
+export const TIME_OFFSET = 0.05
 
 import { playAudio, isAudioPlaying, getCurrentAudioTime } from "./audio";
 import { expectUserInput } from "./metronome";
 import { Player, movePlayer } from "./Player";
+import { renderUI } from "./ui";
 //import { movePlayer } from "./Player";
 export type GameState = {
   player: Player;
@@ -57,7 +60,7 @@ export function updateGame(
   }
 
   if (isAudioPlaying()) {
-    const currentTime = getCurrentAudioTime();
+    const currentTime = getCurrentAudioTime() + TIME_OFFSET;
     const expected = expectUserInput(currentTime);
     newGameState.timePassedSinceSongStarted = currentTime;
     newGameState.expectMove = expected;
@@ -67,18 +70,17 @@ export function updateGame(
     newGameState.needsAudio = true;
   }
 
-  if (inputState.get("Space")?.justPressed && newGameState.expectMove) {
-    const elevationChange = gameState.elevation + 100;
-    const streakChange = gameState.streak + 1;
+  const spacePressed = inputState.get("Space")?.justPressed;
+  const judgement = judge(
+    spacePressed,
+    newGameState.expectMove,
+    gameState.elevation,
+    gameState.streak,
+  );
+  newGameState = { ...newGameState, ...judgement };
 
-    newGameState.elevation = elevationChange;
-    newGameState.streak = streakChange;
-
-    console.log("moving");
+  if (judgement && judgement.elevation) {
     newGameState.player = movePlayer(gameState.player);
-  } else if (inputState.get("Space")?.justPressed && !newGameState.expectMove) {
-    console.log("punishing");
-    newGameState.streak = 0;
   }
 
   newGameState.obstacles = updateObstacles(gameState.obstacles, gameState.expectMove);
