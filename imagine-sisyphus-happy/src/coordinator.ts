@@ -5,11 +5,10 @@ import type { GameState } from "./stateMachine";
 import { loadAudio, playAudio } from "./audio";
 import { setUpMetronome } from "./metronome";
 
-let gameState: GameState;
+const gameState = stateMachine.gameState;
 let { currentTime, bpm, songDuration } = await loadAudio();
 
 export function initializeGameState(): void {
-  gameState = stateMachine.initialGameState;
   inputs.initialize();
   // passing it off to the renderer
   renderer.initialize(gameState);

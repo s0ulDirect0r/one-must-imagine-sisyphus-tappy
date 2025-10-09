@@ -30,9 +30,8 @@ export type Obstacle = {
   y: number;
 };
 
-
-
-export const initialGameState: GameState = {
+// The initial values of gameState.
+export const gameState: GameState = {
   player: {
     x: screen.width / 2,
     y: screen.height / 2 + 200, // TODO need app screen specifically?
@@ -50,6 +49,10 @@ export const initialGameState: GameState = {
   expectMove: false,
   needsAudio: true,
 };
+
+function updateGameState(updates: Partial<GameState>): void {
+  Object.assign(gameState, updates);
+}
 
 export function updateGame(
   inputs: Map<string, KeyState>,
