@@ -22,6 +22,7 @@ import {
 
 let app: Application;
 let obstacleTexture: Texture;
+let lastState: GameState;
 
 // Initialize the application
 export async function initialize(gameState: GameState) {
@@ -72,14 +73,24 @@ export async function initialize(gameState: GameState) {
 
   const bgScreen = initializeBackgroundScreen(app);
   app.stage.addChild(bgScreen);
+
+  app.ticker.add((ticker) => {
+    if (!lastState) return;
+    drawScene(lastState, ticker); // pure draw call
+  });
 }
 
 // TODO: split rendering into the scene itself and the UI
 // TODO: write the UI
-export async function render(gameState: GameState) {
-  renderUI(gameState.expectMove, gameState.elevation, gameState.streak, gameState.lost);
-  renderObstacles(app, gameState.obstacles, gameState.expectMove);
-  renderBackgroundScreen(gameState.expectMove, app);
+export async function render(state: GameState) {
+  lastState = state; // atomic pointer swap
+}
+
+async function drawScene(state: GameState, ticker: Ticker) {
+  renderUI(state.expectMove, state.elevation, state.streak, state.lost);
+  renderBackgroundScreen(state.expectMove, app);
+  renderObstacles(app, state.obstacles, state.expectMove);
+  background.frame(state, ticker);
 }
 
 const myObstacles: Map<string, Sprite> = new Map();

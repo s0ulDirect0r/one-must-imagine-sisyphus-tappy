@@ -1,5 +1,6 @@
 import { Assets, Ticker, Container } from "pixi.js";
 import { CompositeTilemap } from "@pixi/tilemap";
+import { type GameState } from "./stateMachine";
 
 let tiles: CompositeTilemap;
 let gridDeltaY = 0;
@@ -45,7 +46,7 @@ export async function init(width: number, height: number) {
 
 let polarity = -1;
 
-export async function frame(ticker) {
+export async function frame(state: GameState, ticker: Ticker) {
   if (gridDeltaY > 2 * gridDeltaCap) {
     gridDeltaY = 0;
     polarity = -polarity;
