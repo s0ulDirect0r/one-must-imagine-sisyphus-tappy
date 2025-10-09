@@ -24,18 +24,12 @@ export type GameState = {
   needsAudio: boolean;
 };
 
-export type Obstacle = {
-  id: string;
-  x: number;
-  y: number;
-};
-
 // The initial values of gameState.
 export const gameState: GameState = {
   player: {
     x: screen.width / 2,
     y: screen.height / 2 + 200, // TODO need app screen specifically?
-    speed: 0.1
+    speed: 0.1,
   },
   bpm: 0,
   elevation: 0,
@@ -86,7 +80,7 @@ export function updateGame(
   //   newGameState = punishPlayer(newGameState);
   // }
 
-  newGameState = updateObstacles(inputs, newGameState);
+  newGameState.obstacles = updateObstacles(inputs, gameState.obstacles);
   return newGameState;
 }
 

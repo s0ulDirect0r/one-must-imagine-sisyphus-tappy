@@ -43,11 +43,11 @@ export async function initializePlayer(app: Application, player: Player) {
 
 }
 
-export function movePlayer(gamestate: GameState): Partial<GameState> {
-  anime.x = gamestate.player.x;
-  anime.y = gamestate.player.y - 20;
+export function movePlayer(player: Player): Player {
+  anime.x = player.x;
+  anime.y = player.y - 20;
 
-  return { player: { ...gamestate.player, x: anime.x, y: anime.y } };
+  return { ...player, x: anime.x, y: anime.y };
 }
 
 
