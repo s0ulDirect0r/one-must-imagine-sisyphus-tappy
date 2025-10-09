@@ -36,9 +36,24 @@ export async function initialize(gameState: GameState) {
 
   const bg = await background.init(app.screen.width, app.screen.height);
   app.stage.addChild(bg);
-
   app.ticker.add((ticker) => {
     background.frame(ticker);
+  });
+
+  const { width, height } = app.screen;
+  const borderWidth = 10;
+  const holeWidth = width - borderWidth * 2;
+  const holeHeight = height - borderWidth * 2;
+  const border = new Graphics()
+    .rect(0, 0, width, height)
+    .fill(0xffffff)
+    .rect(borderWidth, borderWidth, holeWidth, holeHeight)
+    .cut();
+
+  const animationDuration = 250;
+  app.stage.addChild(border);
+  app.ticker.add((ticker) => {
+    const progress = ticker.deltaMS / 
   });
 
   // const myGrid = initializeGrid();
