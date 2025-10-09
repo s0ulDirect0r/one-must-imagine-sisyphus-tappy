@@ -4,7 +4,7 @@ import { updateObstacles, type Obstacle } from "./obstacle";
 
 export const GRID_WIDTH = 10;
 export const GRID_HEIGHT = 15;
-export const MAX_OBSTACLES = 12;
+export const MAX_OBSTACLES = 1;
 export const TIME_OFFSET = 0.05
 
 import { playAudio, isAudioPlaying, getCurrentAudioTime } from "./audio";
@@ -83,6 +83,6 @@ export function updateGame(
     newGameState.player = movePlayer(gameState.player);
   }
 
-  newGameState.obstacles = updateObstacles(inputs, gameState.obstacles);
+  newGameState.obstacles = updateObstacles(gameState.obstacles, gameState.expectMove);
   return newGameState;
 }
