@@ -17,6 +17,7 @@ import * as background from "./background";
 import { initializePlayer } from "./Player";
 
 let app: Application;
+let lastState: GameState; // local cache for interpolation
 
 // Initialize the application
 export async function initialize(gameState: GameState) {
@@ -35,20 +36,26 @@ export async function initialize(gameState: GameState) {
   const bg = await background.init(app.screen.width, app.screen.height);
   app.stage.addChild(bg);
 
-  app.ticker.add((ticker) => {
-    background.frame(ticker);
-  });
-
   // const myGrid = initializeGrid();
   // app.stage.addChild(myGrid);
   initializeUIElements(app);
   initializePlayer(app, gameState.player);
+
+  app.ticker.add((tick) => {
+    if (!lastState) return;
+    drawScene(lastState, tick); // pure draw call
+  });
+}
+
+async function drawScene(state: GameState, tick: Ticker) {
+  background.frame(tick);
+  renderUI(state.expectMove, state.elevation, state.streak);
 }
 
 // TODO: split rendering into the scene itself and the UI
 // TODO: write the UI
 export async function render(gameState: GameState) {
-  renderUI(gameState.expectMove, gameState.elevation, gameState.streak);
+  lastState = state; // atomic pointer swap
 }
 
 function initializeGrid() {
