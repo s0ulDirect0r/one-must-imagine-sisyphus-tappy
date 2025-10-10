@@ -49,7 +49,7 @@ export function frame(
   lost: boolean,
   ticker?: Ticker,
 ) {
-  elevation.frame(elevationScore);
+  elevation.frame(elevationScore, ticker);
   streak.frame(streakScore);
 
   if (lost) {

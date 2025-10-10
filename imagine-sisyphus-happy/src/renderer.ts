@@ -24,6 +24,26 @@ let app: Application;
 let lastState: GameState;
 let colorMatrix: ColorMatrixFilter;
 
+/*
+ * Assets can be added here, and `Asses.load` can be called either here
+ * or in the "child" elements that use it like ui/elevation.ts in order
+ * for it to access the Dominican font.
+ *
+ * DOES WORK:
+ * Add here | Load here | use "dominican" font in ui/elevation.ts
+ *
+ * DOES NOT WORK:
+ * Add here | load in ui.ts | use "dominican" font in ui/elevation.ts
+ */
+Assets.add({
+  alias: "Dominican",
+  src: "assets/fonts/dominican/DOMINICA.TTF",
+  data: {
+    family: "Dominican",
+    weights: ["Regular"],
+  },
+});
+
 // Initialize the application
 export async function initialize(gameState: GameState) {
   // Create a new application
