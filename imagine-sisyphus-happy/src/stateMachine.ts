@@ -99,11 +99,12 @@ export function updateGame(
   );
   newGameState = { ...newGameState, ...judgement };
 
-  if (judgement && judgement.elevation) {
-    newGameState.player = movePlayer(gameState.player);
-  }
+  const newPlayer: Partial<Player> = gameState.player;
 
-  newGameState.player = shiftPlayer(gameState.player);
+  if (judgement && judgement.elevation) {
+    Object.assign(newPlayer, movePlayer(gameState.player));
+  }
+  Object.assign(newPlayer, shiftPlayer(gameState.player));
 
   newGameState.obstacles = updateObstacles(
     gameState.obstacles,
