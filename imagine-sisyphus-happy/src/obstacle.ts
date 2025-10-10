@@ -19,12 +19,18 @@ export type Obstacle = {
   id: string;
   x: number;
   y: number;
+  // TODO Create additional variables to do something with it upon collision
 };
+
+// TODO this is a temporary WIDTH/HEIGHT
+export const WIDTH = 150;
+export const HEIGHT = 150;
 
 export async function initFrame(obstacles: Obstacle[]): Promise<Sprite> {
   obstacleTexture = await Assets.load("/assets/tree.png");
 }
 
+// TODO Rename this to be clearer about MAP bounds
 function withinBounds(obstacle: Obstacle): boolean {
   if (obstacle.y <= 600) {
     return true;
