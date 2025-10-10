@@ -34,7 +34,10 @@ export async function initFrame(
 }
 
 // player position, enemy position => { dx, dy }
-export function calculateDirectionVector(player: Player, enemy: Enemy) {
+export function calculateDirectionVector(
+  player: Player,
+  enemy: Enemy,
+): { xVector: number; yVector: number } {
   const dx = player.x - enemy.x;
   const dy = player.y - enemy.y;
   const distanceToPlayer = Math.sqrt((dx ^ 2) + (dy ^ 2));

@@ -111,12 +111,16 @@ export function updateGame(
     gameState.obstacles,
     gameState.expectMove,
   );
+
   newGameState.player = { ...gameState.player, ...newPlayer };
 
   const newEnemy: Partial<Enemy> = gameState.enemy;
-  const vectors = calculateDirectionVector(newPlayer, newEnemy);
-  Object.assign(newEnemy, moveEnemy(newEnemy, vectors));
-  newGameState.enemy = newEnemy;
+  const vectors = calculateDirectionVector(
+    newGameState.player,
+    gameState.enemy,
+  );
+  Object.assign(newEnemy, moveEnemy(gameState.enemy, vectors));
+  newGameState.enemy = { ...gameState.enemy, ...newEnemy };
 
   return newGameState;
 }
