@@ -126,7 +126,10 @@ export function updateGame(
     newGameState.player,
     gameState.enemy,
   );
-  Object.assign(newEnemy, moveEnemy(gameState.enemy, vectors));
+  Object.assign(
+    newEnemy,
+    moveEnemy(gameState.expectMove, gameState.enemy, vectors),
+  );
   newGameState.enemy = { ...gameState.enemy, ...newEnemy };
 
   return newGameState;
