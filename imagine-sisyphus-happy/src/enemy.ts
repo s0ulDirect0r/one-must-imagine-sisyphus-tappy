@@ -34,10 +34,7 @@ export async function initFrame(
 }
 
 // player position, enemy position => { dx, dy }
-export function calculateDirectionVector(
-  player: Player,
-  enemy: Enemy,
-): { xVector: number; yVector: number } {
+export function calculateDirectionVector(player: Player, enemy: Enemy): { xVector: number; yVector: number } {
   const dx = player.x - enemy.x;
   const dy = player.y - enemy.y;
   const distanceToPlayer = Math.sqrt((dx ^ 2) + (dy ^ 2));
@@ -47,13 +44,21 @@ export function calculateDirectionVector(
 }
 
 export function moveEnemy(
+  expectMove: boolean,
   enemy: Enemy,
   vectors: { xVector: number; yVector: number },
 ): Partial<Enemy> {
-  return {
-    x: (enemy.x += vectors.xVector * enemy.speed),
-    y: (enemy.y += vectors.yVector * enemy.speed),
-  };
+  if (expectMove ?? false) {
+    return {
+      x: (enemy.x += vectors.xVector * enemy.speed),
+      y: (enemy.y += vectors.yVector * enemy.speed),
+    };
+  } else {
+    return {
+      x: enemy.x,
+      y: enemy.y,
+    };
+  }
 }
 
 export function frame(enemy: Enemy) {
