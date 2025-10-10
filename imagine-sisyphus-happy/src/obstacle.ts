@@ -120,11 +120,7 @@ export function updateObstacles(
       bounded.length < MAX_OBSTACLES
         ? [
           ...bounded,
-          {
-            id: crypto.randomUUID(),
-            x: Math.floor(Math.random() * screen.width),
-            y: GRID_HEIGHT - 1,
-          } as Obstacle,
+          makeNewObstacles()
         ]
         : bounded;
     console.log("SPAWNED", spawned)
@@ -133,4 +129,27 @@ export function updateObstacles(
   }
 
   return obstacles;
+}
+
+
+
+function makeNewObstacles(): Obstacle[] {
+  const random = Math.floor(Math.random() * (2 - 0 + 2)) + 0;
+  let obstacles = []
+
+  for (let i = 0; i < random; i++) {
+    const obstacle = {
+      id: crypto.randomUUID(),
+      x: Math.floor(Math.random() * screen.width),
+      y: GRID_HEIGHT - 1,
+    } as Obstacle
+
+    obstacles.push(obstacle)
+
+  }
+
+
+  return obstacles
+
+
 }
