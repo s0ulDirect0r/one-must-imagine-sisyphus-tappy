@@ -8,7 +8,7 @@ let audioCtx: AudioContext;
 let buffer: AudioBuffer;
 let source: AudioBufferSourceNode | null = null;
 let startTime = 0; // AudioContext.currentTime when playback starts
-let bpm = 68; // hardcoded for now
+let bpm = 136; // hardcoded for now
 let songDuration = 0;
 
 
