@@ -7,6 +7,7 @@ import { setUpMetronome } from "./metronome";
 
 let gameState = stateMachine.gameState;
 let { bpm, songDuration } = await loadAudio();
+let loopInterval: string | number | NodeJS.Timeout | undefined
 
 export function initializeGameState(): void {
   inputs.initialize();

@@ -1,6 +1,4 @@
 
-// current audio
-let audio = new Audio("/assets/garbage.mp3")
 
 
 
