@@ -14,10 +14,9 @@ import {
 } from "./stateMachine";
 import { Assets, Texture, Sprite, AnimatedSprite } from "pixi.js";
 
-let obstacleTextures: Texture[] = [];
+let obstacleTextures: Texture[];
 let sprite: Sprite;
 const myObstacles: Map<string, Sprite> = new Map();
-
 
 export type Obstacle = {
   id: string;
@@ -25,20 +24,13 @@ export type Obstacle = {
   y: number;
 };
 
-export async function initFrame(obstacles: Obstacle[]): Promise<Sprite> {
-  const girlPukeFrames = await loadObstacleTextures("girl-puking-obstacle")
-  const animatedGirlSprite = new AnimatedSprite(girlPukeFrames)
-
-  obstacleTextures.push(animatedGirlSprite)
-
-
-
-
-
+export async function initFrame(obstacles: Obstacle[]) {
+  obstacleTextures = await loadObstacleTextures("girl-puking-obstacle");
+  return obstacleTextures;
 }
 
-async function loadObstacleTextures(folderPath: string) {
-  let GIRL_OBSTACLE_TEXTURES = []
+async function loadObstacleTextures(folderPath: string): Promise<Texture[]> {
+  let GIRL_OBSTACLE_TEXTURES = [];
 
   for (let i = 0; i < 36; i++) {
     let filename = ""
