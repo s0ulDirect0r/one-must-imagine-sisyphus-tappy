@@ -9,7 +9,12 @@ export const TIME_OFFSET = 0.05;
 
 import { getCurrentAudioTime } from "./audio";
 import { isInBeatWindow } from "./metronome";
-import { Player, movePlayer, shiftPlayer } from "./Player";
+import {
+  Player,
+  movePlayer,
+  shiftPlayer,
+  checkCollisionWithObstacle,
+} from "./Player";
 //import { movePlayer } from "./Player";
 export type GameState = {
   player: Player;
@@ -91,6 +96,13 @@ export function updateGame(
     // Just mark that we need to load audio next tick
     newGameState.needsAudio = true;
   }
+
+  gameState.obstacles.map((obstacle) => {
+    if (checkCollisionWithObstacle(gameState.player, obstacle)) {
+      console.error("HITTING");
+      // Confirmed to hit... but.. What to do?
+    }
+  });
 
   const spacePressed = inputState.get("Space")?.justPressed;
   const judgement = judge(

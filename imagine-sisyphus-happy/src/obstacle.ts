@@ -28,6 +28,7 @@ export async function initFrame(obstacles: Obstacle[]): Promise<Sprite> {
   obstacleTexture = await Assets.load("/assets/tree.png");
 }
 
+// TODO Rename this to be clearer about MAP bounds
 function withinBounds(obstacle: Obstacle): boolean {
   if (obstacle.y <= 600) {
     return true;

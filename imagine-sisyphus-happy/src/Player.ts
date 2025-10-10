@@ -38,7 +38,7 @@ function withinCircle(player: Player, vertex: Point) {
   return distance(player.x, player.y, vertex.x, vertex.y) <= RADIUS;
 }
 
-function checkCollisionWithObstacle(
+export function checkCollisionWithObstacle(
   player: Player,
   obstacle: Obstacle,
 ): boolean {
