@@ -26,6 +26,8 @@ export async function initFrame(
 
   anime.animationSpeed = ANIMATION_SPEED;
 
+  anime.scale.set(anime.scale.x * 0.5);
+
   return anime;
 }
 

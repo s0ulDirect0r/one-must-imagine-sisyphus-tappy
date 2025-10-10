@@ -52,7 +52,7 @@ export async function initialize(gameState: GameState) {
   const playerSprite = await player.initFrame(width, height, gameState.player);
   app.stage.addChild(playerSprite);
 
-  const enemySprite = await enemy.initFrame(width - 10, height - 10, gameState.enemy);
+  const enemySprite = await enemy.initFrame(width, height, gameState.enemy);
   app.stage.addChild(enemySprite);
 
   const { elevationText, streakText, debugText, debugMetronomeText } =
