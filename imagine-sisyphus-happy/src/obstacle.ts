@@ -14,7 +14,7 @@ import {
 } from "./stateMachine";
 import { Assets, Texture, Sprite, AnimatedSprite } from "pixi.js";
 
-let obstacleTextures: AnimatedSprite[] = [];
+let obstacleTextures: Texture[] = [];
 let sprite: Sprite;
 const myObstacles: Map<string, Sprite> = new Map();
 
@@ -88,8 +88,9 @@ export async function frame(app: Application, obstacles: Obstacle[]) {
       obstacleSprite.position.set(obstacle.x, obstacle.y);
     } else {
       const newObstacle = obstacleTextures[0]// how to pass texture?
+      const newObstacle = new AnimatedSprite(obstacleTextures); // how to pass texture?
       newObstacle.position.set(obstacle.x, obstacle.y);
-      //newObstacle.play()
+      newObstacle.play();
       app.stage.addChild(newObstacle);
       myObstacles.set(obstacle.id, newObstacle);
     }
