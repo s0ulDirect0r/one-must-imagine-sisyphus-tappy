@@ -28,6 +28,8 @@ const OFFSET_X = 5;
 const OFFSET_Y = -15;
 const RADIUS_X = 75;
 const RADIUS_Y = 60;
+
+// TODO This is a temporary RADIUS
 const RADIUS = 60;
 
 function distance(x1, y1, x2, y2) {

@@ -99,7 +99,7 @@ export function updateGame(
 
   gameState.obstacles.map((obstacle) => {
     if (checkCollisionWithObstacle(gameState.player, obstacle)) {
-      console.error("HITTING");
+      console.error("HITTING", obstacle.id);
       // Confirmed to hit... but.. What to do?
     }
   });
