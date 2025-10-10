@@ -122,7 +122,7 @@ export function updateObstacles(
           ...bounded,
           {
             id: crypto.randomUUID(),
-            x: Math.floor(Math.random() * (GRID_WIDTH - 1)),
+            x: Math.floor(Math.random() * screen.width),
             y: GRID_HEIGHT - 1,
           } as Obstacle,
         ]
