@@ -10,9 +10,11 @@ export const TIME_OFFSET = 0.05;
 import { getCurrentAudioTime } from "./audio";
 import { isInBeatWindow } from "./metronome";
 import { Player, movePlayer, shiftPlayer } from "./Player";
+import { Enemy, moveEnemy, shiftEnemy } from './enemy';
 //import { movePlayer } from "./Player";
 export type GameState = {
   player: Player;
+  enemy: Enemy;
   bpm: number;
   elevation: number;
   score: number;
@@ -35,6 +37,10 @@ export const gameState: GameState = {
     x: screen.width / 2,
     y: screen.height / 2 + 200, // TODO need app screen specifically?
     speed: 0.1,
+  },
+  enemy: {
+    x: 100,
+    y: 50,
   },
   bpm: 0,
   elevation: 0,
@@ -78,14 +84,14 @@ export function updateGame(
 
     newGameState.timePassedSinceSongStarted = currentTime;
 
-    console.log({
-      currentTime,
-      songStartTime: gameState.songStartTime,
-      elapsed: currentTime - gameState.songStartTime,
-      bpm: 136,
-      secondsPerBeat: 60 / gameState.songBpm,
-      expected,
-    });
+    // console.log({
+    //   currentTime,
+    //   songStartTime: gameState.songStartTime,
+    //   elapsed: currentTime - gameState.songStartTime,
+    //   bpm: 136,
+    //   secondsPerBeat: 60 / gameState.songBpm,
+    //   expected,
+    // });
 
   } else {
     // Just mark that we need to load audio next tick

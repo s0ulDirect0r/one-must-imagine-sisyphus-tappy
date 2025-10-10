@@ -16,6 +16,7 @@ import { initDevtools } from "@pixi/devtools";
 import * as background from "./background";
 import * as obstacle from "./obstacle";
 import * as player from "./Player";
+import * as enemy from "./enemy";
 import * as screen from "./backgroundScreen";
 import { DEBUG_MODE } from "./debug";
 
@@ -50,6 +51,9 @@ export async function initialize(gameState: GameState) {
 
   const playerSprite = await player.initFrame(width, height, gameState.player);
   app.stage.addChild(playerSprite);
+
+  const enemySprite = await enemy.initFrame(width - 10, height - 10, gameState.enemy);
+  app.stage.addChild(enemySprite);
 
   const { elevationText, streakText, debugText, debugMetronomeText } =
     ui.initFrame(width, height);
@@ -97,5 +101,6 @@ async function drawScene(state: GameState, ticker: Ticker) {
   screen.frame(state.expectMove, app);
   obstacle.frame(app, state.obstacles);
   player.frame(state.player);
+  enemy.frame(state.enemy);
   ui.frame(state.expectMove, state.elevation, state.streak, state.lost, ticker);
 }
