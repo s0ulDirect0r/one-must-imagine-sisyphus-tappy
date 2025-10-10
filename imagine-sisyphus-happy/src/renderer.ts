@@ -55,15 +55,8 @@ export async function initialize(gameState: GameState) {
   const enemySprite = await enemy.initFrame(width, height, gameState.enemy);
   app.stage.addChild(enemySprite);
 
-  const { elevationText, streakText, debugText, debugMetronomeText } =
-    ui.initFrame(width, height);
-
-  app.stage.addChild(elevationText);
-  app.stage.addChild(streakText);
-  if (DEBUG_MODE) {
-    app.stage.addChild(debugText);
-    app.stage.addChild(debugMetronomeText);
-  }
+  const uiElements = ui.initFrame(app);
+  app.stage.addChild(uiElements);
 
   const borderWidth = 10;
   const holeWidth = width - borderWidth * 2;
