@@ -5,19 +5,16 @@ import { updateObstacles, type Obstacle } from "./obstacle";
 export const GRID_WIDTH = 10;
 export const GRID_HEIGHT = 15;
 export const MAX_OBSTACLES = 1;
-export const TIME_OFFSET = 0.05;
+export const TIME_OFFSET = 0.07;
 
 import { getCurrentAudioTime } from "./audio";
 import { isInBeatWindow } from "./metronome";
-import {
-  Player,
-  movePlayer,
-  shiftPlayer,
-  checkCollisionWithObstacle,
-} from "./Player";
+import { Player, movePlayer, shiftPlayer, checkCollisionWithObstacle } from "./Player";
+import { Enemy, moveEnemy, shiftEnemy } from './enemy';
 //import { movePlayer } from "./Player";
 export type GameState = {
   player: Player;
+  enemy: Enemy;
   bpm: number;
   elevation: number;
   score: number;
@@ -40,6 +37,10 @@ export const gameState: GameState = {
     x: screen.width / 2,
     y: screen.height / 2 + 200, // TODO need app screen specifically?
     speed: 0.1,
+  },
+  enemy: {
+    x: 20,
+    y: 700,
   },
   bpm: 0,
   elevation: 0,
@@ -67,10 +68,9 @@ export function updateGame(
   // check if Audio has been loaded in renderer
   if (gameState.needsAudio) {
     //play song
-    const now = performance.now() / 1000;
 
     if (!gameState.songStartTime) {
-      newGameState.songStartTime = now;
+      newGameState.songStartTime = getCurrentAudioTime();
     }
   }
 
@@ -79,19 +79,11 @@ export function updateGame(
     const elapsed = getCurrentAudioTime() - gameState.songStartTime;
     const expected = isInBeatWindow(elapsed, 136, 0);
     newGameState.expectMove = expected;
-    const currentTime = getCurrentAudioTime() + TIME_OFFSET;
+    const currentTime = getCurrentAudioTime() - TIME_OFFSET;
 
     newGameState.timePassedSinceSongStarted = currentTime;
-
-    console.log({
-      currentTime,
-      songStartTime: gameState.songStartTime,
-      elapsed: currentTime - gameState.songStartTime,
-      bpm: 136,
-      secondsPerBeat: 60 / gameState.songBpm,
-      expected,
-    });
-
+    if (expected) { console.log("TAP") }
+    else { console.log("DONT TAP") }
   } else {
     // Just mark that we need to load audio next tick
     newGameState.needsAudio = true;

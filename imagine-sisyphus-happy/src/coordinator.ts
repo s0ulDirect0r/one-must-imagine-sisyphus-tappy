@@ -2,7 +2,7 @@ import * as stateMachine from "./stateMachine";
 import * as renderer from "./renderer";
 import * as inputs from "./input";
 import type { GameState } from "./stateMachine";
-import { loadAudio, playAudio } from "./audio";
+import { getCurrentAudioTime, loadAudio, playAudio } from "./audio";
 import { setUpMetronome } from "./metronome";
 
 let gameState = stateMachine.gameState;
@@ -33,7 +33,10 @@ export function gameLoop() {
   if (gameState.needsAudio) {
     setUpMetronome(bpm);
     playAudio();
+    newState.songStartTime = getCurrentAudioTime()
+    console.log("STARTING", newState.songStartTime)
     newState.needsAudio = false;
+
   } else {
     newState.songBpm = bpm;
     newState.songDuration = songDuration;
