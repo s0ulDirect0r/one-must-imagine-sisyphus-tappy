@@ -5,6 +5,7 @@ import { updateObstacles, type Obstacle } from "./obstacle";
 export const GRID_WIDTH = 10;
 export const GRID_HEIGHT = 15;
 export const MAX_OBSTACLES = 3;
+export const OBSTACLE_WINDOW = 70;
 export const TIME_OFFSET = 0.07;
 
 import { getCurrentAudioTime } from "./audio";
@@ -122,6 +123,7 @@ export function updateGame(
   newGameState.obstacles = updateObstacles(
     gameState.obstacles,
     gameState.expectMove,
+    gameState.player,
   );
 
   newGameState.player = { ...gameState.player, ...newPlayer };

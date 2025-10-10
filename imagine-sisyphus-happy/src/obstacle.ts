@@ -3,14 +3,13 @@
 // then move every obstacle down in the beat
 
 import { KeyState } from "./input";
-import * as PIXI from "pixi.js";
-import * as fs from "fs"
-import * as path from "path";
+import { Player } from "./Player";
 import {
   GameState,
   GRID_HEIGHT,
   GRID_WIDTH,
   MAX_OBSTACLES,
+  OBSTACLE_WINDOW,
 } from "./stateMachine";
 import { Assets, Texture, Sprite, AnimatedSprite } from "pixi.js";
 
@@ -110,6 +109,7 @@ export async function frame(app: Application, obstacles: Obstacle[]) {
 export function updateObstacles(
   obstacles: Obstacle[],
   expectMove: boolean,
+  player: Player,
 ): Obstacle[] {
   // console.log("inputs: ", inputs)
   // for now, space press represents new beat
@@ -117,10 +117,12 @@ export function updateObstacles(
   // TODO: might need to do filtering order to conform max obstacle size
   if (expectMove ?? false) {
     // TODO: obstacle movement may eventually need its own function
-    const movedObstacles = obstacles.map((obs) => ({ ...obs, y: obs.y + 20 }));
+    const movedObstacles = obstacles.map((obs) => ({ ...obs, y: obs.y + 5 }));
     const bounded = movedObstacles.filter((obs) => withinBounds(obs));
     console.log("BOUNDED", bounded)
 
+    const obs_max = OBSTACLE_WINDOW / 2 + player.x;
+    const obs_min = OBSTACLE_WINDOW / 2 - player.x;
     // TODO: possible to generate multiple obstacles per line?
     const spawned =
       bounded.length < MAX_OBSTACLES
@@ -128,8 +130,8 @@ export function updateObstacles(
           ...bounded,
           {
             id: crypto.randomUUID(),
-            x: Math.floor(Math.random() * screen.width),
-            y: GRID_HEIGHT - 1,
+            x: Math.floor(Math.random() * (obs_max - obs_min) + obs_min),
+            y: 10,
           } as Obstacle,
         ]
         : bounded;
