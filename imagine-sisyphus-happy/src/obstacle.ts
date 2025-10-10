@@ -25,6 +25,17 @@ export async function initFrame(obstacles: Obstacle[]): Promise<Sprite> {
   obstacleTexture = await Assets.load("/assets/tree.png");
 }
 
+function withinBounds(obstacle: Obstacle): boolean {
+  if (obstacle.y <= 600) {
+    return true;
+  }
+  const toDelete: Sprite = myObstacles.get(obstacle.id);
+  toDelete.parent!.removeChild(toDelete);
+  toDelete.destroy();
+  myObstacles.delete(obstacle.id);
+  return false;
+}
+
 // how am i going to keep track of myObstacles?
 // TODO: do we need to check if obstacle is already rendered?
 export async function frame(app: Application, obstacles: Obstacle[]) {
@@ -55,7 +66,7 @@ export function updateObstacles(
   if (expectMove ?? false) {
     // TODO: obstacle movement may eventually need its own function
     const movedObstacles = obstacles.map((obs) => ({ ...obs, y: obs.y + 20 }));
-    const bounded = movedObstacles.filter((obs) => obs.y >= 0);
+    const bounded = movedObstacles.filter((obs) => withinBounds(obs));
 
     // TODO: possible to generate multiple obstacles per line?
     const spawned =
