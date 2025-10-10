@@ -77,6 +77,7 @@ export async function initialize(gameState: GameState) {
 
   const uiElements = ui.initFrame(app);
   app.stage.addChild(uiElements);
+  uiElements.zIndex = 99;
 
   const borderWidth = 10;
   const holeWidth = width - borderWidth * 2;

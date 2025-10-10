@@ -1,7 +1,14 @@
 import { DEBUG_MODE } from "./debug";
 import { inputState } from "./input";
 import "./main.css";
-import { Application, Container, Text, TextStyle, Graphics } from "pixi.js";
+import {
+  Application,
+  Assets,
+  Container,
+  Text,
+  TextStyle,
+  Graphics,
+} from "pixi.js";
 import { getCurrentAudioTime } from "./audio";
 
 import * as elevation from "./ui/elevation";
