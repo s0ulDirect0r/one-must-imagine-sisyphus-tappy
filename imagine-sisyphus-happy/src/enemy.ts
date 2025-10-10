@@ -1,10 +1,12 @@
 import { AnimatedSprite } from "pixi.js";
 import * as PIXI from "pixi.js";
 import { inputState } from "./input";
+import { Player } from "./Player";
 
 export type Enemy = {
   x: number;
   y: number;
+  speed: number;
 };
 
 let anime: AnimatedSprite;
@@ -31,19 +33,27 @@ export async function initFrame(
   return anime;
 }
 
-export function moveEnemy(enemy: Enemy): Partial<Enemy> {
-  return { y: enemy.y - ENEMY_SPEED };
+// player position, enemy position => { dx, dy }
+export function calculateDirectionVector(player: Player, enemy: Enemy) {
+  const dx = player.x - enemy.x;
+  const dy = player.y - enemy.y;
+  const distanceToPlayer = Math.sqrt((dx ^ 2) + (dy ^ 2));
+  const xVector = dx / distanceToPlayer;
+  const yVector = dy / distanceToPlayer;
+  return { xVector, yVector };
 }
 
-export function shiftEnemy(enemy: Enemy): Partial<Enemy> {
-  if (inputState.get("ArrowLeft")?.justPressed) {
-    return { x: enemy.x - 50 };
-  } else if (inputState.get("ArrowRight")?.justPressed) {
-    return { x: enemy.x + 50 };
-  }
-  return enemy;
+export function moveEnemy(
+  enemy: Enemy,
+  vectors: { xVector: number; yVector: number },
+): Partial<Enemy> {
+  return {
+    x: (enemy.x += vectors.xVector * enemy.speed),
+    y: (enemy.y += vectors.yVector * enemy.speed),
+  };
 }
 
 export function frame(enemy: Enemy) {
   anime.position.set(enemy.x, enemy.y);
 }
+
