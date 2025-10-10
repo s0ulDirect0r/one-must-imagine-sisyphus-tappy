@@ -38,18 +38,29 @@ function withinCircle(player: Player, vertex: Point) {
   return distance(player.x, player.y, vertex.x, vertex.y) <= RADIUS;
 }
 
-function checkCollisionWithObstacle(player: Player, obstacle: Obstacle) {
-  const bottomLeft: Point = {
-    x: obstacle.x - OBS_WIDTH,
-    y: obstacle.y + OBS_HEIGHT,
-  };
+function checkCollisionWithObstacle(
+  player: Player,
+  obstacle: Obstacle,
+): boolean {
+  const points: Point[] = [
+    {
+      // Bottom Left
+      x: obstacle.x - OBS_WIDTH,
+      y: obstacle.y + OBS_HEIGHT,
+    },
+    {
+      // Bottom Center
+      x: obstacle.x,
+      y: obstacle.y + OBS_HEIGHT,
+    },
+    {
+      // Bottom Right
+      x: obstacle.x + OBS_WIDTH,
+      y: obstacle.y + OBS_HEIGHT,
+    },
+  ];
 
-  const bottomRight: Point = {
-    x: obstacle.x + OBS_WIDTH,
-    y: obstacle.y + OBS_HEIGHT,
-  };
-
-  return withinCircle(player, bottomLeft) || withinCircle(player, bottomRight);
+  return points.some((point) => withinCircle(player, point));
 }
 
 let anime: AnimatedSprite;
