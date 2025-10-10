@@ -36,15 +36,15 @@ export async function initFrame(
   return anime;
 }
 
-export function movePlayer(player: Player): Player {
-  return { ...player, x: player.x, y: player.y - PLAYER_SPEED };
+export function movePlayer(player: Player): Partial<Player> {
+  return { y: player.y - PLAYER_SPEED };
 }
 
-export function shiftPlayer(player: Player): Player {
+export function shiftPlayer(player: Player): Partial<Player> {
   if (inputState.get("ArrowLeft")?.justPressed) {
-    return { ...player, x: player.x - 50, y: player.y };
+    return { x: player.x - 50 };
   } else if (inputState.get("ArrowRight")?.justPressed) {
-    return { ...player, x: player.x + 50, y: player.y };
+    return { x: player.x + 50 };
   }
   return player;
 }
