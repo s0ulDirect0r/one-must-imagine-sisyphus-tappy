@@ -5,9 +5,9 @@ import { updateObstacles, type Obstacle } from "./obstacle";
 export const GRID_WIDTH = 10;
 export const GRID_HEIGHT = 15;
 export const MAX_OBSTACLES = 1;
-export const TIME_OFFSET = 0.05
+export const TIME_OFFSET = 0.05;
 
-import { playAudio, isAudioPlaying, getCurrentAudioTime } from "./audio";
+import { getCurrentAudioTime } from "./audio";
 import { isInBeatWindow } from "./metronome";
 import { Player, movePlayer, shiftPlayer } from "./Player";
 //import { movePlayer } from "./Player";
@@ -57,24 +57,24 @@ export function updateGame(
   gameState: GameState,
 ): Partial<GameState> {
   let newGameState: Partial<GameState> = {};
-  let expected = false
+  let expected = false;
 
   // check if Audio has been loaded in renderer
   if (gameState.needsAudio) {
     //play song
-    const now = performance.now() / 1000
+    const now = performance.now() / 1000;
 
     if (!gameState.songStartTime) {
-      newGameState.songStartTime = now
+      newGameState.songStartTime = now;
     }
   }
 
-  if (isAudioPlaying()) {
+  if (!gameState.needsAudio) {
 
     const elapsed = getCurrentAudioTime() - gameState.songStartTime;
     const expected = isInBeatWindow(elapsed, 136, 0);
     newGameState.expectMove = expected;
-    const currentTime = getCurrentAudioTime() + TIME_OFFSET
+    const currentTime = getCurrentAudioTime() + TIME_OFFSET;
 
     newGameState.timePassedSinceSongStarted = currentTime;
 
