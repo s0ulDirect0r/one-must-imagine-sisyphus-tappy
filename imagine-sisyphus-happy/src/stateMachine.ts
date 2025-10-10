@@ -4,7 +4,7 @@ import { updateObstacles, type Obstacle } from "./obstacle";
 
 export const GRID_WIDTH = 10;
 export const GRID_HEIGHT = 15;
-export const MAX_OBSTACLES = 1;
+export const MAX_OBSTACLES = 3;
 export const TIME_OFFSET = 0.07;
 
 import { getCurrentAudioTime } from "./audio";
