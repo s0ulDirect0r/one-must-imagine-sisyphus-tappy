@@ -14,6 +14,25 @@ export type Player = {
   y: number;
 };
 
+type Point = {
+  x: number;
+  y: number;
+};
+
+const OFFSET_X = 5;
+const OFFSET_Y = -15;
+const RADIUS_X = 75;
+const RADIUS_Y = 60;
+const RADIUS = 60;
+
+function distance(x1, y1, x2, y2) {
+  return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
+}
+
+function withinCircle(player: Player, vertex: Point) {
+  return distance(player.x, player.y, vertex.x, vertex.y) <= RADIUS;
+}
+
 let anime: AnimatedSprite;
 const ANIMATION_SPEED = 0.1;
 

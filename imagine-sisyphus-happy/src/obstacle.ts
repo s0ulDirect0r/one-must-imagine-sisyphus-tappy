@@ -21,6 +21,9 @@ export type Obstacle = {
   y: number;
 };
 
+export const WIDTH = 150;
+export const HEIGHT = 150;
+
 export async function initFrame(obstacles: Obstacle[]): Promise<Sprite> {
   obstacleTexture = await Assets.load("/assets/tree.png");
 }
