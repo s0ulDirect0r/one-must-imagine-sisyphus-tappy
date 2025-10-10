@@ -3,7 +3,7 @@
 // then move every obstacle down in the beat
 
 import { KeyState } from "./input";
-import { Player } from "./Player";
+import { checkCollisionWithObstacle, Player } from "./Player";
 import {
   GameState,
   GRID_HEIGHT,
@@ -103,6 +103,21 @@ export async function frame(app: Application, obstacles: Obstacle[]) {
   });
 }
 
+export function moveObstacles(
+  obstacles: Obstacle[],
+  player: Player,
+): Obstacle[] {
+  const movedObstacles = obstacles.map((obs) => {
+    if (!checkCollisionWithObstacle(player, obs)) {
+      return { ...obs, y: obs.y + 5 };
+    } else {
+      return { ...obs };
+    }
+  });
+
+  return movedObstacles;
+}
+
 // mvp: generate an obstacle for every space press, and move each obstacle down by one
 // TODO: pass obstacle updates to renderer, make it it's own function?
 // TODO: handle player movement? need to calculate elevation and player position
@@ -115,9 +130,11 @@ export function updateObstacles(
   // for now, space press represents new beat
   // TODO: sync movement updates to metronome
   // TODO: might need to do filtering order to conform max obstacle size
-  if (expectMove ?? false) {
+  if (expectMove) {
     // TODO: obstacle movement may eventually need its own function
-    const movedObstacles = obstacles.map((obs) => ({ ...obs, y: obs.y + 5 }));
+    // (oct10;1730) looks like today is that day.
+    // const movedObstacles = obstacles.map((obs) => ({ ...obs, y: obs.y + 5 }));
+    const movedObstacles = moveObstacles(obstacles, player);
     const bounded = movedObstacles.filter((obs) => withinBounds(obs));
     console.log("BOUNDED", bounded)
 
