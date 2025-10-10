@@ -46,7 +46,7 @@ export function shiftPlayer(player: Player): Partial<Player> {
   } else if (inputState.get("ArrowRight")?.justPressed) {
     return { x: player.x + 50 };
   }
-  return player;
+  return { x: player.x };
 }
 
 export function frame(player: Player) {
