@@ -9,7 +9,12 @@ export const TIME_OFFSET = 0.07;
 
 import { getCurrentAudioTime } from "./audio";
 import { isInBeatWindow } from "./metronome";
-import { Player, movePlayer, shiftPlayer, checkCollisionWithObstacle } from "./Player";
+import {
+  Player,
+  movePlayer,
+  shiftPlayer,
+  checkCollisionWithObstacle,
+} from "./Player";
 import { Enemy, moveEnemy, calculateDirectionVector } from "./enemy";
 //import { movePlayer } from "./Player";
 export type GameState = {
