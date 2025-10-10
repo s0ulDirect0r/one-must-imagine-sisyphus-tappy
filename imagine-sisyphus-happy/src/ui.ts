@@ -71,7 +71,13 @@ export function initFrame(width: number, height: number) {
     debugMetronomeText.y = 200;
   }
 
-  return { elevationText, streakText, debugText, debugMetronomeText };
+  return {
+    elevationText,
+    streakText,
+    gameOverText,
+    debugText,
+    debugMetronomeText,
+  };
 }
 
 let lastBeatTime = 0;
@@ -88,6 +94,7 @@ export function frame(
   streakText.text = `${streak}x`;
 
   if (lost) {
+    console.log(gameOverText);
     gameOverText.text = "GAME OVER!!";
   }
 }
