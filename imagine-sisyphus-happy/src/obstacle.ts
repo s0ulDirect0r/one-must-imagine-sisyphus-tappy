@@ -14,7 +14,7 @@ import {
 } from "./stateMachine";
 import { Assets, Texture, Sprite, AnimatedSprite } from "pixi.js";
 
-let obstacleTextures: Texture[];
+let obstacleTextures: Texture[][] = [];
 let sprite: Sprite;
 const myObstacles: Map<string, Sprite> = new Map();
 
@@ -30,12 +30,17 @@ export const WIDTH = 150;
 export const HEIGHT = 150;
 
 export async function initFrame(obstacles: Obstacle[]) {
-  obstacleTextures = await loadObstacleTextures("girl-puking-obstacle");
-  return obstacleTextures;
+  const girlObst = await loadObstacleTextures("girl-puking-obstacle");
+  obstacleTextures.push(girlObst)
+  const stripperObst = await loadObstacleTextures("stripper")
+  obstacleTextures.push(stripperObst)
+  const homelessObst = await loadObstacleTextures("homeless")
+  obstacleTextures.push(homelessObst)
+
 }
 
 async function loadObstacleTextures(folderPath: string): Promise<Texture[]> {
-  let GIRL_OBSTACLE_TEXTURES = [];
+  let OBSTACLE_TEXTURES = [];
 
   for (let i = 0; i < 36; i++) {
     let filename = ""
@@ -47,13 +52,13 @@ async function loadObstacleTextures(folderPath: string): Promise<Texture[]> {
     }
 
     console.log(`/assets/${folderPath}/${filename}`)
-    GIRL_OBSTACLE_TEXTURES.push(await PIXI.Assets.load(`/assets/${folderPath}/${filename}`));
+    OBSTACLE_TEXTURES.push(await PIXI.Assets.load(`/assets/${folderPath}/${filename}`));
 
 
 
   }
 
-  return GIRL_OBSTACLE_TEXTURES
+  return OBSTACLE_TEXTURES
 
 
 
@@ -87,7 +92,10 @@ export async function frame(app: Application, obstacles: Obstacle[]) {
     if (obstacleSprite) {
       obstacleSprite.position.set(obstacle.x, obstacle.y);
     } else {
-      const newObstacle = new AnimatedSprite(obstacleTextures); // how to pass texture?
+      const random = Math.floor(Math.random() * (2 - 0 + 2)) + 0;
+
+      const newObstacle = new AnimatedSprite(obstacleTextures[random]);
+      console.log("NEWOBST", newObstacle) // how to pass texture?
       newObstacle.position.set(obstacle.x, obstacle.y);
       newObstacle.play();
       app.stage.addChild(newObstacle);
