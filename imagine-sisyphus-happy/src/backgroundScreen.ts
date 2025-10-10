@@ -40,39 +40,6 @@ export function changeBackgroundColor(color: number, app: Application) {
     backgroundScreen.fill();
 }
 
-
-/*
-
-export function frame(expectMove: boolean, app: Application) {
-    const now = getCurrentAudioTime() + VISUAL_OFFSET;
-
-    // Start flash when expectMove becomes true
-    if (expectMove && !flashing) {
-        flashing = true;
-        lastBeatTime = now;
-    }
-
-    // Determine current flash color
-    let color = "#cc33ff";
-    if (flashing) {
-        color = "#33ff85";
-
-    }
-
-    // Draw the background every frame
-    changeBackgroundColor(color, app);
-
-    // End flash after FLASH_DURATION
-    if (flashing && now - lastBeatTime >= FLASH_DURATION) {
-        flashing = false;
-    }
-
-    
-}
-*/
-
-
-
 export function frame(gameState: GameState, app: Application) {
     if (gameState.songStartTime === undefined)
         return;
