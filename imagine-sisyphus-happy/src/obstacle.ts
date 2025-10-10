@@ -70,11 +70,13 @@ function withinBounds(obstacle: Obstacle): boolean {
   if (obstacle.y <= 600) {
     return true;
   }
-  const toDelete: AnimatedSprite = myObstacles.get(obstacle.id);
-  console.log("OBSTACLETODELETE", toDelete)
-  toDelete?.parent!.removeChild(toDelete);
-  toDelete.destroy();
-  myObstacles.delete(obstacle.id);
+  if (myObstacles.has(obstacle.id)){
+    const toDelete: AnimatedSprite = myObstacles.get(obstacle.id);
+    console.log("OBSTACLETODELETE", toDelete)
+    toDelete?.parent!.removeChild(toDelete);
+    toDelete.destroy();
+    myObstacles.delete(obstacle.id);
+  }
   return false;
 }
 
@@ -87,7 +89,6 @@ export async function frame(app: Application, obstacles: Obstacle[]) {
     if (obstacleSprite) {
       obstacleSprite.position.set(obstacle.x, obstacle.y);
     } else {
-      const newObstacle = obstacleTextures[0]// how to pass texture?
       const newObstacle = new AnimatedSprite(obstacleTextures); // how to pass texture?
       newObstacle.position.set(obstacle.x, obstacle.y);
       newObstacle.play();
