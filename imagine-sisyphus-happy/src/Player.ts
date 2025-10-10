@@ -8,6 +8,11 @@ import {
 } from "pixi.js";
 import * as PIXI from "pixi.js";
 import { inputState } from "./input";
+import {
+  WIDTH as OBS_WIDTH,
+  HEIGHT as OBS_HEIGHT,
+  type Obstacle,
+} from "./obstacle";
 
 export type Player = {
   x: number;
@@ -31,6 +36,20 @@ function distance(x1, y1, x2, y2) {
 
 function withinCircle(player: Player, vertex: Point) {
   return distance(player.x, player.y, vertex.x, vertex.y) <= RADIUS;
+}
+
+function checkCollisionWithObstacle(player: Player, obstacle: Obstacle) {
+  const bottomLeft: Point = {
+    x: obstacle.x - OBS_WIDTH,
+    y: obstacle.y + OBS_HEIGHT,
+  };
+
+  const bottomRight: Point = {
+    x: obstacle.x + OBS_WIDTH,
+    y: obstacle.y + OBS_HEIGHT,
+  };
+
+  return withinCircle(player, bottomLeft) || withinCircle(player, bottomRight);
 }
 
 let anime: AnimatedSprite;
