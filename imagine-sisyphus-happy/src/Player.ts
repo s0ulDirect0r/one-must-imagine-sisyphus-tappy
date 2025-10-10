@@ -41,12 +41,12 @@ export function movePlayer(player: Player): Partial<Player> {
 }
 
 export function shiftPlayer(player: Player): Partial<Player> {
-    if (inputState.get("ArrowLeft")?.justPressed) {
-        return { x: player.x - 50 };
-    } else if (inputState.get("ArrowRight")?.justPressed) {
-        return { x: player.x + 50 };
-    }
-    return player;
+  if (inputState.get("ArrowLeft")?.justPressed) {
+    return { x: player.x - 50 };
+  } else if (inputState.get("ArrowRight")?.justPressed) {
+    return { x: player.x + 50 };
+  }
+  return { x: player.x };
 }
 
 export function frame(player: Player) {
