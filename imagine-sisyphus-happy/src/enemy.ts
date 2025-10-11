@@ -52,8 +52,8 @@ export function moveEnemy(
 ): Partial<Enemy> {
   if (expectMove ?? false) {
     return {
-      x: (enemy.x += vectors.xVector * enemy.speed),
-      y: (enemy.y += vectors.yVector * enemy.speed),
+      x: enemy.x + vectors.xVector * enemy.speed,
+      y: enemy.y + vectors.yVector * enemy.speed,
     };
   } else {
     return {
