@@ -40,6 +40,11 @@ export function calculateDirectionVector(player: Player, enemy: Enemy): { xVecto
   const vectors = { xVector, yVector, distanceToPlayer };
   return vectors;
 }
+const THRESHOLD_BUMP = 500;
+
+export function bumpEnemyDown(newEnemy: Partial<Enemy>): Partial<Enemy> {
+  return { y: newEnemy.y + THRESHOLD_BUMP };
+}
 
 export function moveEnemy(
   expectMove: boolean,
@@ -48,8 +53,8 @@ export function moveEnemy(
 ): Partial<Enemy> {
   if (expectMove ?? false) {
     return {
-      x: (enemy.x += vectors.xVector * enemy.speed),
-      y: (enemy.y += vectors.yVector * enemy.speed),
+      x: enemy.x + vectors.xVector * enemy.speed,
+      y: enemy.y + vectors.yVector * enemy.speed,
     };
   } else {
     return {
