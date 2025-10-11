@@ -3,14 +3,13 @@
 // then move every obstacle down in the beat
 
 import { KeyState } from "./input";
-import * as PIXI from "pixi.js";
-import * as fs from "fs"
-import * as path from "path";
+import { checkCollisionWithObstacle, Player } from "./Player";
 import {
   GameState,
   GRID_HEIGHT,
   GRID_WIDTH,
   MAX_OBSTACLES,
+  OBSTACLE_WINDOW,
 } from "./stateMachine";
 import { Assets, Texture, Sprite, AnimatedSprite } from "pixi.js";
 
@@ -22,7 +21,12 @@ export type Obstacle = {
   id: string;
   x: number;
   y: number;
+  // TODO Create additional variables to do something with it upon collision
 };
+
+// TODO this is a temporary WIDTH/HEIGHT
+export const WIDTH = 150;
+export const HEIGHT = 150;
 
 export async function initFrame(obstacles: Obstacle[]) {
   const girlObst = await loadObstacleTextures("girl-puking-obstacle");
@@ -46,7 +50,6 @@ async function loadObstacleTextures(folderPath: string): Promise<Texture[]> {
       filename = `tile0${i}.png`
     }
 
-    console.log(`/assets/${folderPath}/${filename}`)
     console.log(`/assets/${folderPath}/${filename}`);
     OBSTACLE_TEXTURES.push(
       await Assets.load(`/assets/${folderPath}/${filename}`),
@@ -95,34 +98,54 @@ export async function frame(app: Application, obstacles: Obstacle[]) {
   });
 }
 
+export function moveObstacles(
+  obstacles: Obstacle[],
+  player: Player,
+): Obstacle[] {
+  const movedObstacles = obstacles.map((obs) => {
+    if (!checkCollisionWithObstacle(player, obs)) {
+      return { ...obs, y: obs.y + 5 };
+    } else {
+      return { ...obs };
+    }
+  });
+
+  return movedObstacles;
+}
+
 // mvp: generate an obstacle for every space press, and move each obstacle down by one
 // TODO: pass obstacle updates to renderer, make it it's own function?
 // TODO: handle player movement? need to calculate elevation and player position
 export function updateObstacles(
   obstacles: Obstacle[],
   expectMove: boolean,
+  player: Player,
 ): Obstacle[] {
   // console.log("inputs: ", inputs)
   // for now, space press represents new beat
   // TODO: sync movement updates to metronome
   // TODO: might need to do filtering order to conform max obstacle size
-  if (expectMove ?? false) {
+  if (expectMove) {
     // TODO: obstacle movement may eventually need its own function
-    const movedObstacles = obstacles.map((obs) => ({ ...obs, y: obs.y + 20 }));
+    // (oct10;1730) looks like today is that day.
+    // const movedObstacles = obstacles.map((obs) => ({ ...obs, y: obs.y + 5 }));
+    const movedObstacles = moveObstacles(obstacles, player);
     const bounded = movedObstacles.filter((obs) => withinBounds(obs));
     console.log("BOUNDED", bounded);
 
+    const obs_max = OBSTACLE_WINDOW / 2 + player.x;
+    const obs_min = OBSTACLE_WINDOW / 2 - player.x;
     // TODO: possible to generate multiple obstacles per line?
     const spawned =
       bounded.length < MAX_OBSTACLES
         ? [
-            ...bounded,
-            {
-              id: crypto.randomUUID(),
-              x: Math.floor(Math.random() * screen.width),
-              y: GRID_HEIGHT - 1,
-            } as Obstacle,
-          ]
+          ...bounded,
+          {
+            id: crypto.randomUUID(),
+            x: Math.floor(Math.random() * (obs_max - obs_min) + obs_min),
+            y: 10,
+          } as Obstacle,
+        ]
         : bounded;
     console.log("SPAWNED", spawned);
 

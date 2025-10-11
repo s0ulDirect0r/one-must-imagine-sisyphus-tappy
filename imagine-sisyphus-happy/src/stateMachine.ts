@@ -5,6 +5,7 @@ import { updateObstacles, type Obstacle } from "./obstacle";
 export const GRID_WIDTH = 10;
 export const GRID_HEIGHT = 15;
 export const MAX_OBSTACLES = 3;
+export const OBSTACLE_WINDOW = 70;
 export const TIME_OFFSET = 0.07;
 export const CAMERA_EFFECT = 0.332;
 
@@ -15,6 +16,7 @@ import {
   anime as playerAnime,
   movePlayer,
   shiftPlayer,
+  checkCollisionWithObstacle,
 } from "./Player";
 import {
   Enemy,
@@ -98,6 +100,13 @@ export function updateGame(
     newGameState.needsAudio = true;
   }
 
+  gameState.obstacles.map((obstacle) => {
+    if (checkCollisionWithObstacle(gameState.player, obstacle)) {
+      console.error("HITTING", obstacle.id);
+      // Confirmed to hit... but.. What to do?
+    }
+  });
+
   const spacePressed = inputState.get("Space")?.justPressed;
   const judgement = judge(
     spacePressed,
@@ -120,6 +129,7 @@ export function updateGame(
   newGameState.obstacles = updateObstacles(
     gameState.obstacles,
     gameState.expectMove,
+    gameState.player,
   );
 
   newGameState.player = { ...gameState.player, ...newPlayer };

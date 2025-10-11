@@ -66,3 +66,4 @@ export function moveEnemy(
 export function frame(enemy: Enemy) {
   anime.position.set(enemy.x, enemy.y);
 }
+
