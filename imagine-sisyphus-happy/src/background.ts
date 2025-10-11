@@ -8,7 +8,7 @@ let gridDeltaX = 0;
 const gridDeltaCap = 64;
 const TILE_LENGTH = 64;
 const FPS = 60;
-const SCROLL_RATE = TILE_LENGTH / FPS; // One Tile per Second
+const SCROLL_RATE = TILE_LENGTH / 64 / FPS; // One Tile per Second
 // TODO Add FLIP_RATE
 
 // Delta time is 60 units per second.
@@ -58,9 +58,8 @@ export async function frame(state: GameState, ticker: Ticker) {
     }
   }
 
-  gridDeltaY += ((TILE_LENGTH / 1000) * ticker.deltaMS) % gridDeltaCap;
-  gridDeltaX +=
-    (polarity * ((TILE_LENGTH / 1000) * ticker.deltaMS)) % gridDeltaCap;
+  gridDeltaY += (SCROLL_RATE * ticker.deltaMS) % gridDeltaCap;
+  gridDeltaX += (polarity * (SCROLL_RATE * ticker.deltaMS)) % gridDeltaCap;
 
   // gridDeltaX = 0;
   tiles.y = gridDeltaY;

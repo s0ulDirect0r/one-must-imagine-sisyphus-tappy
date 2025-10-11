@@ -13,6 +13,7 @@ import {
   HEIGHT as OBS_HEIGHT,
   type Obstacle,
 } from "./obstacle";
+import { CAMERA_EFFECT } from "./stateMachine";
 
 export type Player = {
   x: number;
@@ -87,8 +88,15 @@ export async function initFrame(
   return anime;
 }
 
-export function movePlayer(player: Player): Partial<Player> {
-  return { y: player.y - PLAYER_SPEED };
+export function movePlayer(
+  player: Player,
+  successfulMovement: boolean,
+): Partial<Player> {
+  if (successfulMovement) {
+    return { y: player.y - PLAYER_SPEED };
+  } else {
+    return { y: player.y + CAMERA_EFFECT / 2 };
+  }
 }
 
 export function shiftPlayer(player: Player): Partial<Player> {

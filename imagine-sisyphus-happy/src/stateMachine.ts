@@ -7,17 +7,23 @@ export const GRID_HEIGHT = 15;
 export const MAX_OBSTACLES = 3;
 export const OBSTACLE_WINDOW = 70;
 export const TIME_OFFSET = 0.07;
+export const CAMERA_EFFECT = 0.332;
 
 import { getCurrentAudioTime } from "./audio";
 import { isInBeatWindow } from "./metronome";
 import {
   Player,
+  anime as playerAnime,
   movePlayer,
   shiftPlayer,
   checkCollisionWithObstacle,
 } from "./Player";
-//import { movePlayer } from "./Player";
-import { Enemy, moveEnemy, calculateDirectionVector } from "./enemy";
+import {
+  Enemy,
+  moveEnemy,
+  calculateDirectionVector,
+  anime as enemyAnime,
+} from "./enemy";
 
 export type GameState = {
   player: Player;
@@ -83,7 +89,6 @@ export function updateGame(
   }
 
   if (!gameState.needsAudio) {
-
     const elapsed = getCurrentAudioTime() - gameState.songStartTime;
     const expected = isInBeatWindow(elapsed, 136, 0);
     newGameState.expectMove = expected;
@@ -115,7 +120,9 @@ export function updateGame(
   const newPlayer: Partial<Player> = {};
 
   if (judgement && judgement.elevation) {
-    Object.assign(newPlayer, movePlayer(gameState.player));
+    Object.assign(newPlayer, movePlayer(gameState.player, true));
+  } else {
+    Object.assign(newPlayer, movePlayer(gameState.player, false));
   }
   Object.assign(newPlayer, shiftPlayer(gameState.player));
 
@@ -132,10 +139,12 @@ export function updateGame(
     newGameState.player,
     gameState.enemy,
   );
+
   Object.assign(
     newEnemy,
     moveEnemy(gameState.expectMove, gameState.enemy, vectors),
   );
+
   newGameState.enemy = { ...gameState.enemy, ...newEnemy };
 
   if (vectors.distanceToPlayer < 8.5) {
