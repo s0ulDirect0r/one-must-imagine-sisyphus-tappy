@@ -83,7 +83,7 @@ export async function frame(app: Application, obstacles: Obstacle[]) {
       const obstacleSprite = myObstacles.get(obstacle.id)!;
       obstacleSprite.position.set(obstacle.x, obstacle.y);
     } else {
-      const random = Math.floor(Math.random() * 2);
+      const random = Math.floor(Math.random() * 3);
 
       const newObstacle = new AnimatedSprite(obstacleTextures[random]);
       console.log("NEWOBST", newObstacle); // how to pass texture?
