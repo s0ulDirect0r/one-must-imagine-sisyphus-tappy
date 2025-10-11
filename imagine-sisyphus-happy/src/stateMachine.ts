@@ -6,7 +6,7 @@ export const GRID_WIDTH = 10;
 export const GRID_HEIGHT = 15;
 export const MAX_OBSTACLES = 3;
 export const TIME_OFFSET = 0.07;
-export const CAMERA_EFFECT = 0.3;
+export const CAMERA_EFFECT = 0.332;
 
 import { getCurrentAudioTime } from "./audio";
 import { isInBeatWindow } from "./metronome";
