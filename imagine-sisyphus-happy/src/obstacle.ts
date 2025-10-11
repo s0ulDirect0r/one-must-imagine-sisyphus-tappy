@@ -46,11 +46,10 @@ async function loadObstacleTextures(folderPath: string): Promise<Texture[]> {
       filename = `tile0${i}.png`
     }
 
-    console.log(`/assets/${folderPath}/${filename}`)
-    OBSTACLE_TEXTURES.push(await Assets.load(`/assets/${folderPath}/${filename}`));
-
-
-
+    console.log(`/assets/${folderPath}/${filename}`);
+    OBSTACLE_TEXTURES.push(
+      await Assets.load(`/assets/${folderPath}/${filename}`),
+    );
   }
 
   return OBSTACLE_TEXTURES
@@ -63,13 +62,11 @@ async function loadObstacleTextures(folderPath: string): Promise<Texture[]> {
 
 
 function withinBounds(obstacle: Obstacle): boolean {
-  console.log("HELLOHELLO")
   if (obstacle.y <= 600) {
     return true;
   }
   if (myObstacles.has(obstacle.id)) {
     const toDelete: AnimatedSprite = myObstacles.get(obstacle.id);
-    console.log("OBSTACLETODELETE", toDelete)
     toDelete?.parent!.removeChild(toDelete);
     toDelete.destroy();
     myObstacles.delete(obstacle.id);
@@ -81,15 +78,14 @@ function withinBounds(obstacle: Obstacle): boolean {
 // TODO: do we need to check if obstacle is already rendered?
 export async function frame(app: Application, obstacles: Obstacle[]) {
   obstacles.forEach((obstacle) => {
-    const obstacleSprite = myObstacles.get(obstacle.id);
-    console.log("SPRITE", obstacleSprite)
-    if (obstacleSprite) {
+    if (myObstacles.has(obstacle.id)) {
+      const obstacleSprite = myObstacles.get(obstacle.id)!;
       obstacleSprite.position.set(obstacle.x, obstacle.y);
     } else {
-      const random = Math.floor(Math.random() * (2 - 0 + 2)) + 0;
+      const random = Math.floor(Math.random() * 2);
 
       const newObstacle = new AnimatedSprite(obstacleTextures[random]);
-      console.log("NEWOBST", newObstacle) // how to pass texture?
+      console.log("NEWOBST", newObstacle); // how to pass texture?
       newObstacle.position.set(obstacle.x, obstacle.y);
       newObstacle.play();
       app.stage.addChild(newObstacle);
@@ -131,7 +127,7 @@ export function updateObstacles(
     // const movedObstacles = obstacles.map((obs) => ({ ...obs, y: obs.y + 5 }));
     const movedObstacles = moveObstacles(obstacles, player);
     const bounded = movedObstacles.filter((obs) => withinBounds(obs));
-    console.log("BOUNDED", bounded)
+    console.log("BOUNDED", bounded);
 
     const obs_max = OBSTACLE_WINDOW / 2 + player.x;
     const obs_min = OBSTACLE_WINDOW / 2 - player.x;
@@ -147,7 +143,7 @@ export function updateObstacles(
           } as Obstacle,
         ]
         : bounded;
-    console.log("SPAWNED", spawned)
+    console.log("SPAWNED", spawned);
 
     return spawned;
   }

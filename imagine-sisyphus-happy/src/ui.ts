@@ -57,7 +57,7 @@ export function frame(
   ticker?: Ticker,
 ) {
   elevation.frame(elevationScore, ticker);
-  streak.frame(streakScore);
+  streak.frame(streakScore, ticker);
 
   if (lost) {
     gameover.frame();

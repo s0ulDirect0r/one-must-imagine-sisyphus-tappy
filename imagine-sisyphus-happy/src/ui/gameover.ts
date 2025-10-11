@@ -1,4 +1,4 @@
-import { Application, Text, TextStyle, Graphics } from "pixi.js";
+import { Text, TextStyle } from "pixi.js";
 
 const MENU_TEXT_STYLE = new TextStyle({
   fontFamily: "Arial Black, Arial, sans-serif",
