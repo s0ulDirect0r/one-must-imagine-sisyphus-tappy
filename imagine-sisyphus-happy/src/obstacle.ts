@@ -24,6 +24,10 @@ export type Obstacle = {
   // TODO Create additional variables to do something with it upon collision
 };
 
+// TODO this is a temporary WIDTH/HEIGHT
+export const WIDTH = 150;
+export const HEIGHT = 150;
+
 export async function initFrame(obstacles: Obstacle[]) {
   const girlObst = await loadObstacleTextures("girl-puking-obstacle");
   obstacleTextures.push(girlObst)
