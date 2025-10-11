@@ -34,23 +34,12 @@ export async function initFrame(
 export function calculateDirectionVector(player: Player, enemy: Enemy): { xVector: number; yVector: number, distanceToPlayer: number } {
   const dx = player.x - enemy.x;
   const dy = player.y - enemy.y;
-  const distanceToPlayer = Math.sqrt((dx ^ 2) + (dy ^ 2));
+  const distanceToPlayer = Math.sqrt((dx ** 2) + (dy ** 2));
   const xVector = dx / distanceToPlayer;
   const yVector = dy / distanceToPlayer;
   const vectors = { xVector, yVector, distanceToPlayer };
   return vectors;
 }
-
-// placeholder until proper collision system is in place and we can integrate with that
-// export function enemyIntersectsPlayer(
-//   enemyAnime: AnimatedSprite,
-//   playerAnime: AnimatedSprite,
-// ) {
-//   return enemyAnime
-//     .getBounds()
-//     .rectangle.intersects(playerAnime.getBounds().rectangle);
-// }
-
 
 export function moveEnemy(
   expectMove: boolean,

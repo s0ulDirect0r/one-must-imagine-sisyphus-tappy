@@ -39,9 +39,9 @@ export const gameState: GameState = {
     speed: 0.1,
   },
   enemy: {
-    x: 20,
-    y: 700,
-    speed: 0.1,
+    x: screen.width / 4,
+    y: screen.height / 2 + 400,
+    speed: 2.5,
   },
   bpm: 0,
   elevation: 0,
