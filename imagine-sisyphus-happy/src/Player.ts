@@ -14,7 +14,7 @@ export type Player = {
     y: number;
 };
 
-let anime: AnimatedSprite;
+export let anime: AnimatedSprite;
 const ANIMATION_SPEED = 0.1;
 
 const PLAYER_SPEED = 20;
