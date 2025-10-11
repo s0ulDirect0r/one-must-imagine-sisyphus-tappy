@@ -16,6 +16,7 @@ import {
   anime as playerAnime,
   movePlayer,
   shiftPlayer,
+  bumpPlayerDown,
   checkCollisionWithObstacle,
 } from "./Player";
 import {
@@ -23,6 +24,7 @@ import {
   moveEnemy,
   calculateDirectionVector,
   anime as enemyAnime,
+  bumpEnemyDown,
 } from "./enemy";
 
 export type GameState = {
@@ -42,8 +44,11 @@ export type GameState = {
   needsAudio: boolean;
   lost: boolean;
   songStartTime: number;
+  passedDistanceThreshold: boolean;
 };
 
+const THRESHOLD = 100;
+const THRESHOLD_BUMP = (screen.height * 2) / 3;
 // The initial values of gameState.
 export const gameState: GameState = {
   player: {
@@ -132,14 +137,8 @@ export function updateGame(
     gameState.player,
   );
 
-  newGameState.player = { ...gameState.player, ...newPlayer };
-
   const newEnemy: Partial<Enemy> = gameState.enemy;
-  const vectors = calculateDirectionVector(
-    newGameState.player,
-    gameState.enemy,
-  );
-
+  const vectors = calculateDirectionVector(gameState.player, gameState.enemy);
   Object.assign(
     newEnemy,
     moveEnemy(gameState.expectMove, gameState.enemy, vectors),
@@ -150,6 +149,19 @@ export function updateGame(
   if (vectors.distanceToPlayer < 8.5) {
     newGameState.lost = true;
   }
+
+  newGameState.passedDistanceThreshold = gameState.player.y < THRESHOLD;
+  if (gameState.passedDistanceThreshold) {
+    newPlayer.y = gameState.player.y + THRESHOLD_BUMP;
+    newEnemy.y = gameState.enemy.y + THRESHOLD_BUMP;
+
+    // Object.assign(newPlayer, bumpPlayerDown(newPlayer));
+    // Object.assign(newEnemy, bumpEnemyDown(newEnemy));
+    newGameState.passedDistanceThreshold = false;
+  }
+
+  newGameState.player = { ...gameState.player, ...newPlayer };
+  newGameState.enemy = { ...gameState.enemy, ...newEnemy };
 
   return newGameState;
 }
