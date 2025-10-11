@@ -112,7 +112,6 @@ export async function render(state: GameState) {
 
 async function drawScene(state: GameState, ticker: Ticker) {
   background.frame(state, ticker);
-  console.log("TIME: ", state.songStartTime)
   screen.frame(state, app);
   obstacle.frame(app, state.obstacles);
   player.frame(state.player);
