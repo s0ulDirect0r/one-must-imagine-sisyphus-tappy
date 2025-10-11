@@ -47,10 +47,9 @@ async function loadObstacleTextures(folderPath: string): Promise<Texture[]> {
     }
 
     console.log(`/assets/${folderPath}/${filename}`)
-    OBSTACLE_TEXTURES.push(await PIXI.Assets.load(`/assets/${folderPath}/${filename}`));
-
-
-
+    console.log(`/assets/${folderPath}/${filename}`);
+    OBSTACLE_TEXTURES.push(
+      await Assets.load(`/assets/${folderPath}/${filename}`),
   }
 
   return OBSTACLE_TEXTURES
@@ -63,13 +62,11 @@ async function loadObstacleTextures(folderPath: string): Promise<Texture[]> {
 
 
 function withinBounds(obstacle: Obstacle): boolean {
-  console.log("HELLOHELLO")
   if (obstacle.y <= 600) {
     return true;
   }
   if (myObstacles.has(obstacle.id)) {
     const toDelete: AnimatedSprite = myObstacles.get(obstacle.id);
-    console.log("OBSTACLETODELETE", toDelete)
     toDelete?.parent!.removeChild(toDelete);
     toDelete.destroy();
     myObstacles.delete(obstacle.id);

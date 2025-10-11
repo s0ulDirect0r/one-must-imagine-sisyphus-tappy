@@ -33,7 +33,6 @@ export function initFrame(app: Application) {
 }
 
 export function changeBackgroundColor(color: number, app: Application) {
-    console.log("COLOR", color)
     backgroundScreen.clear();
     backgroundScreen.fill({ color: color, alpha: 0.5 });
     backgroundScreen.rect(0, 0, app.screen.width, app.screen.height);
