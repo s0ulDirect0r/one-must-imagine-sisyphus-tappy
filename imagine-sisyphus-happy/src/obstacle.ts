@@ -50,6 +50,7 @@ async function loadObstacleTextures(folderPath: string): Promise<Texture[]> {
     console.log(`/assets/${folderPath}/${filename}`);
     OBSTACLE_TEXTURES.push(
       await Assets.load(`/assets/${folderPath}/${filename}`),
+    );
   }
 
   return OBSTACLE_TEXTURES
