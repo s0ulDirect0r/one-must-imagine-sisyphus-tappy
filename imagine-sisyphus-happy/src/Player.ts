@@ -65,7 +65,7 @@ export function checkCollisionWithObstacle(
   return points.some((point) => withinCircle(player, point));
 }
 
-let anime: AnimatedSprite;
+export let anime: AnimatedSprite;
 const ANIMATION_SPEED = 0.1;
 
 const PLAYER_SPEED = 20;

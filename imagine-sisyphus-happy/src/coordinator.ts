@@ -8,6 +8,7 @@ import { setUpMetronome } from "./metronome";
 let gameState = stateMachine.gameState;
 let { bpm, songDuration } = await loadAudio();
 let loopInterval: string | number | NodeJS.Timeout | undefined
+let startMenu = true;
 
 export function initializeGameState(): void {
   inputs.initialize();
@@ -15,10 +16,20 @@ export function initializeGameState(): void {
   renderer.initialize(gameState);
 }
 
+function waitForPlayerInput(): void {
+  if (inputs.inputState.get("Space")) {
+    startMenu = false;
+  }
+}
+
 export function startGameLoop() {
   // start the game loop forever.
   loopInterval = setInterval(() => {
-    gameLoop();
+    if (startMenu) {
+      waitForPlayerInput();
+    } else {
+      gameLoop();
+    }
   }, 16);
 }
 

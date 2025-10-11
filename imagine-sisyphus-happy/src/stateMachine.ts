@@ -16,8 +16,9 @@ import {
   shiftPlayer,
   checkCollisionWithObstacle,
 } from "./Player";
-import { Enemy, moveEnemy, calculateDirectionVector } from "./enemy";
 //import { movePlayer } from "./Player";
+import { Enemy, moveEnemy, calculateDirectionVector } from "./enemy";
+
 export type GameState = {
   player: Player;
   enemy: Enemy;
@@ -45,9 +46,9 @@ export const gameState: GameState = {
     speed: 0.1,
   },
   enemy: {
-    x: 20,
-    y: 700,
-    speed: 0.1,
+    x: screen.width / 4,
+    y: screen.height / 2 + 400,
+    speed: 2.5,
   },
   bpm: 0,
   elevation: 0,
@@ -89,8 +90,6 @@ export function updateGame(
     const currentTime = getCurrentAudioTime() - TIME_OFFSET;
 
     newGameState.timePassedSinceSongStarted = currentTime;
-    if (expected) { console.log("TAP") }
-    else { console.log("DONT TAP") }
   } else {
     // Just mark that we need to load audio next tick
     newGameState.needsAudio = true;
@@ -138,6 +137,10 @@ export function updateGame(
     moveEnemy(gameState.expectMove, gameState.enemy, vectors),
   );
   newGameState.enemy = { ...gameState.enemy, ...newEnemy };
+
+  if (vectors.distanceToPlayer < 8.5) {
+    newGameState.lost = true;
+  }
 
   return newGameState;
 }

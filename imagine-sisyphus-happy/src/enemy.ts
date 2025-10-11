@@ -1,4 +1,4 @@
-import { AnimatedSprite } from "pixi.js";
+import { AnimatedSprite, Point } from "pixi.js";
 import * as PIXI from "pixi.js";
 import { inputState } from "./input";
 import { Player } from "./Player";
@@ -9,10 +9,8 @@ export type Enemy = {
   speed: number;
 };
 
-let anime: AnimatedSprite;
+export let anime: AnimatedSprite;
 const ANIMATION_SPEED = 0.1;
-
-const ENEMY_SPEED = 10;
 
 export async function initFrame(
   width: number,
@@ -29,18 +27,18 @@ export async function initFrame(
   anime.animationSpeed = ANIMATION_SPEED;
 
   anime.scale.set(anime.scale.x * 0.5);
-
   return anime;
 }
 
 // player position, enemy position => { dx, dy }
-export function calculateDirectionVector(player: Player, enemy: Enemy): { xVector: number; yVector: number } {
+export function calculateDirectionVector(player: Player, enemy: Enemy): { xVector: number; yVector: number, distanceToPlayer: number } {
   const dx = player.x - enemy.x;
   const dy = player.y - enemy.y;
-  const distanceToPlayer = Math.sqrt((dx ^ 2) + (dy ^ 2));
+  const distanceToPlayer = Math.sqrt((dx ** 2) + (dy ** 2));
   const xVector = dx / distanceToPlayer;
   const yVector = dy / distanceToPlayer;
-  return { xVector, yVector };
+  const vectors = { xVector, yVector, distanceToPlayer };
+  return vectors;
 }
 
 export function moveEnemy(
