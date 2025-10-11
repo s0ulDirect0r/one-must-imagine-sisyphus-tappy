@@ -47,18 +47,18 @@ export type GameState = {
   passedDistanceThreshold: boolean;
 };
 
-const THRESHOLD = 100;
-const THRESHOLD_BUMP = (screen.height * 2) / 3;
+const THRESHOLD = window.innerHeight / 5;
+const THRESHOLD_BUMP = (window.innerHeight * 2) / 3;
 // The initial values of gameState.
 export const gameState: GameState = {
   player: {
-    x: screen.width / 2,
-    y: screen.height / 2 + 200, // TODO need app screen specifically?
+    x: window.innerWidth / 2,
+    y: window.innerHeight / 2 + 200, // TODO need app screen specifically?
     speed: 0.1,
   },
   enemy: {
-    x: screen.width / 4,
-    y: screen.height / 2 + 400,
+    x: window.innerWidth / 4,
+    y: window.innerHeight / 2 + 400,
     speed: 2.5,
   },
   bpm: 0,
