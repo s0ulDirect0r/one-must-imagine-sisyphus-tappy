@@ -113,6 +113,7 @@ export function moveObstacles(
   return movedObstacles;
 }
 
+const THRESHOLD_BUMP = (window.innerHeight * 2) / 3;
 // mvp: generate an obstacle for every space press, and move each obstacle down by one
 // TODO: pass obstacle updates to renderer, make it it's own function?
 // TODO: handle player movement? need to calculate elevation and player position
