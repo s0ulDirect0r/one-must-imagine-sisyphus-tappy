@@ -2,6 +2,7 @@ import { AnimatedSprite, Point } from "pixi.js";
 import * as PIXI from "pixi.js";
 import { inputState } from "./input";
 import { Player } from "./Player";
+import { CAMERA_EFFECT } from "./stateMachine";
 
 export type Enemy = {
   x: number;
@@ -31,10 +32,13 @@ export async function initFrame(
 }
 
 // player position, enemy position => { dx, dy }
-export function calculateDirectionVector(player: Player, enemy: Enemy): { xVector: number; yVector: number, distanceToPlayer: number } {
+export function calculateDirectionVector(
+  player: Player,
+  enemy: Enemy,
+): { xVector: number; yVector: number; distanceToPlayer: number } {
   const dx = player.x - enemy.x;
   const dy = player.y - enemy.y;
-  const distanceToPlayer = Math.sqrt((dx ** 2) + (dy ** 2));
+  const distanceToPlayer = Math.sqrt(dx ** 2 + dy ** 2);
   const xVector = dx / distanceToPlayer;
   const yVector = dy / distanceToPlayer;
   const vectors = { xVector, yVector, distanceToPlayer };
@@ -54,7 +58,7 @@ export function moveEnemy(
   } else {
     return {
       x: enemy.x,
-      y: enemy.y,
+      y: (enemy.y += CAMERA_EFFECT),
     };
   }
 }
@@ -62,3 +66,4 @@ export function moveEnemy(
 export function frame(enemy: Enemy) {
   anime.position.set(enemy.x, enemy.y);
 }
+

@@ -5,7 +5,9 @@ import { updateObstacles, type Obstacle } from "./obstacle";
 export const GRID_WIDTH = 10;
 export const GRID_HEIGHT = 15;
 export const MAX_OBSTACLES = 3;
+export const OBSTACLE_WINDOW = 70;
 export const TIME_OFFSET = 0.07;
+export const CAMERA_EFFECT = 0.332;
 
 import { getCurrentAudioTime } from "./audio";
 import { isInBeatWindow } from "./metronome";
@@ -15,6 +17,7 @@ import {
   movePlayer,
   shiftPlayer,
   bumpPlayerDown,
+  checkCollisionWithObstacle,
 } from "./Player";
 import {
   Enemy,
@@ -91,7 +94,6 @@ export function updateGame(
   }
 
   if (!gameState.needsAudio) {
-
     const elapsed = getCurrentAudioTime() - gameState.songStartTime;
     const expected = isInBeatWindow(elapsed, 136, 0);
     newGameState.expectMove = expected;
@@ -102,6 +104,13 @@ export function updateGame(
     // Just mark that we need to load audio next tick
     newGameState.needsAudio = true;
   }
+
+  gameState.obstacles.map((obstacle) => {
+    if (checkCollisionWithObstacle(gameState.player, obstacle)) {
+      console.error("HITTING", obstacle.id);
+      // Confirmed to hit... but.. What to do?
+    }
+  });
 
   const spacePressed = inputState.get("Space")?.justPressed;
   const judgement = judge(
@@ -116,13 +125,16 @@ export function updateGame(
   const newPlayer: Partial<Player> = {};
 
   if (judgement && judgement.elevation) {
-    Object.assign(newPlayer, movePlayer(gameState.player));
+    Object.assign(newPlayer, movePlayer(gameState.player, true));
+  } else {
+    Object.assign(newPlayer, movePlayer(gameState.player, false));
   }
   Object.assign(newPlayer, shiftPlayer(gameState.player));
 
   newGameState.obstacles = updateObstacles(
     gameState.obstacles,
     gameState.expectMove,
+    gameState.player,
   );
 
   const newEnemy: Partial<Enemy> = gameState.enemy;
@@ -131,6 +143,8 @@ export function updateGame(
     newEnemy,
     moveEnemy(gameState.expectMove, gameState.enemy, vectors),
   );
+
+  newGameState.enemy = { ...gameState.enemy, ...newEnemy };
 
   if (vectors.distanceToPlayer < 8.5) {
     newGameState.lost = true;
