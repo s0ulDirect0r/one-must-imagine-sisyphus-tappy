@@ -60,7 +60,6 @@ export function frame(
   streak.frame(streakScore, ticker);
 
   if (lost) {
-    console.log('lost!!')
     gameover.frame();
   }
 }

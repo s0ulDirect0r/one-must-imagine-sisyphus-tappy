@@ -41,6 +41,5 @@ export function initFrame(width: number, height: number) {
 }
 
 export function frame() {
-  console.log('frame set!')
   text.visible = true;
 }
