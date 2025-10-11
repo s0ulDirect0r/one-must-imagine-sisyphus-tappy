@@ -1,121 +1,65 @@
 import { DEBUG_MODE } from "./debug";
 import { inputState } from "./input";
 import "./main.css";
-import { Application, Text, TextStyle, Graphics } from "pixi.js";
+import {
+  Application,
+  Assets,
+  Container,
+  Text,
+  TextStyle,
+  Graphics,
+} from "pixi.js";
 import { getCurrentAudioTime } from "./audio";
-let elevationText: Text;
-let streakText: Text;
-let gameOverText: Text;
+
+import * as elevation from "./ui/elevation";
+import * as streak from "./ui/streak";
+import * as gameover from "./ui/gameover";
+import * as debug from "./ui/debug";
+import * as debugMetronome from "./ui/debugMetronome";
+
 let debugText: Text;
 let debugMetronomeText: Text;
+let uiElements: Container;
 
-export function initFrame(width: number, height: number) {
-  // create UI elements
-  // should these be initialized elsewhere?
-  const textStyle = new TextStyle({
-    align: "center",
-  });
+export function initFrame(app: Application) {
+  uiElements = new Container();
+  const width = app.screen.width;
+  const height = app.screen.height;
 
-  const gameOverTextStyle = new TextStyle({
-    fontFamily: "Arial Black, Arial, sans-serif",
-    fontSize: 72,
-    fontWeight: "bold",
-    fill: ["#ff00ff", "#00ffff", "#ffff00"], // Gradient: magenta -> cyan -> yellow
-    stroke: "#ffffff",
-    strokeThickness: 6,
-    dropShadow: true,
-    dropShadowColor: "#000000",
-    dropShadowBlur: 10,
-    dropShadowAngle: Math.PI / 4,
-    dropShadowDistance: 8,
-    wordWrap: true,
-    wordWrapWidth: 440,
-    letterSpacing: 2,
-  });
-  elevationText = new Text({ style: textStyle });
-  streakText = new Text({ style: textStyle });
-  gameOverText = new Text({ style: gameOverTextStyle });
+  const elevationText = elevation.initFrame(width, height);
+  uiElements.addChild(elevationText);
 
-  streakText.pivot.set(streakText.width / 3, streakText.height);
-  streakText.x = width / 2.5;
-  streakText.y = height;
+  const streakText = streak.initFrame(width, height);
+  uiElements.addChild(streakText);
 
-  elevationText.pivot.set(elevationText.width / 2, 0);
-  elevationText.x = width / 2.5;
-  elevationText.y = 0;
-
-  // Anchor to center of text (0.5, 0.5 = middle)
-  gameOverText.anchor.set(0.5, 0.5);
-
-  // Position at screen center
-  gameOverText.x = width / 2;
-  gameOverText.y = height / 2;
-
-  // Make sure it's on top
-  gameOverText.zIndex = 1000;
-
-  // Add to stage
+  const gameOverText = gameover.initFrame(width, height);
+  uiElements.addChild(gameOverText);
 
   // Make sure z-index sorting is enabled on the stage
+  uiElements.sortableChildren = true;
 
   if (DEBUG_MODE) {
-    debugText = new Text({ style: textStyle });
-    debugMetronomeText = new Text({ style: textStyle });
+    const debugText = debug.initFrame(width, height);
+    uiElements.addChild(debugText);
 
-    debugText.pivot.set(debugText.width / 2, 0);
-    debugText.x = width / 6;
-    debugText.y = 100;
-
-    debugMetronomeText.pivot.set(debugMetronomeText.width / 2, 0);
-    debugMetronomeText.x = width / 8;
-    debugMetronomeText.y = 200;
+    const debugMetronomeText = debugMetronome.initFrame(width, height);
+    uiElements.addChild(debugMetronomeText);
   }
 
-  return {
-    elevationText,
-    streakText,
-    gameOverText,
-    debugText,
-    debugMetronomeText,
-  };
+  return uiElements;
 }
-
-let lastBeatTime = 0;
-let flashing = false;
 
 export function frame(
   expectMove: boolean,
-  elevation: number,
-  streak: number,
+  elevationScore: number,
+  streakScore: number,
   lost: boolean,
   ticker?: Ticker,
 ) {
-  elevationText.text = `${elevation} ft`;
-  streakText.text = `${streak}x`;
+  elevation.frame(elevationScore, ticker);
+  streak.frame(streakScore);
 
   if (lost) {
-    console.log(gameOverText);
-    gameOverText.text = "GAME OVER!!";
+    gameover.frame();
   }
 }
-
-/*
-
-if (DEBUG_MODE) {
-  const entries = inputState.entries();
-  let textGuy = "Key Debug State: \n";
-  for (const [key, value] of entries) {
-    textGuy = textGuy.concat(
-      key,
-      ":    ",
-      String(value.pressed),
-      "     ",
-      String(value.justPressed),
-      "\n",
-    );
-  }
-  debugText.text = textGuy;
-  debugMetronomeText.text = `Metronome Debug State: \n${expectMove}`;
-}
-
-*/

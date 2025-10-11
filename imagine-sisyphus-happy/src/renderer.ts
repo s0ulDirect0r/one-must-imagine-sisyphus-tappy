@@ -24,6 +24,26 @@ let app: Application;
 let lastState: GameState;
 let colorMatrix: ColorMatrixFilter;
 
+/*
+ * Assets can be added here, and `Asses.load` can be called either here
+ * or in the "child" elements that use it like ui/elevation.ts in order
+ * for it to access the Dominican font.
+ *
+ * DOES WORK:
+ * Add here | Load here | use "dominican" font in ui/elevation.ts
+ *
+ * DOES NOT WORK:
+ * Add here | load in ui.ts | use "dominican" font in ui/elevation.ts
+ */
+Assets.add({
+  alias: "Dominican",
+  src: "assets/fonts/dominican/DOMINICA.TTF",
+  data: {
+    family: "Dominican",
+    weights: ["Regular"],
+  },
+});
+
 // Initialize the application
 export async function initialize(gameState: GameState) {
   // Create a new application
@@ -55,21 +75,9 @@ export async function initialize(gameState: GameState) {
   const enemySprite = await enemy.initFrame(width, height, gameState.enemy);
   app.stage.addChild(enemySprite);
 
-  const {
-    elevationText,
-    streakText,
-    gameOverText,
-    debugText,
-    debugMetronomeText,
-  } = ui.initFrame(width, height);
-
-  app.stage.addChild(elevationText);
-  app.stage.addChild(streakText);
-  app.stage.addChild(gameOverText);
-  if (DEBUG_MODE) {
-    app.stage.addChild(debugText);
-    app.stage.addChild(debugMetronomeText);
-  }
+  const uiElements = ui.initFrame(app);
+  app.stage.addChild(uiElements);
+  uiElements.zIndex = 99;
 
   const borderWidth = 10;
   const holeWidth = width - borderWidth * 2;
