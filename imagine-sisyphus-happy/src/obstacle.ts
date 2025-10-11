@@ -81,15 +81,14 @@ function withinBounds(obstacle: Obstacle): boolean {
 // TODO: do we need to check if obstacle is already rendered?
 export async function frame(app: Application, obstacles: Obstacle[]) {
   obstacles.forEach((obstacle) => {
-    const obstacleSprite = myObstacles.get(obstacle.id);
-    console.log("SPRITE", obstacleSprite)
-    if (obstacleSprite) {
+    if (myObstacles.has(obstacle.id)) {
+      const obstacleSprite = myObstacles.get(obstacle.id)!;
       obstacleSprite.position.set(obstacle.x, obstacle.y);
     } else {
       const random = Math.floor(Math.random() * 2);
 
       const newObstacle = new AnimatedSprite(obstacleTextures[random]);
-      console.log("NEWOBST", newObstacle) // how to pass texture?
+      console.log("NEWOBST", newObstacle); // how to pass texture?
       newObstacle.position.set(obstacle.x, obstacle.y);
       newObstacle.play();
       app.stage.addChild(newObstacle);
@@ -113,21 +112,21 @@ export function updateObstacles(
     // TODO: obstacle movement may eventually need its own function
     const movedObstacles = obstacles.map((obs) => ({ ...obs, y: obs.y + 20 }));
     const bounded = movedObstacles.filter((obs) => withinBounds(obs));
-    console.log("BOUNDED", bounded)
+    console.log("BOUNDED", bounded);
 
     // TODO: possible to generate multiple obstacles per line?
     const spawned =
       bounded.length < MAX_OBSTACLES
         ? [
-          ...bounded,
-          {
-            id: crypto.randomUUID(),
-            x: Math.floor(Math.random() * screen.width),
-            y: GRID_HEIGHT - 1,
-          } as Obstacle,
-        ]
+            ...bounded,
+            {
+              id: crypto.randomUUID(),
+              x: Math.floor(Math.random() * screen.width),
+              y: GRID_HEIGHT - 1,
+            } as Obstacle,
+          ]
         : bounded;
-    console.log("SPAWNED", spawned)
+    console.log("SPAWNED", spawned);
 
     return spawned;
   }
