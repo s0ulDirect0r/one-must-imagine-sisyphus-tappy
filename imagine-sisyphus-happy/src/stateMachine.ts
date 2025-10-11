@@ -48,7 +48,7 @@ export type GameState = {
 };
 
 const THRESHOLD = 100;
-const THRESHOLD_BUMP = 777;
+const THRESHOLD_BUMP = (screen.height * 2) / 3;
 // The initial values of gameState.
 export const gameState: GameState = {
   player: {
