@@ -18,7 +18,6 @@ export let anime: AnimatedSprite;
 const ANIMATION_SPEED = 0.1;
 
 const PLAYER_SPEED = 20;
-const THRESHOLD_BUMP = 500;
 
 export async function initFrame(
     width: number,
@@ -38,10 +37,7 @@ export async function initFrame(
 }
 
 export function movePlayer(player: Player): Partial<Player> {
-    return { y: player.y - PLAYER_SPEED };
-
-export function bumpPlayerDown(newPlayer: Partial<Player>): Partial<Player> {
-  return { y: newPlayer.y + THRESHOLD_BUMP };
+  return { y: player.y - PLAYER_SPEED };
 }
 
 export function shiftPlayer(player: Player): Partial<Player> {

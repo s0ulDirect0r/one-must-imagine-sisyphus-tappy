@@ -45,6 +45,7 @@ export type GameState = {
 };
 
 const THRESHOLD = 100;
+const THRESHOLD_BUMP = 777;
 // The initial values of gameState.
 export const gameState: GameState = {
   player: {
@@ -137,9 +138,11 @@ export function updateGame(
 
   newGameState.passedDistanceThreshold = gameState.player.y < THRESHOLD;
   if (gameState.passedDistanceThreshold) {
-    Object.assign(newPlayer, bumpPlayerDown(newPlayer));
+    newPlayer.y = gameState.player.y + THRESHOLD_BUMP;
+    newEnemy.y = gameState.enemy.y + THRESHOLD_BUMP;
 
-    Object.assign(newEnemy, bumpEnemyDown(newEnemy));
+    // Object.assign(newPlayer, bumpPlayerDown(newPlayer));
+    // Object.assign(newEnemy, bumpEnemyDown(newEnemy));
     newGameState.passedDistanceThreshold = false;
   }
 
