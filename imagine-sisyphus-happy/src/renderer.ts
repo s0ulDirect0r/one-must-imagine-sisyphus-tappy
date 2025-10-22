@@ -12,7 +12,7 @@ let app: Application;
 let lastState: GameState;
 
 /*
- * Assets can be added here, and `Asses.load` can be called either here
+ * Assets can be added here, and `Assets.load` can be called either here
  * or in the "child" elements that use it like ui/elevation.ts in order
  * for it to access the Dominican font.
  *
@@ -24,7 +24,7 @@ let lastState: GameState;
  */
 Assets.add({
   alias: "Dominican",
-  src: "assets/fonts/dominican/DOMINICA.TTF",
+  src: "/assets/fonts/dominican/DOMINICA.TTF",
   data: {
     family: "Dominican",
     weights: ["Regular"],
@@ -41,6 +41,10 @@ export async function initialize(gameState: GameState) {
     background: "#1099bb",
     resizeTo: window,
   });
+
+  // Load the Dominican font
+  await Assets.load("Dominican");
+
   const { width, height } = app.screen;
 
   // Append the application canvas to the document body
