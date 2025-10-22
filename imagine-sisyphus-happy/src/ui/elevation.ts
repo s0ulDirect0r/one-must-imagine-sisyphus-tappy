@@ -1,11 +1,8 @@
 import {
-  Application,
-  Assets,
   ColorMatrixFilter,
   Text,
   FillGradient,
   TextStyle,
-  Graphics,
   Ticker,
   Color,
 } from "pixi.js";
@@ -48,7 +45,7 @@ const UI_TEXT = () => new Text({ style: UI_TEXT_STYLE });
 
 let text: Text;
 
-export function initFrame(width: number, height: number) {
+export function initFrame() {
   text = UI_TEXT();
 
   text.position.set(10, 20);

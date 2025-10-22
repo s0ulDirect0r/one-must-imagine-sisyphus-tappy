@@ -1,15 +1,4 @@
-import {
-  Application,
-  Assets,
-  Sprite,
-  Container,
-  Graphics,
-  Ticker,
-  Text,
-  TextStyle,
-  Texture,
-  ColorMatrixFilter,
-} from "pixi.js";
+import { Application, Assets, Graphics, Ticker } from "pixi.js";
 import type { GameState } from "./stateMachine";
 import * as ui from "./ui";
 import { initDevtools } from "@pixi/devtools";
@@ -18,11 +7,9 @@ import * as obstacle from "./obstacle";
 import * as player from "./Player";
 import * as enemy from "./enemy";
 import * as screen from "./backgroundScreen";
-import { DEBUG_MODE } from "./debug";
 
 let app: Application;
 let lastState: GameState;
-let colorMatrix: ColorMatrixFilter;
 
 /*
  * Assets can be added here, and `Asses.load` can be called either here
@@ -66,7 +53,7 @@ export async function initialize(gameState: GameState) {
   const bgScreen = screen.initFrame(app);
   app.stage.addChild(bgScreen);
 
-  const obs = await obstacle.initFrame(gameState.obstacles);
+  await obstacle.initFrame();
   // app.stage.addChild(obs);
 
   const playerSprite = await player.initFrame(width, height, gameState.player);
@@ -88,7 +75,6 @@ export async function initialize(gameState: GameState) {
     .rect(borderWidth, borderWidth, holeWidth, holeHeight)
     .cut();
 
-  const animationDuration = 250;
   app.stage.addChild(border);
   // TODO: implement border fade with background logic??
   // app.ticker.add((ticker) => {

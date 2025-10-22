@@ -17,7 +17,7 @@ export function initialize() {
 
 // TODO: justPressed doesn't work
 // TODO: turn this into a nice input system that detects mouse movement too
-export function updateInputs(): Map<string, KeyState> {
+export function updateInputs(): void {
   keys.forEach((v) => {
     v.justPressed = false;
   });

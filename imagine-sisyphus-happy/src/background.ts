@@ -1,4 +1,4 @@
-import { Assets, Ticker, Container } from "pixi.js";
+import { Assets, Ticker } from "pixi.js";
 import { CompositeTilemap } from "@pixi/tilemap";
 import { type GameState } from "./stateMachine";
 
@@ -19,7 +19,7 @@ export async function initFrame(width: number, height: number) {
 
   // Assets.add({ alias: "atlas", src: ground });
   Assets.add({ alias: "atlas", src: "/assets/tinyswords.json" });
-  const atlasTexture = await Assets.load("atlas");
+  await Assets.load("atlas");
   tiles = new CompositeTilemap();
 
   for (
@@ -40,13 +40,9 @@ export async function initFrame(width: number, height: number) {
   return tiles;
 }
 
-
-
-
-
 let polarity = -1;
 
-export async function frame(state: GameState, ticker: Ticker) {
+export async function frame(_state: GameState, ticker: Ticker) {
   if (gridDeltaY > 2 * gridDeltaCap) {
     gridDeltaY = 0;
     polarity = -polarity;
