@@ -1,15 +1,6 @@
 import { DEBUG_MODE } from "./debug";
-import { inputState } from "./input";
 import "./main.css";
-import {
-  Application,
-  Assets,
-  Container,
-  Text,
-  TextStyle,
-  Graphics,
-} from "pixi.js";
-import { getCurrentAudioTime } from "./audio";
+import { Application, Container, Ticker } from "pixi.js";
 
 import * as elevation from "./ui/elevation";
 import * as streak from "./ui/streak";
@@ -17,8 +8,6 @@ import * as gameover from "./ui/gameover";
 import * as debug from "./ui/debug";
 import * as debugMetronome from "./ui/debugMetronome";
 
-let debugText: Text;
-let debugMetronomeText: Text;
 let uiElements: Container;
 
 export function initFrame(app: Application) {
@@ -26,7 +15,7 @@ export function initFrame(app: Application) {
   const width = app.screen.width;
   const height = app.screen.height;
 
-  const elevationText = elevation.initFrame(width, height);
+  const elevationText = elevation.initFrame();
   uiElements.addChild(elevationText);
 
   const streakText = streak.initFrame(width, height);
@@ -39,10 +28,10 @@ export function initFrame(app: Application) {
   uiElements.sortableChildren = true;
 
   if (DEBUG_MODE) {
-    const debugText = debug.initFrame(width, height);
+    const debugText = debug.initFrame(width);
     uiElements.addChild(debugText);
 
-    const debugMetronomeText = debugMetronome.initFrame(width, height);
+    const debugMetronomeText = debugMetronome.initFrame(width);
     uiElements.addChild(debugMetronomeText);
   }
 
@@ -50,14 +39,16 @@ export function initFrame(app: Application) {
 }
 
 export function frame(
-  expectMove: boolean,
+  _expectMove: boolean,
   elevationScore: number,
   streakScore: number,
   lost: boolean,
   ticker?: Ticker,
 ) {
-  elevation.frame(elevationScore, ticker);
-  streak.frame(streakScore, ticker);
+  if (ticker) {
+    elevation.frame(elevationScore, ticker);
+    streak.frame(streakScore, ticker);
+  }
 
   if (lost) {
     gameover.frame();

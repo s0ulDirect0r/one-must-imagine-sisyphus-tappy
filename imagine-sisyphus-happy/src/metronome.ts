@@ -1,12 +1,4 @@
-let lastBeat = 0;
-let beatDuration: number;
-let nextBeatPosition: number;
 const WINDOW = 0.2;
-
-export function setUpMetronome(bpm: number) {
-  beatDuration = 60 / bpm; // 60/beatsperminuetn = seconds per beat
-  nextBeatPosition = beatDuration;
-}
 
 export function isInBeatWindow(
   now: number, // current audio time in seconds

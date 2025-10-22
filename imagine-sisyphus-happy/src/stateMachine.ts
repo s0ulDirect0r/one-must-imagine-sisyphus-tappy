@@ -13,19 +13,11 @@ import { getCurrentAudioTime } from "./audio";
 import { isInBeatWindow } from "./metronome";
 import {
   Player,
-  anime as playerAnime,
   movePlayer,
   shiftPlayer,
-  bumpPlayerDown,
   checkCollisionWithObstacle,
 } from "./Player";
-import {
-  Enemy,
-  moveEnemy,
-  calculateDirectionVector,
-  anime as enemyAnime,
-  bumpEnemyDown,
-} from "./enemy";
+import { Enemy, moveEnemy, calculateDirectionVector } from "./enemy";
 
 export type GameState = {
   player: Player;
@@ -54,7 +46,6 @@ export const gameState: GameState = {
   player: {
     x: window.innerWidth / 2,
     y: window.innerHeight / 2 + 200, // TODO need app screen specifically?
-    speed: 0.1,
   },
   enemy: {
     x: window.innerWidth / 4,
@@ -75,14 +66,14 @@ export const gameState: GameState = {
   needsAudio: true,
   lost: false,
   songStartTime: 0,
+  passedDistanceThreshold: false,
 };
 
 export function updateGame(
-  inputs: Map<string, KeyState>,
+  _inputs: Map<string, KeyState>,
   gameState: GameState,
 ): Partial<GameState> {
   let newGameState: Partial<GameState> = {};
-  let expected = false;
 
   // check if Audio has been loaded in renderer
   if (gameState.needsAudio) {
@@ -112,10 +103,10 @@ export function updateGame(
     }
   });
 
-  const spacePressed = inputState.get("Space")?.justPressed;
+  const spacePressed = inputState.get("Space")?.justPressed ?? false;
   const judgement = judge(
     spacePressed,
-    newGameState.expectMove,
+    newGameState.expectMove ?? false,
     gameState.elevation,
     gameState.streak,
     gameState.missStreak,

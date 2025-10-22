@@ -4,10 +4,11 @@
   "private": true,
   "type": "module",
   "scripts": {
-    "start": "npm run dev",
-    "build": "npm run lint && tsc && vite build",
-    "lint": "eslint .",
-    "dev": "vite"
+    "start": "bun run dev",
+    "build": "bun run lint && tsc && vite build",
+    "lint": "eslint . --fix",
+    "dev": "vite",
+    "preview": "python3 -m http.server 8000 --directory dist/"
   },
   "dependencies": {
     "@pixi/tilemap": "^5.0.2",

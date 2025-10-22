@@ -1,6 +1,5 @@
-import { AnimatedSprite, Point } from "pixi.js";
+import { AnimatedSprite } from "pixi.js";
 import * as PIXI from "pixi.js";
-import { inputState } from "./input";
 import { Player } from "./Player";
 import { CAMERA_EFFECT } from "./stateMachine";
 
@@ -14,8 +13,8 @@ export let anime: AnimatedSprite;
 const ANIMATION_SPEED = 0.1;
 
 export async function initFrame(
-  width: number,
-  height: number,
+  _width: number,
+  _height: number,
   enemy: Enemy,
 ): Promise<AnimatedSprite> {
   // const texture = await PIXI.Assets.load("/assets/partyfury.png"); // load asset
@@ -66,4 +65,3 @@ export function moveEnemy(
 export function frame(enemy: Enemy) {
   anime.position.set(enemy.x, enemy.y);
 }
-

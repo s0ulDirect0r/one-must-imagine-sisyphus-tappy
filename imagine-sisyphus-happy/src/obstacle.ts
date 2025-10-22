@@ -2,19 +2,11 @@
 // if there isn't, create a new random obstacle at the top of the grid
 // then move every obstacle down in the beat
 
-import { KeyState } from "./input";
 import { checkCollisionWithObstacle, Player } from "./Player";
-import {
-  GameState,
-  GRID_HEIGHT,
-  GRID_WIDTH,
-  MAX_OBSTACLES,
-  OBSTACLE_WINDOW,
-} from "./stateMachine";
-import { Assets, Texture, Sprite, AnimatedSprite } from "pixi.js";
+import { MAX_OBSTACLES, OBSTACLE_WINDOW } from "./stateMachine";
+import { Assets, Texture, Sprite, AnimatedSprite, Application } from "pixi.js";
 
-let obstacleTextures: Texture[][] = [];
-let sprite: Sprite;
+const obstacleTextures: Texture[][] = [];
 const myObstacles: Map<string, Sprite> = new Map();
 
 export type Obstacle = {
@@ -28,26 +20,24 @@ export type Obstacle = {
 export const WIDTH = 150;
 export const HEIGHT = 150;
 
-export async function initFrame(obstacles: Obstacle[]) {
+export async function initFrame() {
   const girlObst = await loadObstacleTextures("girl-puking-obstacle");
-  obstacleTextures.push(girlObst)
-  const stripperObst = await loadObstacleTextures("stripper")
-  obstacleTextures.push(stripperObst)
-  const homelessObst = await loadObstacleTextures("homeless")
-  obstacleTextures.push(homelessObst)
-
+  obstacleTextures.push(girlObst);
+  const stripperObst = await loadObstacleTextures("stripper");
+  obstacleTextures.push(stripperObst);
+  const homelessObst = await loadObstacleTextures("homeless");
+  obstacleTextures.push(homelessObst);
 }
 
 async function loadObstacleTextures(folderPath: string): Promise<Texture[]> {
-  let OBSTACLE_TEXTURES = [];
+  const OBSTACLE_TEXTURES = [];
 
   for (let i = 0; i < 36; i++) {
-    let filename = ""
+    let filename = "";
     if (i < 10) {
-      filename = `tile00${i}.png`
-
+      filename = `tile00${i}.png`;
     } else {
-      filename = `tile0${i}.png`
+      filename = `tile0${i}.png`;
     }
 
     console.log(`/assets/${folderPath}/${filename}`);
@@ -56,21 +46,15 @@ async function loadObstacleTextures(folderPath: string): Promise<Texture[]> {
     );
   }
 
-  return OBSTACLE_TEXTURES
-
-
-
+  return OBSTACLE_TEXTURES;
 }
-
-
-
 
 function withinBounds(obstacle: Obstacle): boolean {
   if (obstacle.y <= 600) {
     return true;
   }
   if (myObstacles.has(obstacle.id)) {
-    const toDelete: AnimatedSprite = myObstacles.get(obstacle.id);
+    const toDelete = myObstacles.get(obstacle.id)!;
     toDelete?.parent!.removeChild(toDelete);
     toDelete.destroy();
     myObstacles.delete(obstacle.id);
@@ -113,7 +97,6 @@ export function moveObstacles(
   return movedObstacles;
 }
 
-const THRESHOLD_BUMP = (window.innerHeight * 2) / 3;
 // mvp: generate an obstacle for every space press, and move each obstacle down by one
 // TODO: pass obstacle updates to renderer, make it it's own function?
 // TODO: handle player movement? need to calculate elevation and player position
@@ -140,13 +123,13 @@ export function updateObstacles(
     const spawned =
       bounded.length < MAX_OBSTACLES
         ? [
-          ...bounded,
-          {
-            id: crypto.randomUUID(),
-            x: Math.floor(Math.random() * (obs_max - obs_min) + obs_min),
-            y: 10,
-          } as Obstacle,
-        ]
+            ...bounded,
+            {
+              id: crypto.randomUUID(),
+              x: Math.floor(Math.random() * (obs_max - obs_min) + obs_min),
+              y: 10,
+            } as Obstacle,
+          ]
         : bounded;
     console.log("SPAWNED", spawned);
 

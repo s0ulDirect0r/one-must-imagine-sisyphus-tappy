@@ -1,15 +1,4 @@
-import {
-  Application,
-  Assets,
-  Sprite,
-  Container,
-  Graphics,
-  Ticker,
-  Text,
-  TextStyle,
-  Texture,
-  ColorMatrixFilter,
-} from "pixi.js";
+import { Application, Assets, Graphics, Ticker } from "pixi.js";
 import type { GameState } from "./stateMachine";
 import * as ui from "./ui";
 import { initDevtools } from "@pixi/devtools";
@@ -18,14 +7,12 @@ import * as obstacle from "./obstacle";
 import * as player from "./Player";
 import * as enemy from "./enemy";
 import * as screen from "./backgroundScreen";
-import { DEBUG_MODE } from "./debug";
 
 let app: Application;
 let lastState: GameState;
-let colorMatrix: ColorMatrixFilter;
 
 /*
- * Assets can be added here, and `Asses.load` can be called either here
+ * Assets can be added here, and `Assets.load` can be called either here
  * or in the "child" elements that use it like ui/elevation.ts in order
  * for it to access the Dominican font.
  *
@@ -37,7 +24,7 @@ let colorMatrix: ColorMatrixFilter;
  */
 Assets.add({
   alias: "Dominican",
-  src: "assets/fonts/dominican/DOMINICA.TTF",
+  src: "/assets/fonts/dominican/DOMINICA.TTF",
   data: {
     family: "Dominican",
     weights: ["Regular"],
@@ -54,6 +41,10 @@ export async function initialize(gameState: GameState) {
     background: "#1099bb",
     resizeTo: window,
   });
+
+  // Load the Dominican font
+  await Assets.load("Dominican");
+
   const { width, height } = app.screen;
 
   // Append the application canvas to the document body
@@ -66,7 +57,7 @@ export async function initialize(gameState: GameState) {
   const bgScreen = screen.initFrame(app);
   app.stage.addChild(bgScreen);
 
-  const obs = await obstacle.initFrame(gameState.obstacles);
+  await obstacle.initFrame();
   // app.stage.addChild(obs);
 
   const playerSprite = await player.initFrame(width, height, gameState.player);
@@ -88,7 +79,6 @@ export async function initialize(gameState: GameState) {
     .rect(borderWidth, borderWidth, holeWidth, holeHeight)
     .cut();
 
-  const animationDuration = 250;
   app.stage.addChild(border);
   // TODO: implement border fade with background logic??
   // app.ticker.add((ticker) => {

@@ -1,11 +1,8 @@
 import {
-  Application,
-  Assets,
   ColorMatrixFilter,
   Text,
   FillGradient,
   TextStyle,
-  Graphics,
   Ticker,
   Color,
 } from "pixi.js";

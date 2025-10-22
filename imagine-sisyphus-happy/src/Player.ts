@@ -1,11 +1,4 @@
-import {
-  Application,
-  Sprite,
-  Texture,
-  Rectangle,
-  AnimatedSprite,
-  Graphics,
-} from "pixi.js";
+import { AnimatedSprite } from "pixi.js";
 import * as PIXI from "pixi.js";
 import { inputState } from "./input";
 import {
@@ -25,15 +18,10 @@ type Point = {
   y: number;
 };
 
-const OFFSET_X = 5;
-const OFFSET_Y = -15;
-const RADIUS_X = 75;
-const RADIUS_Y = 60;
-
 // TODO This is a temporary RADIUS
 const RADIUS = 60;
 
-function distance(x1, y1, x2, y2) {
+function distance(x1: number, y1: number, x2: number, y2: number): number {
   return Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2));
 }
 
@@ -72,11 +60,10 @@ const ANIMATION_SPEED = 0.1;
 const PLAYER_SPEED = 20;
 
 export async function initFrame(
-  width: number,
-  height: number,
+  _width: number,
+  _height: number,
   player: Player,
 ): Promise<AnimatedSprite> {
-  const texture = await PIXI.Assets.load("/assets/sissypose1.png"); // load asset
   const texture2 = await PIXI.Assets.load("/assets/sissypose2.png"); // load asset
   anime = new AnimatedSprite([texture2]);
   anime.x = player.x;
