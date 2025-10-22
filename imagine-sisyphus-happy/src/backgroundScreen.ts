@@ -20,11 +20,6 @@ export function initFrame(app: Application) {
     backgroundScreen.rect(0, 0, app.screen.width, app.screen.height);
     backgroundScreen.fill({ color: "#cc33ff", alpha: 0.5 });
     // Draw a giant rectangle that covers the full screen
-
-    // Handle window resizing to keep the square full-screen
-    window.addEventListener("resize", () => {
-      backgroundScreen.rect(0, 0, app.screen.width, app.screen.height);
-    });
   });
   return backgroundScreen;
 }
